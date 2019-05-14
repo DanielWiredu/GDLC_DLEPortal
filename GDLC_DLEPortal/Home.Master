@@ -1,0 +1,359 @@
+﻿<%@ Master Language="C#" AutoEventWireup="true" CodeBehind="Home.master.cs" Inherits="GDLC_DLEPortal.Home" %>
+
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="asp" %>
+
+<%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+    <title>GDLC Client Portal</title>
+
+    <link href="/Content/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="/Content/css/plugins/toastr/toastr.min.css" rel="stylesheet"/>
+    <link href="/Content/js/plugins/gritter/jquery.gritter.css" rel="stylesheet"/>
+    <link href="/Content/css/animate.css" rel="stylesheet"/>
+    <link href="/Content/css/style.css" rel="stylesheet"/>
+    <link href="/Content/css/commot.min.css" rel="stylesheet" />
+    <link href="/Content/css/comm.blueopal.min.css" rel="stylesheet" />
+    <link href="/Content/font-awesome/css/font-awesome.css" rel="stylesheet"/>
+    <%--STYLE session timeout modal popup --%>
+    <link href="/Content/css/modalPopupStyle.css" rel="stylesheet" /> 
+
+      <script src="/Content/js/jquery-2.1.1.js"></script>
+    
+    <script type="text/javascript">
+        //
+        var myTimer = null;
+        var t1 = null;
+        var t2 = null;
+        function SessionExpireAlert(timeout) {
+            //var timeout = 120000;
+            RecountSession();
+            var seconds = timeout / 1000;
+            document.getElementById("secondsIdle").innerHTML = seconds;
+            document.getElementById("seconds").innerHTML = seconds;
+            myTimer = setInterval(function () {
+                seconds--;
+                document.getElementById("seconds").innerHTML = seconds;
+                document.getElementById("secondsIdle").innerHTML = seconds;
+            }, 1000);
+            t1 = setTimeout(function () {
+                //Show Popup before 20 seconds of timeout.
+                $find("mpeTimeout").show();
+            }, timeout - 60 * 1000);
+            t2 = setTimeout(function () {
+                window.location = "/Login.aspx";
+            }, timeout);
+        };
+        function ResetSession() {
+            //Redirect to refresh Session.
+            window.location = window.location.href;
+        }
+        function RecountSession() {
+            if (myTimer != null) {
+                window.clearInterval(myTimer);
+            }
+            if (t1 != null) {
+                window.clearTimeout(t1);
+            }
+            if (t2 != null) {
+                window.clearTimeout(t2);
+            }
+        }
+        //function pageLoad(sender, args) {
+        //    Sys.WebForms.PageRequestManager.getInstance().add_beginRequest(beginRequest);
+        //    //Sys.WebForms.PageRequestManager.getInstance().add_endRequest(endRequest);
+        //}
+        //function beginRequest(sender, args) {
+        //    SessionExpireAlert(70000);
+        //}
+    </script>
+
+    <asp:ContentPlaceHolder ID="head" runat="server">
+    </asp:ContentPlaceHolder>
+</head>
+<body>
+    <form id="form1" runat="server">
+  
+      <div id="wrapper">
+        <nav class="navbar-default navbar-static-side" role="navigation">
+            <div class="sidebar-collapse">
+                <ul class="nav metismenu" id="side-menu">
+                    <li class="nav-header">
+                        <div class="dropdown profile-element"> <span>
+                            <img alt="image" class="img-circle" src="/Content/img/GDLC_Logo_2.png" width="140" height="100"/>
+                             </span>
+                            <a href="/Dashboard.aspx" data-toggle="dropdown" class="dropdown-toggle" aria-expanded="true">
+                            <span class="clear">Welcome,  <span class="block m-t-xs">  <strong class="font-bold"><asp:Label ID="lblUser" runat="server" Text="" Font-Size="Medium"></asp:Label></strong>
+                             </span>  </span> </a>
+                            <ul class="dropdown-menu animated fadeInRight m-t-xs">
+                                <li data-toggle="modal" data-target="#chpassmodal"><a href="#"><i class="fa fa-key"></i> Change Password</a></li>
+                              <%--  <li><a href="#">Contacts</a></li>
+                                <li><a href="#">Mailbox</a></li>--%>
+                                <li class="divider"></li>
+                                <li onclick="confirmLogout()"><a href="#"><i class="fa fa-lock"></i> Logout</a></li>
+                            </ul>
+                        </div>
+                        <div class="logo-element">
+                            GDLC
+                        </div>
+                    </li>
+                    
+                    <li class="active"><a href="/Dashboard.aspx"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard </span></a></li>
+
+                    <li><a href="/LabourRequest/Requests.aspx"><i class="fa fa-crosshairs"></i> <span class="nav-label">Labour Request </span></a></li>
+
+                    <li><a href="#"><i class="fa fa-group"></i> <span class="nav-label">Daily Requisition  </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="/Operations/Daily/DailyStaffReq.aspx"> UnApproved</a></li>
+                            <li><a href="/Operations/Daily/DailyStaffReqApproved.aspx"> Approved</a></li>
+                        </ul>
+                    </li>
+                    <%--<li><a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Weekly Requisition  </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="/Operations/Weekly/WeeklyStaffReq.aspx"> UnApproved</a></li>
+                            <li><a href="/Operations/Weekly/WeeklyStaffReqApproved.aspx"> Approved</a></li>
+                        </ul>
+                    </li>--%>
+                    <%--<li><a href="#"><i class="fa fa-puzzle-piece"></i> <span class="nav-label">Monthly Requisition  </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="/Operations/Monthly/MonthlyStaffReq.aspx"> UnApproved</a></li>
+                            <li><a href="/Operations/Monthly/MonthlyStaffReqApproved.aspx"> Approved</a></li>
+                        </ul>
+                    </li>--%>
+
+                    <li><a href="#"><i class="fa fa-pencil"></i> <span class="nav-label">Audit </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="/Audit/Approvals/DailyApprovalNew.aspx?reqno="> Daily Requisition Approval </a></li>
+                            <li><a href="/Audit/Approvals/WeeklyApprovalNew.aspx"> Weekly Requisition Approval </a></li>
+                            <li><a href="/Audit/Approvals/MonthlyApprovalNew.aspx"> Monthly Requisition Approval </a></li>
+                        </ul>
+                    </li>
+
+                    <li ><a href="#"><i class="fa fa-gears"></i> <span>Tools</span><span class="fa arrow"></span> </a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="#"> Trade Setup <span class="fa arrow"></span></a>
+                                <ul class="nav nav-third-level">
+                                    <li><a href="/Tools/TradeGroup.aspx">Trade Group </a> </li>
+                                    <li><a href="/Tools/TradeType.aspx">Trade Type </a> </li>
+                                </ul>
+                            </li>
+                            <li><a href="/Tools/PayrollSetup.aspx">Payroll Setup </a> </li>
+                        </ul>
+                    </li>
+                    <li><a href="#"><i class="fa fa-bar-chart"></i> <span class="nav-label">Reports </span><span class="fa arrow"></span></a>
+                        <ul class="nav nav-second-level collapse">
+                            <li><a href="/Reports/Daily/DailyCostSheet1.aspx"> All Daily Reports</a></li>
+                            <li><a href="/Reports/Weekly/vwWeekly1.aspx"> All Weekly Reports</a></li>
+                            <li><a href="/Reports/Monthly/vwMonthlyReports.aspx"> All Monthly Reports</a></li>
+                        </ul>
+                    </li>
+
+                    <li><a href="/Downloads/Invoices.aspx"><i class="fa fa-download"></i> <span class="nav-label"> GDLC Invoices </span></a></li>
+
+                    <li><a href="/Security/Users.aspx"><i class="fa fa-key"></i> <span class="nav-label">Security </span></a></li>
+
+                    <%--<li><a href="/ChangePassword.aspx"><i class="fa fa-key"></i> <span class="nav-label">Change Password </span></a></li>--%>
+
+                 </ul>
+            </div>
+        </nav>
+
+        <div id="page-wrapper" class="gray-bg dashbard-1">
+        <div class="row border-bottom">
+        <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
+        <div class="navbar-header">
+            <a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="#"><i class="fa fa-bars"></i> </a>
+            
+        </div>
+            <ul class="nav navbar-top-links navbar-right">
+                
+                <li>
+                    <span class="m-r-sm text-muted welcome-message" style="padding-right:400px; font-size:16px; color:darkgray; font-weight:600">GDLC Client Portal</span>
+                </li>
+
+                <%--<li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell"></i>  <span runat="server" id="spRM" class="label label-warning">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="/Operations/RawMaterialStock.aspx">
+                                <div runat="server" id="lblRM">
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>--%>
+                <%--<li class="dropdown">
+                    <a class="dropdown-toggle count-info" data-toggle="dropdown" href="#">
+                        <i class="fa fa-bell-o"></i>  <span runat="server" id="spPDT" class="label label-danger">8</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-alerts">
+                        <li>
+                            <a href="/Operations/ProductStock.aspx">
+                                <div runat="server" id="lblPDT">
+                                    <i class="fa fa-envelope fa-fw"></i> You have 16 messages
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>--%>
+                <li onclick="confirmLogout()"> <a href="#"><i class="fa fa-sign-out"></i> Log out  </a>  </li>
+               
+            </ul>
+        </nav>
+        </div>
+
+            <%--<asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>--%>
+
+             <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server" EnablePageMethods="true" CombineScripts="false"></asp:ToolkitScriptManager>
+            <%--<script type="text/javascript" language="javascript">
+    Sys.WebForms.PageRequestManager.getInstance().add_endRequest(EndRequestHandler);
+    function EndRequestHandler(sender, args){
+        if (args.get_error() != undefined){
+            args.set_errorHandled(true);
+        }
+    }
+</script>--%>
+            <telerik:RadSkinManager ID="RadSkinManager1" runat="server" Skin="Office2010Blue"></telerik:RadSkinManager>
+            
+                <asp:UpdatePanel ID="upSessionExpire" runat="server" >
+                <ContentTemplate>
+<h3 hidden="hidden">Session Idle:&nbsp;<span id="secondsIdle"></span>&nbsp;seconds.</h3>
+<asp:LinkButton ID="lnkFake" runat="server" />
+<asp:ModalPopupExtender ID="mpeTimeout" BehaviorID ="mpeTimeout" runat="server" PopupControlID="pnlPopup" TargetControlID="lnkFake"
+    OkControlID="btnYes" CancelControlID="btnNo" BackgroundCssClass="modalBackground1" OnOkScript = "ResetSession()">
+</asp:ModalPopupExtender>
+<asp:Panel ID="pnlPopup" runat="server" CssClass="modalPopup1" Style="display: none">
+    <div class="header1">
+        Session Expiring!
+    </div>
+    <div class="body1">
+        Your Session will expire in&nbsp;<span id="seconds"></span>&nbsp;seconds.<br />
+        Do you want to reset?
+    </div>
+    <div class="footer1" align="right">
+        <asp:Button ID="btnYes" runat="server" Text="Yes" CssClass="yes1" CausesValidation="false" />
+        <asp:Button ID="btnNo" runat="server" Text="No" CssClass="no1" CausesValidation="false" />
+    </div>
+</asp:Panel>
+                </ContentTemplate>
+            </asp:UpdatePanel>
+            
+        <asp:ContentPlaceHolder ID="ContentPlaceHolder1" runat="server">
+            
+        </asp:ContentPlaceHolder>     
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="footer fixed">
+                        <div class="pull-right hidden-xs">
+                            Eupac Web Solutions, danielwiredu@gmail.com,  +233 543 581 406
+                        </div>
+                        <div>
+                            <strong>Copyright &copy; <%=DateTime.Now.Year.ToString() %> <a href="https://docklabour.com/" target="_blank" >Ghana Dock Labour Company</a>.</strong> All rights reserved.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    <div class="modal animated bounceInLeft" id="chpassmodal">
+    <div class="modal-dialog" style="width:40%">
+         <asp:UpdatePanel ID="upPassword" runat="server" >
+             <ContentTemplate>
+                          <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Change Password</h4>
+                </div>
+                        <div class="modal-body">
+                         <div class="form-group">
+                             <label>Password</label>
+                             <asp:TextBox runat="server" ID="txtPassword" Width="100%" TextMode="Password"></asp:TextBox>
+                              <asp:RequiredFieldValidator runat="server" ErrorMessage="Password is required" ControlToValidate="txtPassword" Display="Dynamic" ForeColor="Red" SetFocusOnError="true" ValidationGroup="chpass"></asp:RequiredFieldValidator>
+                             <%--<asp:CompareValidator runat="server" ErrorMessage="Passwords do not match" ForeColor="Red" ControlToValidate="txtPassword" ControlToCompare="txtConfirmPassword" ValidationGroup="chpass"></asp:CompareValidator>--%>
+                         </div>
+                            <div class="form-group">
+                             <label>Confirm Password</label>
+                             <asp:TextBox runat="server" ID="txtConfirmPassword" Width="100%" TextMode="Password"></asp:TextBox>
+                             <asp:CompareValidator runat="server" ErrorMessage="Passwords do not match" ForeColor="Red" ControlToValidate="txtPassword" ControlToCompare="txtConfirmPassword" ValidationGroup="chpass"></asp:CompareValidator>
+                         </div>
+                       </div>
+                <div class="modal-footer">
+                     <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <asp:Button runat="server" ID="btnUpdate" CssClass="btn btn-primary" Text="Update" OnClick="btnUpdate_Click" ValidationGroup="chpass"/>
+                </div>
+            </div>
+             </ContentTemplate>
+         </asp:UpdatePanel>
+        </div>
+    </div>
+
+    </div>
+    </form>
+
+     <%--<script src="/Content/js/jquery-2.1.1.js"></script>  moved to head section cos of auto focus     --%> 
+
+     <script src="/Content/js/bootstrap.min.js"></script>
+    <script src="/Content/js/plugins/metisMenu/jquery.metisMenu.js"></script>
+    <script src="/Content/js/plugins/slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="/Content/js/inspinia.js"></script>
+    <script src="/Content/js/plugins/toastr/toastr.min.js"></script>
+    <script src="/Content/js/plugins/pace/pace.min.js"></script>
+     <!-- JQuery Draggable -->
+    <%--<script src="//code.jquery.com/jquery-1.10.2.js"></script>--%>
+    <script src="//code.jquery.com/ui/1.11.2/jquery-ui.js"></script>
+    <!-- JQuery Draggable -->  
+
+    <script >
+        $(document).ready(function () {
+            setTimeout(function () {
+                toastr.options = {
+                    closeButton: true,
+                    progressBar: true,
+                    showMethod: 'slideDown',
+                    timeOut: 5000
+                };
+                //toastr.success('GIWC App', 'Password Changed');
+                //$('#chpassmodal').appendTo($("form:first"));
+            }, 1000);
+
+            $('#chpassmodal').appendTo($("form:first"));
+        });
+
+        function showpassmodal() {
+            $('#chpassmodal').modal('show');
+        }
+        function closepassmodal() {
+            $('#chpassmodal').modal('hide');
+        }
+        $('#chpassmodal').on('shown.bs.modal', function () {
+            // jQuery code is in here
+            $('#txtPassword').focus();
+        });
+        // Jquery draggable
+        $('.modal-dialog').draggable({
+            handle: ".modal-header"
+        });
+
+        function confirmLogout() {
+            var r = confirm("Do you really want to logout from the system?");
+            if (r == true) {
+                window.location = "/Login.aspx";
+            } else {
+                return;
+            }
+        }
+    </script>
+
+</body>
+</html>

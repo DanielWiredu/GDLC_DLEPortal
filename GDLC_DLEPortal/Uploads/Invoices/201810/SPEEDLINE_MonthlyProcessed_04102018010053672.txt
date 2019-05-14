@@ -1,0 +1,28 @@
+4455980229016238
+KWEKU AFEDZI HAYFORD
+
+
+            'thetellerdata.Attributes.Add("data-APIKey", "OTY2ZTJkNWViZGVlNmY4ODk1OGU4ZjZjZTYzZDdhNDQ=")
+            thetellerdata.Attributes.Add("data-APIKey", "bskjsdsd5446488sdsdsdd")
+
+            'Parsing transaction id... must be 12 digits..
+            thetellerdata.Attributes.Add("data-transid", "090030020325")
+
+            'Parsing amount...
+            thetellerdata.Attributes.Add("data-amount", "1")
+
+            'Parsing customer email
+            thetellerdata.Attributes.Add("data-customer_email", "danielwiredu@gmail.com")
+
+            'Parsing currency.. Ex GHS , USD
+            thetellerdata.Attributes.Add("data-currency", "GHS")
+
+            'Parsing redirect url
+            thetellerdata.Attributes.Add("data-redirect_url", "http://localhost:51177/WebForm2.aspx")
+
+            'Parsing description
+            thetellerdata.Attributes.Add("data-custom_description", "Payment to Payswitch")
+
+            'Parsing payment method...Ex both, momo, card
+            thetellerdata.Attributes.Add("data-payment_method", "both")
+

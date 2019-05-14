@@ -1,0 +1,144 @@
+﻿.rbl input[type="radio"]
+{
+  margin-left: 10px;
+  margin-right: 1px;
+}
+input[type="checkbox"]
+{
+  margin-left: 5px;
+  margin-right: 1px;
+  color:red !important;
+  /* Double-sized Checkboxes */
+  -ms-transform: scale(2); /* IE */
+  -moz-transform: scale(2); /* FF */
+  -webkit-transform: scale(1.2); /* Safari and Chrome */
+  -o-transform: scale(2); /* Opera */
+  /*padding: 10px;*/
+
+  /*transform: scale(1.5);*/
+  /*for all modern browsers*/
+
+}
+input[type="checkbox"]:checked{
+    transform: scale(1.5);
+  background-color: #2ECC71;
+  color: #2ECC71;
+}
+input[type=checkbox][disabled]{
+  /*outline:1px solid red;
+  color:solid blue; */
+  /*-webkit-appearance: none;  disable chrome and safari styles */
+  /*width: 12px;
+  height: 12px;
+  background: white;
+  border: solid 1px black;
+  vertical-align: middle;*/
+  background: url(http://www.thecssninja.com/demo/css_custom-forms/gr_custom-inputs.png) 0 -1px no-repeat;
+  /*height: 16px;*/
+}
+
+input[type="number"]
+{
+    font-weight:bold;
+    color:blue;
+}
+input[type="text"], textarea
+{
+    font-weight:bold;
+    color:blue;
+}
+.riTextBox
+{
+    font-weight:bold !important;
+    font-size:13px !important;
+    color:blue !important;
+}
+.RadGrid_Office2010Blue .rgRow 
+{
+    color:black;
+    font-weight:bold;
+    /*font-size:13px;*/
+}
+.rgAltRow 
+{
+    color:black;
+    font-weight:bold;
+    /*font-size:13px;*/
+}
+/*.RadGrid_Office2010Blue th.rgHeader
+{
+    color:green;
+    font-weight:bold;
+}*/
+.RadGrid_Office2010Blue .rgHeader a
+{
+    /*color:black !important;*/
+    font-weight:bold;
+    font-size:13px;
+}
+/*.rcbItem
+{
+    color:green;
+}*/
+/*.RadComboBox .RadComboBox_Office2010Blue
+{
+    color:blue;
+ 
+}*/
+.RadComboBox_Office2010Blue .rcbInput
+{
+    font-weight:bold;
+    font-size:13px !important;
+    color:blue !important;
+}
+/*.RadComboBox 
+{
+    font-size:large;
+}*/
+/*.rcbInput
+{
+    color:#0f0f0f;
+    font-weight:bold;
+}*/
+/*.riSingle
+{
+    color:yellow;
+    font-weight:bold;
+}*/
+/*.RadInput .RadInput_Office2010Blue
+{
+    color:indigo;
+    font-size:x-large;
+}*/
+/*.riDisabled
+{
+    color:green !important;
+    font-weight:bold !important;
+}*/
+.rcbDisabled
+{
+    color:red !important;
+    font-weight:bold !important;
+    opacity:100;
+}
+/*.rcbHovered
+{
+    color:seashell;
+}*/
+/*.rcSelected 
+{
+    background-color:purple;
+    font-weight:bold;
+    font-size:large;
+}*/
+/*.radInput_Office2010Blue .radReadOnlyCss_Office2010Blue
+{
+    color: green;
+}*/
+/*.RadInput_Office2010Blue .riTextBox, html body .RadInputMgr_Office2010Blue {
+    border-color: #9babc2;
+    background: #fff;
+    color: #384e73;
+     font: normal 16px "Segoe UI",Arial,Helvetica,sans-serif; 
+}*/
+
