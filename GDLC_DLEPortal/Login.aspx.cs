@@ -147,7 +147,8 @@ namespace GDLC_DLEPortal
                         //login not unsuccessful 
                         else
                         {
-                            returnUrl1 = Request.QueryString["ReturnUrl"];
+                            //returnUrl1 = Request.QueryString["ReturnUrl"];
+                            returnUrl1 = "/Dashboard.aspx";
                         }
                         Response.Redirect(returnUrl1);
                     }

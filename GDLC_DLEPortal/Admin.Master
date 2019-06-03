@@ -133,8 +133,8 @@
                     <li><a href="#"><i class="fa fa-bar-chart"></i> <span class="nav-label">Reports </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="/GDLCAdmin/Reports/Daily/DailyCostSheet1.aspx"> All Daily Reports</a></li>
-                            <li><a href="/GDLCAdmin/Reports/Weekly/vwWeekly1.aspx"> All Weekly Reports</a></li>
-                            <li><a href="/GDLCAdmin/Reports/Monthly/vwMonthlyReports.aspx"> All Monthly Reports</a></li>
+                            <%--<li><a href="/GDLCAdmin/Reports/Weekly/vwWeekly1.aspx"> All Weekly Reports</a></li>--%>
+                            <%--<li><a href="/GDLCAdmin/Reports/Monthly/vwMonthlyReports.aspx"> All Monthly Reports</a></li>--%>
                         </ul>
                     </li>
 

@@ -40,6 +40,7 @@
                                             </div>
                                         </div>
                                     </div>
+                        <hr />
                         <asp:HiddenField runat="server" ID="hfReqNo" />
                              <telerik:RadGrid ID="commentGrid" runat="server" DataSourceID="commentSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="False" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemDeleted="commentGrid_ItemDeleted" >
                             <ClientSettings>

@@ -8,6 +8,7 @@ using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Globalization;
+using Telerik.Web.UI;
 
 namespace GDLC_DLEPortal.Operations.Daily
 {
@@ -18,7 +19,7 @@ namespace GDLC_DLEPortal.Operations.Daily
         {
             if (!IsPostBack)
             {
-                string query = "select AutoNo,ReqNo,DLEcodeCompanyName,VesselName,Location,ReportingPoint,CargoName,GangName,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from vwDailyReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
+                string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
                 string reqno = Request.QueryString["reqno"].ToString();
                 if (!String.IsNullOrEmpty(reqno))
                     loadReqNo(reqno, query, "load");
@@ -42,12 +43,36 @@ namespace GDLC_DLEPortal.Operations.Daily
                         {
                             txtAutoNo.Text = reader["AutoNo"].ToString();
                             txtReqNo.Text = reader["ReqNo"].ToString();
-                            txtDLECompany.Text = reader["DLEcodeCompanyName"].ToString();
-                            txtVessel.Text = reader["VesselName"].ToString();
-                            txtLocation.Text = reader["Location"].ToString();
-                            txtReportingPoint.Text = reader["ReportingPoint"].ToString();
-                            txtCargo.Text = reader["CargoName"].ToString();
-                            txtGang.Text = reader["GangName"].ToString();
+                            string companyId = reader["DLEcodeCompanyID"].ToString();
+                            query = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID ='" + companyId + "'";
+                            dleSource.SelectCommand = query;
+                            dlCompany.DataBind();
+                            dlCompany.SelectedValue = companyId;
+                            string vesselId = reader["VesselberthID"].ToString();
+                            query = "SELECT VesselId, VesselName FROM tblVessel WHERE VesselId ='" + vesselId + "'";
+                            vesselSource.SelectCommand = query;
+                            dlVessel.DataBind();
+                            dlVessel.SelectedValue = vesselId;
+                            string locationId = reader["locationID"].ToString();
+                            query = "SELECT LocationId,Location FROM [tblLocation] WHERE LocationId = '" + locationId + "'";
+                            locationSource.SelectCommand = query;
+                            dlLocation.DataBind();
+                            dlLocation.SelectedValue = locationId;
+                            string repPoint = reader["ReportpointID"].ToString();
+                            query = "SELECT ReportingPointId, ReportingPoint FROM tblReportingPoint WHERE ReportingPointId = '" + repPoint + "'";
+                            repPointSource.SelectCommand = query;
+                            dlReportingPoint.DataBind();
+                            dlReportingPoint.SelectedValue = repPoint;
+                            string cargoId = reader["CargoId"].ToString();
+                            query = "SELECT CargoId, CargoName FROM tblCargo WHERE CargoId = '" + cargoId + "'";
+                            cargoSource.SelectCommand = query;
+                            dlCargo.DataBind();
+                            dlCargo.SelectedValue = cargoId;
+                            string gangId = reader["GangId"].ToString();
+                            query = "SELECT GangId, GangName FROM tblGangs WHERE GangId = '" + gangId + "'";
+                            gangSource.SelectCommand = query;
+                            dlGang.DataBind();
+                            dlGang.SelectedValue = gangId;
                             txtJobDescription.Text = reader["job"].ToString();
                             dpRegdate.SelectedDate = Convert.ToDateTime(reader["date_"]);
                             txtNormalHrs.Text = reader["Normal"].ToString();
@@ -159,25 +184,60 @@ namespace GDLC_DLEPortal.Operations.Daily
         }
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            string query = "select AutoNo,ReqNo,DLEcodeCompanyName,VesselName,Location,ReportingPoint,CargoName,GangName,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from vwDailyReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
+            string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
             loadReqNo(txtSearchValue.Text.Trim(), query,"search");
         }
 
         protected void btnPrevious_Click(object sender, EventArgs e)
         {
-            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyName,VesselName,Location,ReportingPoint,CargoName,GangName,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from vwDailyReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo<@ReqNo and Normal = 0 order by reqno desc";
+            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo<@ReqNo and Normal = 0 order by reqno desc";
             loadReqNo(txtReqNo.Text, query, "load");
         }
 
         protected void btnNext_Click(object sender, EventArgs e)
         {
-            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyName,VesselName,Location,ReportingPoint,CargoName,GangName,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from vwDailyReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo>@ReqNo and Normal = 0 order by reqno";
+            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo>@ReqNo and Normal = 0 order by reqno";
             loadReqNo(txtReqNo.Text, query, "load");
         }
 
         protected void btnComments_Click(object sender, EventArgs e)
         {
             Response.Redirect("/Operations/ReqComments.aspx?reqno=" + txtReqNo.Text);
+        }
+        protected void dlVessel_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["VesselName"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["VesselId"].ToString();
+        }
+
+        protected void dlCompany_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyName"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyID"].ToString();
+        }
+
+        protected void dlReportingPoint_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["ReportingPoint"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["ReportingPointId"].ToString();
+        }
+
+        protected void dlLocation_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["Location"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["LocationId"].ToString();
+        }
+
+        protected void dlCargo_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["CargoName"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["CargoId"].ToString();
+        }
+
+        protected void dlGang_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["GangName"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["GangId"].ToString();
         }
     }
 }

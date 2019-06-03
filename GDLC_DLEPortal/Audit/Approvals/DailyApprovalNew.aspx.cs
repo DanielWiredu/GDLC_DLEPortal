@@ -8,7 +8,6 @@ using Telerik.Web.UI;
 using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
-using System.Security.Permissions;
 
 namespace GDLC_DLEPortal.Audit.Approvals
 {
@@ -25,8 +24,7 @@ namespace GDLC_DLEPortal.Audit.Approvals
         {
             if (!IsPostBack)
             {
-                //btnDisapprove.Enabled = User.IsInRole("Administrator") || User.IsInRole("Audit-Disapproval");
-                string query = "select AutoNo,ReqNo,DLEcodeCompanyName,VesselName,Location,ReportingPoint,CargoName,GangName,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from vwDailyReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
+                string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
                 string reqno = Request.QueryString["reqno"].ToString();
                 if (!String.IsNullOrEmpty(reqno))
                     loadReqNo(reqno, query, "load");
@@ -50,7 +48,7 @@ namespace GDLC_DLEPortal.Audit.Approvals
         protected void loadReqNo(string reqno, string query, string request)
         {
             string dleCompanyId = Request.Cookies["dlecompanyId"].Value;
-            //string query = "select AutoNo,ReqNo,DLEcodeCompanyName,VesselName,Location,ReportingPoint,CargoName,GangName,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance, Processed,Stored from vwDailyReq where ReqNo=@ReqNo";
+            //string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance, Processed,Stored from vwDailyReq where ReqNo=@ReqNo";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -65,12 +63,36 @@ namespace GDLC_DLEPortal.Audit.Approvals
                         {
                             txtAutoNo.Text = reader["AutoNo"].ToString();
                             txtReqNo.Text = reader["ReqNo"].ToString();
-                            txtDLECompany.Text = reader["DLEcodeCompanyName"].ToString();
-                            txtVessel.Text = reader["VesselName"].ToString();
-                            txtLocation.Text = reader["Location"].ToString();
-                            txtReportingPoint.Text = reader["ReportingPoint"].ToString();
-                            txtCargo.Text = reader["CargoName"].ToString();
-                            txtGang.Text = reader["GangName"].ToString();
+                            string companyId = reader["DLEcodeCompanyID"].ToString();
+                            query = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID ='" + companyId + "'";
+                            dleSource.SelectCommand = query;
+                            dlCompany.DataBind();
+                            dlCompany.SelectedValue = companyId;
+                            string vesselId = reader["VesselberthID"].ToString();
+                            query = "SELECT VesselId, VesselName FROM tblVessel WHERE VesselId ='" + vesselId + "'";
+                            vesselSource.SelectCommand = query;
+                            dlVessel.DataBind();
+                            dlVessel.SelectedValue = vesselId;
+                            string locationId = reader["locationID"].ToString();
+                            query = "SELECT LocationId,Location FROM [tblLocation] WHERE LocationId = '" + locationId + "'";
+                            locationSource.SelectCommand = query;
+                            dlLocation.DataBind();
+                            dlLocation.SelectedValue = locationId;
+                            string repPoint = reader["ReportpointID"].ToString();
+                            query = "SELECT ReportingPointId, ReportingPoint FROM tblReportingPoint WHERE ReportingPointId = '" + repPoint + "'";
+                            repPointSource.SelectCommand = query;
+                            dlReportingPoint.DataBind();
+                            dlReportingPoint.SelectedValue = repPoint;
+                            string cargoId = reader["CargoId"].ToString();
+                            query = "SELECT CargoId, CargoName FROM tblCargo WHERE CargoId = '" + cargoId + "'";
+                            cargoSource.SelectCommand = query;
+                            dlCargo.DataBind();
+                            dlCargo.SelectedValue = cargoId;
+                            string gangId = reader["GangId"].ToString();
+                            query = "SELECT GangId, GangName FROM tblGangs WHERE GangId = '" + gangId + "'";
+                            gangSource.SelectCommand = query;
+                            dlGang.DataBind();
+                            dlGang.SelectedValue = gangId;
                             txtJobDescription.Text = reader["job"].ToString();
                             dpRegdate.SelectedDate = Convert.ToDateTime(reader["date_"]);
                             txtNormalHrs.Text = reader["Normal"].ToString();
@@ -226,6 +248,7 @@ namespace GDLC_DLEPortal.Audit.Approvals
                         {
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.success('Approved Successfully', 'Success');", true);
                             chkApproved.Checked = true;
+                            chkProcessed.Checked = true;
                             ViewState["Approved"] = "True";
                             //btnApprove.Enabled = false;
                             //btnDisapprove.Enabled = true;
@@ -244,60 +267,6 @@ namespace GDLC_DLEPortal.Audit.Approvals
             lblGangs.InnerText = "Total Members : " + subStaffReqGrid.Items.Count;
         }
 
-
-        [PrincipalPermission(SecurityAction.Demand, Role = "Administrator")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Audit-Disapproval")]
-        protected void btnDisapprove_Click(object sender, EventArgs e)
-        {
-            //if (!User.IsInRole("Administrator"))
-            //{
-            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('You do not have the privilege to disapprove a cost sheet...Please contact the administrator', 'Error');", true);
-            //    return;
-            //}
-            if (ViewState["Approved"].ToString() == "False")
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet not yet Approved...', 'Error');", true);
-                return;
-            }
-            if (chkStored.Checked)
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet Stored...Changes Not Allowed', 'Error');", true);
-                return;
-            }
-            //if cost sheet is processed, unprocess(clear approved), save in disapproved, unprocess/disapprove
-            //else disapprove
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlCommand command = new SqlCommand("spDisapproveDailyReq", connection))
-                {
-                    command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@Processed", SqlDbType.Bit).Value = chkProcessed.Checked;
-                    command.Parameters.Add("@ReqNo", SqlDbType.VarChar).Value = txtReqNo.Text;
-                    command.Parameters.Add("@DisApprovedBy", SqlDbType.VarChar).Value = User.Identity.Name;
-                    command.Parameters.Add("@return_value", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
-                    try
-                    {
-                        connection.Open();
-                        command.ExecuteNonQuery();
-                        int retVal = Convert.ToInt16(command.Parameters["@return_value"].Value);
-                        if (retVal == 0)
-                        {
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.success('Disapproved Successfully', 'Success');", true);
-                            chkApproved.Checked = false;
-                            ViewState["Approved"] = "False";
-                            chkProcessed.Checked = false;
-                            //btnApprove.Enabled = false;
-                            //btnDisapprove.Enabled = true;
-                        }
-                    }
-                    catch (SqlException ex)
-                    {
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
-                    }
-                }
-            }
-        }
-
         protected void btnPrint_Click(object sender, EventArgs e)
         {
             if (!String.IsNullOrEmpty(txtReqNo.Text))
@@ -309,7 +278,7 @@ namespace GDLC_DLEPortal.Audit.Approvals
         }
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            string query = "select AutoNo,ReqNo,DLEcodeCompanyName,VesselName,Location,ReportingPoint,CargoName,GangName,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from vwDailyReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
+            string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
             loadReqNo(txtSearchValue.Text.Trim(), query, "search");
         }
 
@@ -324,7 +293,7 @@ namespace GDLC_DLEPortal.Audit.Approvals
             //{
             //    MessageBox.Show("first ");
             //}
-            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyName,VesselName,Location,ReportingPoint,CargoName,GangName,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from vwDailyReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo<@ReqNo and Approved = 0 order by reqno desc";
+            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo<@ReqNo and Approved = 0 order by reqno desc";
             loadReqNo(txtReqNo.Text, query, "load");
         }
 
@@ -339,8 +308,43 @@ namespace GDLC_DLEPortal.Audit.Approvals
             //{
             //    ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('No more records', 'Error');", true);
             //}
-            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyName,VesselName,Location,ReportingPoint,CargoName,GangName,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from vwDailyReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo>@ReqNo and Approved = 0 order by reqno";
+            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo>@ReqNo and Approved = 0 order by reqno";
             loadReqNo(txtReqNo.Text, query, "load");
+        }
+        protected void dlVessel_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["VesselName"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["VesselId"].ToString();
+        }
+
+        protected void dlCompany_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyName"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyID"].ToString();
+        }
+
+        protected void dlReportingPoint_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["ReportingPoint"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["ReportingPointId"].ToString();
+        }
+
+        protected void dlLocation_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["Location"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["LocationId"].ToString();
+        }
+
+        protected void dlCargo_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["CargoName"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["CargoId"].ToString();
+        }
+
+        protected void dlGang_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
+        {
+            e.Item.Text = ((DataRowView)e.Item.DataItem)["GangName"].ToString();
+            e.Item.Value = ((DataRowView)e.Item.DataItem)["GangId"].ToString();
         }
     }
 }

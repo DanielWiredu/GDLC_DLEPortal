@@ -75,19 +75,19 @@ namespace GDLC_DLEPortal
                 Exception ex = Server.GetLastError().GetBaseException();
                 string errorpage = Request.Url.ToString();
                 //Server.Transfer("Default5s.aspx");
-                //using (SqlConnection connection = new SqlConnection(connectionString))
-                //{
-                //    using (SqlCommand command = new SqlCommand("spAddErrorLog", connection))
-                //    {
-                //        command.CommandType = CommandType.StoredProcedure;
-                //        command.Parameters.Add("@ErrorMessage", SqlDbType.VarChar).Value = ex.Message;
-                //        command.Parameters.Add("@ErrorPage", SqlDbType.VarChar).Value = errorpage;
-                //        command.Parameters.Add("@ErrorUser", SqlDbType.VarChar).Value = Context.User.Identity.Name;
-                //        connection.Open();
-                //        command.ExecuteNonQuery();
-                //        //Server.ClearError();
-                //    }
-                //}
+                using (SqlConnection connection = new SqlConnection(connectionString))
+                {
+                    using (SqlCommand command = new SqlCommand("spAddErrorLog", connection))
+                    {
+                        command.CommandType = CommandType.StoredProcedure;
+                        command.Parameters.Add("@ErrorMessage", SqlDbType.VarChar).Value = ex.Message;
+                        command.Parameters.Add("@ErrorPage", SqlDbType.VarChar).Value = errorpage;
+                        command.Parameters.Add("@ErrorUser", SqlDbType.VarChar).Value = Context.User.Identity.Name;
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        //Server.ClearError();
+                    }
+                }
             }
         }
     }

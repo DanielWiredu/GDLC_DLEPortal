@@ -125,12 +125,6 @@
     <Content Include="Security\EditUser.aspx" />
     <Content Include="Security\NewUser.aspx" />
     <Content Include="Security\Users.aspx" />
-    <Content Include="Uploads\Invoices\201810\ANTRAK_DailyInvoice_04102018125828902.docx" />
-    <Content Include="Uploads\Invoices\201810\GPHA-CLAIMSDOCUMENTATIONS_MonthlyProcessed_04102018013625157.pdf" />
-    <Content Include="Uploads\Invoices\201810\GPHA_WeeklyInvoice_04102018012937946.xlsx" />
-    <Content Include="Uploads\Invoices\201810\TRAFIX_DailyInvoice_04102018122230730.xlsx" />
-    <Content Include="Uploads\Invoices\201810\TRAFIX_MonthlyProcessed_04102018114051306.pdf" />
-    <Content Include="Uploads\Invoices\201810\TRAFIX_WeeklyInvoice_04102018110758340.pdf" />
     <Content Include="Admin.Master" />
     <None Include="Properties\PublishProfiles\finalOnlinePublish.pubxml" />
     <None Include="Properties\PublishProfiles\onlinePublish.pubxml" />
@@ -819,7 +813,6 @@
     <Content Include="Tools\PayrollSetup.aspx" />
     <Content Include="Tools\TradeGroup.aspx" />
     <Content Include="Tools\TradeType.aspx" />
-    <Content Include="Uploads\Invoices\201810\SPEEDLINE_MonthlyProcessed_04102018010053672.txt" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1195,22 +1188,10 @@
       <DependentUpon>WeeklyStaffReqApproved.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Reports\Daily\Approved\rptDailyInvoice.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptDailyInvoice.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
     <Compile Include="Reports\Daily\Approved\rptDailyInvoiceNew.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>rptDailyInvoiceNew.rpt</DependentUpon>
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Reports\Daily\Approved\rptDailyProcessed.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>rptDailyProcessed.rpt</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="Reports\Daily\Approved\rptDailyProcessedNew.cs">
@@ -1370,6 +1351,7 @@
     <Folder Include="Models\" />
     <Folder Include="Reports\Monthly\Approved\" />
     <Folder Include="Reports\Monthly\General\" />
+    <Folder Include="Uploads\Invoices\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GDLCAdmin\Reports\Daily\Approved\rptDailyInvoice.rpt">
@@ -1405,17 +1387,9 @@
       <LastGenOutput>rptWeeklyCostSheet.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\licenses.licx" />
-    <EmbeddedResource Include="Reports\Daily\Approved\rptDailyInvoice.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptDailyInvoice.cs</LastGenOutput>
-    </EmbeddedResource>
     <EmbeddedResource Include="Reports\Daily\Approved\rptDailyInvoiceNew.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>rptDailyInvoiceNew.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="Reports\Daily\Approved\rptDailyProcessed.rpt">
-      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
-      <LastGenOutput>rptDailyProcessed.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Daily\Approved\rptDailyProcessedNew.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

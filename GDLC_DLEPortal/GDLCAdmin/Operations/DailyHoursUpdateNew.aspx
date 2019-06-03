@@ -45,25 +45,103 @@
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">DLE Company</label>
                                     <div class="col-sm-8">
-                                        <asp:TextBox ID="txtDLECompany" runat="server" Width="100%" ReadOnly="true"></asp:TextBox>
+                                        <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" EmptyMessage="Select Company" Filter="Contains"
+                                           OnItemDataBound="dlCompany_ItemDataBound"  >
+                                            <HeaderTemplate>
+                <ul>
+                    <li class="ncolfull">DLE COMPANY</li>
+                </ul>
+            </HeaderTemplate>
+            <ItemTemplate>
+                <ul>
+                    <li class="ncolfull">
+                        <%# DataBinder.Eval(Container.DataItem, "DLEcodeCompanyName")%></li>
+                </ul>
+            </ItemTemplate>
+            <FooterTemplate>
+                A total of
+                <asp:Literal runat="server" ID="companyCount" />
+                items
+            </FooterTemplate>
+                                        </telerik:RadComboBox>
+                                        <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">Vessel</label>
                                     <div class="col-sm-8">
-                                        <asp:TextBox ID="txtVessel" runat="server" Width="100%" ReadOnly="true"></asp:TextBox>
+                                        <telerik:RadComboBox ID="dlVessel" runat="server" Width="100%" DataSourceID="vesselSource" EmptyMessage="Select Vessel" Filter="Contains"
+                                          OnItemDataBound="dlVessel_ItemDataBound" >
+                                            <HeaderTemplate>
+                <ul>
+                    <li class="ncolfull">VESSEL NAME</li>
+                </ul>
+            </HeaderTemplate>
+            <ItemTemplate>
+                <ul>
+                    <li class="ncolfull">
+                        <%# DataBinder.Eval(Container.DataItem, "VesselName")%></li>
+                </ul>
+            </ItemTemplate>
+            <FooterTemplate>
+                A total of
+                <asp:Literal runat="server" ID="vesselCount" />
+                items
+            </FooterTemplate>
+                                        </telerik:RadComboBox>
+                                        <asp:SqlDataSource ID="vesselSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="dlVessel" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">Reporting Point</label>
                                     <div class="col-sm-8">
-                                        <asp:TextBox ID="txtReportingPoint" runat="server" Width="100%" ReadOnly="true"></asp:TextBox>
+                                        <telerik:RadComboBox ID="dlReportingPoint" runat="server" Width="100%" DataSourceID="repPointSource" EmptyMessage="Select Reporting Point" Filter="Contains"
+                                           OnItemDataBound="dlReportingPoint_ItemDataBound"  >
+                                             <HeaderTemplate>
+                <ul>
+                    <li class="ncolfull">REPORTING POINT</li>
+                </ul>
+            </HeaderTemplate>
+            <ItemTemplate>
+                <ul>
+                    <li class="ncolfull">
+                        <%# DataBinder.Eval(Container.DataItem, "ReportingPoint")%></li>
+                </ul>
+            </ItemTemplate>
+            <FooterTemplate>
+                A total of
+                <asp:Literal runat="server" ID="repPointCount" />
+                items
+            </FooterTemplate>
+                                        </telerik:RadComboBox>
+                                        <asp:SqlDataSource ID="repPointSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
                                     </div>
                                 </div>
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">Location</label>
                                     <div class="col-sm-8">
-                                        <asp:TextBox ID="txtLocation" runat="server" Width="100%" ReadOnly="true"></asp:TextBox>
+                                        <telerik:RadComboBox ID="dlLocation" runat="server" Width="100%" DataSourceID="locationSource" EmptyMessage="Select Location" Filter="Contains"
+                                          OnItemDataBound="dlLocation_ItemDataBound"   >
+                                            <HeaderTemplate>
+                <ul>
+                    <li class="ncolfull">LOCATION</li>
+                </ul>
+            </HeaderTemplate>
+            <ItemTemplate>
+                <ul>
+                    <li class="ncolfull">
+                        <%# DataBinder.Eval(Container.DataItem, "Location")%></li>
+                </ul>
+            </ItemTemplate>
+            <FooterTemplate>
+                A total of
+                <asp:Literal runat="server" ID="locationCount" />
+                items
+            </FooterTemplate>
+                                        </telerik:RadComboBox>
+                                        <asp:SqlDataSource ID="locationSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ></asp:SqlDataSource>
                                     </div>
                                 </div>
                                     <div class="form-group">
@@ -93,13 +171,51 @@
                                   <div class="form-group">
                                     <label class="col-sm-4 control-label">Cargo</label>
                                     <div class="col-sm-8">
-                                        <asp:TextBox ID="txtCargo" runat="server" Width="100%" ReadOnly="true"></asp:TextBox>
+                                        <telerik:RadComboBox ID="dlCargo" runat="server" Width="100%" DataSourceID="cargoSource" EmptyMessage="Select Cargo" Filter="Contains"
+                                           OnItemDataBound="dlCargo_ItemDataBound" >
+                                            <HeaderTemplate>
+                <ul>
+                    <li class="ncolfull">CARGO</li>
+                </ul>
+            </HeaderTemplate>
+            <ItemTemplate>
+                <ul>
+                    <li class="ncolfull">
+                        <%# DataBinder.Eval(Container.DataItem, "CargoName")%></li>
+                </ul>
+            </ItemTemplate>
+            <FooterTemplate>
+                A total of
+                <asp:Literal runat="server" ID="cargoCount" />
+                items
+            </FooterTemplate>
+                                        </telerik:RadComboBox>
+                                        <asp:SqlDataSource ID="cargoSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
                                     </div>
                                 </div>
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">Gang</label>
                                     <div class="col-sm-8">
-                                        <asp:TextBox ID="txtGang" runat="server" Width="100%" ReadOnly="true"></asp:TextBox>
+                                        <telerik:RadComboBox ID="dlGang" runat="server" Width="100%" DataSourceID="gangSource" EmptyMessage="Select Gang" Filter="Contains"
+                                        OnItemDataBound="dlGang_ItemDataBound"  >
+                                            <HeaderTemplate>
+                <ul>
+                    <li class="ncolfull">GANG</li>
+                </ul>
+            </HeaderTemplate>
+            <ItemTemplate>
+                <ul>
+                    <li class="ncolfull">
+                        <%# DataBinder.Eval(Container.DataItem, "GangName")%></li>
+                </ul>
+            </ItemTemplate>
+            <FooterTemplate>
+                A total of
+                <asp:Literal runat="server" ID="gangCount" />
+                items
+            </FooterTemplate>
+                                        </telerik:RadComboBox>
+                                        <asp:SqlDataSource ID="gangSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
                                     </div>
                                 </div>
                                     <div class="form-group">
@@ -163,9 +279,6 @@
 
                                  <MasterTableView DataKeyNames="AutoId" DataSourceID="subStaffReqSource" CommandItemDisplay="Top" CommandItemSettings-AddNewRecordText="Add Worker">
                                      <Columns>
-                                        <telerik:GridButtonColumn CommandName="Delete" UniqueName="Delete" ConfirmText="Delete Record?" ButtonType="FontIconButton" Exportable="false">
-                                            <HeaderStyle Width="20px" />
-                                        </telerik:GridButtonColumn>
                                          <telerik:GridBoundColumn Display="false" DataField="AutoId" DataType="System.Int32" FilterControlAltText="Filter AutoId column" HeaderText="AutoId" SortExpression="AutoId" UniqueName="AutoId">
                                          <HeaderStyle Width="100px" />
                                          </telerik:GridBoundColumn>
@@ -184,15 +297,9 @@
                                          <telerik:GridBoundColumn DataField="TradegroupNAME" FilterControlAltText="Filter TradegroupNAME column" HeaderText="Group" SortExpression="TradegroupNAME" UniqueName="TradegroupNAME">
                                          <HeaderStyle Width="100px" />
                                          </telerik:GridBoundColumn>
-                                         <telerik:GridBoundColumn DataField="ezwichid" FilterControlAltText="Filter ezwichid column" HeaderText="Ezwich No" SortExpression="ezwichid" UniqueName="ezwichid">
-                                         <HeaderStyle Width="120px" />
-                                         </telerik:GridBoundColumn>
                                          <telerik:GridBoundColumn DataField="transport" FilterControlAltText="Filter transport column" HeaderText="*" SortExpression="transport" UniqueName="transport" EmptyDataText="" ConvertEmptyStringToNull="false">
                                          <HeaderStyle Width="20px" />
                                          </telerik:GridBoundColumn>
-                                         <telerik:GridButtonColumn ButtonType="PushButton" ButtonCssClass="btn-success" CommandName="Transport" UniqueName="Transport" Text="t" Exportable="false">
-                                        <HeaderStyle Width="25px" />
-                                        </telerik:GridButtonColumn>
                                      </Columns>
                                  </MasterTableView>
 
@@ -216,6 +323,7 @@
                             <asp:Button runat="server" ID="btnReturn" Text="Return" CssClass="btn btn-warning" style="margin-bottom:0px" CausesValidation="false" PostBackUrl="~/GDLCAdmin/Operations/DailyStaffReq.aspx" />
                             <a class="btn btn-success" onclick="newModal()" >Find</a>                           
                              <asp:Button runat="server" ID="btnPrint" Text="Print" CssClass="btn btn-info" OnClick="btnPrint_Click" OnClientClick="if (Page_IsValid) {this.value='Processing...';this.disabled=true; }" UseSubmitBehavior="false"  />
+                            <asp:Button runat="server" ID="btnDisapprove" Text="Disapprove" CssClass="btn btn-danger" OnClick="btnDisapprove_Click" OnClientClick="if (Page_IsValid) {this.value='Processing...';this.disabled=true; }" UseSubmitBehavior="false" />
                         </div>   
                     </ContentTemplate>
                 </asp:UpdatePanel>

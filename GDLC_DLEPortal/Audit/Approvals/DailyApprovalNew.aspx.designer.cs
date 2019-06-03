@@ -58,40 +58,76 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         protected global::System.Web.UI.WebControls.TextBox txtReqNo;
         
         /// <summary>
-        /// txtDLECompany control.
+        /// dlCompany control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDLECompany;
+        protected global::Telerik.Web.UI.RadComboBox dlCompany;
         
         /// <summary>
-        /// txtVessel control.
+        /// dleSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtVessel;
+        protected global::System.Web.UI.WebControls.SqlDataSource dleSource;
         
         /// <summary>
-        /// txtReportingPoint control.
+        /// dlVessel control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtReportingPoint;
+        protected global::Telerik.Web.UI.RadComboBox dlVessel;
         
         /// <summary>
-        /// txtLocation control.
+        /// vesselSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtLocation;
+        protected global::System.Web.UI.WebControls.SqlDataSource vesselSource;
+        
+        /// <summary>
+        /// dlReportingPoint control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadComboBox dlReportingPoint;
+        
+        /// <summary>
+        /// repPointSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource repPointSource;
+        
+        /// <summary>
+        /// dlLocation control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadComboBox dlLocation;
+        
+        /// <summary>
+        /// locationSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource locationSource;
         
         /// <summary>
         /// tpNormalFrom control.
@@ -121,22 +157,40 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         protected global::Telerik.Web.UI.RadDatePicker dpRegdate;
         
         /// <summary>
-        /// txtCargo control.
+        /// dlCargo control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCargo;
+        protected global::Telerik.Web.UI.RadComboBox dlCargo;
         
         /// <summary>
-        /// txtGang control.
+        /// cargoSource control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtGang;
+        protected global::System.Web.UI.WebControls.SqlDataSource cargoSource;
+        
+        /// <summary>
+        /// dlGang control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadComboBox dlGang;
+        
+        /// <summary>
+        /// gangSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource gangSource;
         
         /// <summary>
         /// txtJobDescription control.

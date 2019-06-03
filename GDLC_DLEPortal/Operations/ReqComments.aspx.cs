@@ -38,13 +38,14 @@ namespace GDLC_DLEPortal.Operations
 
         protected void btnSaveComment_Click(object sender, EventArgs e)
         {
-            string query = "insert into tblReqComments(reqno,comment) values(@reqno,@comment)";
+            string query = "insert into tblReqComments(reqno,comment,createdby) values(@reqno,@comment,@createdby)";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.Add("@ReqNo", SqlDbType.VarChar).Value = hfReqNo.Value;
                     command.Parameters.Add("@Comment", SqlDbType.VarChar).Value = txtComment.Text;
+                    command.Parameters.Add("@createdby", SqlDbType.VarChar).Value = Context.User.Identity.Name;
                     try
                     {
                         connection.Open();
