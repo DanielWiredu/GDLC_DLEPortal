@@ -127,6 +127,7 @@
     <Content Include="Security\Users.aspx" />
     <Content Include="Admin.Master" />
     <None Include="Properties\PublishProfiles\finalOnlinePublish.pubxml" />
+    <None Include="Properties\PublishProfiles\offlinePublish.pubxml" />
     <None Include="Properties\PublishProfiles\onlinePublish.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

@@ -123,9 +123,9 @@ namespace GDLC_DLEPortal.Operations.Daily
         }
         protected void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (Convert.ToDouble(txtNormalHrs.Text.Trim()) <= 0.0)
+            if (Convert.ToDouble(txtNormalHrs.Text.Trim()) < 8.0)
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Update Cost Sheet..... Normal hours shold be greater than 0', 'Error');", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Update Cost Sheet..... Normal hours should not be less than 8', 'Error');", true);
                 return;
             }
             if (ViewState["Approved"].ToString() == "True")
