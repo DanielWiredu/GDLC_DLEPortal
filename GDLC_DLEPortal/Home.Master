@@ -255,7 +255,7 @@
                 <div class="col-lg-12">
                     <div class="footer fixed">
                         <div class="pull-right hidden-xs">
-                            Eupac Web Solutions, danielwiredu@gmail.com,  +233 543 581 406
+                            <strong><a href="http://eupacwebs.com/" target="_blank" >Eupac Web Solutions</a></strong>, daniel.wiredu@eupacwebs.com,  +233 (0) 543 581 406
                         </div>
                         <div>
                             <strong>Copyright &copy; <%=DateTime.Now.Year.ToString() %> <a href="https://docklabour.com/" target="_blank" >Ghana Dock Labour Company</a>.</strong> All rights reserved.
