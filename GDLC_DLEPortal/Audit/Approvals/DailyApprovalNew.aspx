@@ -413,7 +413,8 @@
             function OnNormalTimeSelected(sender, e) {
                 if (e.get_newDate() != null) {
                     //alert($find("<%=tpNormalFrom.ClientID %>").get_selectedDate().format("HH:mm:ss"));
-                    var normalhrs = hoursDiff($find("<%=tpNormalTo.ClientID %>").get_selectedDate(), $find("<%=tpNormalFrom.ClientID %>").get_selectedDate());
+                    //var normalhrs = hoursDiff($find("<%=tpNormalTo.ClientID %>").get_selectedDate(), $find("<%=tpNormalFrom.ClientID %>").get_selectedDate());
+                    var normalhrs = 8;
                     $('#txtNormalHrs').val(normalhrs.toFixed(1));
                     //logEvent("OnDateSelected: " + e.get_newDate().toDateString() + " selected in " + sender.get_id() + "<br />");
                 }

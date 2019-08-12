@@ -19,7 +19,7 @@ namespace GDLC_DLEPortal.Operations.Daily
         {
             if (!IsPostBack)
             {
-                string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
+                string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo=@ReqNo";
                 string reqno = Request.QueryString["reqno"].ToString();
                 if (!String.IsNullOrEmpty(reqno))
                     loadReqNo(reqno, query, "load");
@@ -33,7 +33,7 @@ namespace GDLC_DLEPortal.Operations.Daily
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.Add("@DLEcodeCompanyID", SqlDbType.Int).Value = dleCompanyId;
+                    command.Parameters.Add("@DLEcodeCompanyID", SqlDbType.VarChar).Value = dleCompanyId;
                     command.Parameters.Add("@ReqNo", SqlDbType.VarChar).Value = reqno; 
                     try
                     {
@@ -123,9 +123,9 @@ namespace GDLC_DLEPortal.Operations.Daily
         }
         protected void btnUpdate_Click(object sender, EventArgs e)
         {
-            if (Convert.ToDouble(txtNormalHrs.Text.Trim()) < 8.0)
+            if (Convert.ToDouble(txtNormalHrs.Text.Trim()) != 8.0)
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Update Cost Sheet..... Normal hours should not be less than 8', 'Error');", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Update..... Normal hours should not be more or less than 8', 'Error');", true);
                 return;
             }
             if (ViewState["Approved"].ToString() == "True")
@@ -184,19 +184,19 @@ namespace GDLC_DLEPortal.Operations.Daily
         }
         protected void btnSearch_Click(object sender, EventArgs e)
         {
-            string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo=@ReqNo";
+            string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo=@ReqNo";
             loadReqNo(txtSearchValue.Text.Trim(), query,"search");
         }
 
         protected void btnPrevious_Click(object sender, EventArgs e)
         {
-            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo<@ReqNo and Normal = 0 order by reqno desc";
+            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo<@ReqNo and Normal = 0 order by reqno desc";
             loadReqNo(txtReqNo.Text, query, "load");
         }
 
         protected void btnNext_Click(object sender, EventArgs e)
         {
-            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID = @DLEcodeCompanyID AND ReqNo>@ReqNo and Normal = 0 order by reqno";
+            string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo>@ReqNo and Normal = 0 order by reqno";
             loadReqNo(txtReqNo.Text, query, "load");
         }
 

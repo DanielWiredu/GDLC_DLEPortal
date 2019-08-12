@@ -14,7 +14,7 @@ namespace GDLC_DLEPortal.GDLCAdmin.LabourRequest
     public partial class Requests : MasterPageChange
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
-        int rows = 0;
+        
         protected void Page_Load(object sender, EventArgs e)
         {
 
@@ -22,9 +22,10 @@ namespace GDLC_DLEPortal.GDLCAdmin.LabourRequest
 
         protected void RequestGrid_ItemCommand(object sender, GridCommandEventArgs e)
         {
-            if (e.CommandName == "Edit")
+            if (e.CommandName == "View")
             {
                 GridDataItem item = e.Item as GridDataItem;
+                lblCompany.InnerText = item["DLEcodeCompanyName"].Text;
                 txtRequestNo1.Text = item["RequestNo"].Text;
                 txtRequest1.Text = item["Request"].Text;
 

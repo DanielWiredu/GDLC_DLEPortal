@@ -77,20 +77,9 @@
                      </div>
                       <div class="col-md-6">
                          <label>DLE Company</label>
-                                        <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="200" EmptyMessage="Select Company" Filter="Contains"
-                                           OnItemDataBound="dlCompany_ItemDataBound" OnDataBound="dlCompany_DataBound" EnableLoadOnDemand="true"
-                                            OnClientItemsRequested="UpdateCompanyItemCountField" HighlightTemplatedItems="true" MarkFirstMatch="true" Enabled="false" >
-                                            <HeaderTemplate>
-                <ul>
-                    <li class="ncolfull">DLE COMPANY</li>
-                </ul>
-            </HeaderTemplate>
-            <ItemTemplate>
-                <ul>
-                    <li class="ncolfull">
-                        <%# DataBinder.Eval(Container.DataItem, "DLEcodeCompanyName")%></li>
-                </ul>
-            </ItemTemplate>
+                                        <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="300px" EmptyMessage="Select 1 or more companies" Filter="None" Localization-AllItemsCheckedString="All companies checked"
+                                           OnDataBound="dlCompany_DataBound" DataTextField="DLEcodeCompanyName" DataValueField="DLEcodeCompanyID" MarkFirstMatch="false" CheckBoxes="true" EnableCheckAllItemsCheckBox="true">
+
             <FooterTemplate>
                 A total of
                 <asp:Literal runat="server" ID="companyCount" />
@@ -98,7 +87,7 @@
             </FooterTemplate>
                                         </telerik:RadComboBox>
                                         <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
-<%--                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                          </div>
                          </div>
                      </div>
@@ -114,7 +103,7 @@
                             </div>
                          <div class="col-md-6">
                          <label>User Role</label>
-                         <telerik:RadComboBox ID="dlRoles" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" runat="server" Width="100%" DataSourceID="roleSource" DataTextField="Userrole" DataValueField="Userrole" Filter="None" MarkFirstMatch="false" Text="Select Roles"></telerik:RadComboBox>
+                         <telerik:RadComboBox ID="dlRoles" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" runat="server" Width="100%" DataSourceID="roleSource" DataTextField="Userrole" DataValueField="Userrole" Filter="None" MarkFirstMatch="false" EmptyMessage="Select Role(s)" Localization-AllItemsCheckedString="All roles checked"></telerik:RadComboBox>
                           <asp:SqlDataSource ID="roleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT Userrole from tblUserRoles WHERE UserRole <> 'Administrator'"></asp:SqlDataSource>  
                           <asp:RequiredFieldValidator runat="server" ErrorMessage="Required Field" ControlToValidate="dlRoles" Display="Dynamic" ForeColor="Red" SetFocusOnError="true"></asp:RequiredFieldValidator>
                      </div>
@@ -122,7 +111,8 @@
                      </div>
 
                      <div class="modal-footer">
-                    <asp:Button runat="server" CssClass="btn btn-warning" Text="Return" CausesValidation="false" PostBackUrl="~/Security/Users.aspx" style="margin-bottom:0px"/>              
+                    <asp:Button runat="server" CssClass="btn btn-warning" Text="Return" CausesValidation="false" PostBackUrl="~/Security/Users.aspx" style="margin-bottom:0px"/> 
+                    <asp:Button ID="btnAddNew" runat="server" CssClass="btn btn-danger" Text="Add New" CausesValidation="false" OnClick="btnAddNew_Click"/>              
                     <asp:Button ID="btnSave" CssClass="btn btn-primary" runat="server" Text="Save" OnClick="btnSave_Click" OnClientClick="if (Page_IsValid) {this.value='Processing...';this.disabled=true; }" UseSubmitBehavior="false" />         
                 </div>
                             </div>
@@ -132,12 +122,4 @@
                 </div>
         </div>
 
-        <telerik:RadScriptBlock ID="RadScriptBlock1" runat="server">
-        <script type="text/javascript">
-            function UpdateCompanyItemCountField(sender, args) {
-                //Set the footer text.
-                sender.get_dropDownElement().lastChild.innerHTML = "A total of " + sender.get_items().get_count() + " items";
-            }
-        </script>
-    </telerik:RadScriptBlock>
 </asp:Content>

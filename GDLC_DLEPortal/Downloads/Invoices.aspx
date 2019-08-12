@@ -17,7 +17,7 @@
                                 <i class="fa fa-times"></i>
                             </a>
                         </div>
-                    </div>
+                    </div> 
                     <div class="ibox-content">
 
                         <div class="row">
@@ -74,9 +74,9 @@
                                  </MasterTableView>
 
                         </telerik:RadGrid>
-                        <asp:SqlDataSource ID="invoiceSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (50) Id, DLEcodeCompanyName, FileName, FileType, FilePath, DateFrom, DateTo, ReportType, CreatedDate FROM vwFileUploads WHERE DLEcodeCompanyID = @DLEcodeCompanyID AND (FileName LIKE '%' + @FileName + '%') ORDER BY Id DESC">
+                        <asp:SqlDataSource ID="invoiceSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (50) Id, DLEcodeCompanyName, FileName, FileType, FilePath, DateFrom, DateTo, ReportType, CreatedDate FROM vwFileUploads WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyId)) AND (FileName LIKE '%' + @FileName + '%') ORDER BY Id DESC">
                             <SelectParameters>
-                                <asp:CookieParameter Name="DLEcodeCompanyID" CookieName="dlecompanyId" Type="Int32" />
+                                <asp:CookieParameter Name="DLEcodeCompanyID" CookieName="dlecompanyId" Type="String" />
                                 <asp:ControlParameter Name="FileName" ControlID="txtSearchStaffReq" Type="String" PropertyName="Text" ConvertEmptyStringToNull="false" />
                             </SelectParameters>
                         </asp:SqlDataSource>

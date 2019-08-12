@@ -77,28 +77,17 @@
                      </div>
                             <div class="col-md-6">
                          <label>DLE Company</label>
-                                        <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="200" EmptyMessage="Select Company" Filter="Contains"
-                                           OnItemDataBound="dlCompany_ItemDataBound" OnDataBound="dlCompany_DataBound" OnItemsRequested="dlCompany_ItemsRequested" EnableLoadOnDemand="true"
-                                            OnClientItemsRequested="UpdateCompanyItemCountField" HighlightTemplatedItems="true" MarkFirstMatch="true"  >
-                                            <HeaderTemplate>
-                <ul>
-                    <li class="ncolfull">DLE COMPANY</li>
-                </ul>
-            </HeaderTemplate>
-            <ItemTemplate>
-                <ul>
-                    <li class="ncolfull">
-                        <%# DataBinder.Eval(Container.DataItem, "DLEcodeCompanyName")%></li>
-                </ul>
-            </ItemTemplate>
+                                        <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="300px" EmptyMessage="Select 1 or more companies" Filter="None" Localization-AllItemsCheckedString="All companies checked"
+                                           OnDataBound="dlCompany_DataBound" DataTextField="DLEcodeCompanyName" DataValueField="DLEcodeCompanyID" MarkFirstMatch="false" CheckBoxes="true" EnableCheckAllItemsCheckBox="true">
+
             <FooterTemplate>
                 A total of
                 <asp:Literal runat="server" ID="companyCount" />
                 items
             </FooterTemplate>
                                         </telerik:RadComboBox>
-                                        <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ></asp:SqlDataSource>
-<%--                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
+                                        <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT DLEcodeCompanyID,DLEcodeCompanyName FROM [tblDLECompany] WHERE Active = 1 ORDER BY DLEcodeCompanyName"></asp:SqlDataSource>
+                                        <%--<asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>--%>
                          </div>
                          </div>
                      </div>
@@ -115,7 +104,7 @@
                             </div>
                          <div class="col-md-6">
                          <label>User Role</label>
-                         <telerik:RadComboBox ID="dlRoles" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" runat="server" Width="100%" DataSourceID="roleSource" DataTextField="Userrole" DataValueField="Userrole" Filter="None" MarkFirstMatch="false" Text="Select Roles"></telerik:RadComboBox>
+                         <telerik:RadComboBox ID="dlRoles" CheckBoxes="true" EnableCheckAllItemsCheckBox="true" runat="server" Width="100%" DataSourceID="roleSource" DataTextField="Userrole" DataValueField="Userrole" Filter="None" MarkFirstMatch="false" EmptyMessage="Select Role(s)" Localization-AllItemsCheckedString="All roles checked"></telerik:RadComboBox>
                           <asp:SqlDataSource ID="roleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT Userrole from tblUserRoles"></asp:SqlDataSource>  
                           <asp:RequiredFieldValidator runat="server" ErrorMessage="Required Field" ControlToValidate="dlRoles" Display="Dynamic" ForeColor="Red" SetFocusOnError="true"></asp:RequiredFieldValidator>
                      </div>

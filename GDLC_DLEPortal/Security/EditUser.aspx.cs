@@ -21,13 +21,24 @@ namespace GDLC_DLEPortal.Security
             if (!IsPostBack)
             {
                 string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
-                string query = "SELECT * FROM tblUsers WHERE id = @id and DleCompanyId=@DleCompanyId";
+
+                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) ORDER BY DLEcodeCompanyName";
+                dleSource.SelectParameters.Add("DLEcodeCompanyID", DbType.String, dleCompanyId);
+                dlCompany.DataBind();
+                if (!dleCompanyId.Contains(","))
+                {
+                    dlCompany.Items.FindItemByValue(dleCompanyId).Checked = true;
+                    dlCompany.CheckedItemsTexts = RadComboBoxCheckedItemsTexts.DisplayAllInInput;
+                    dlCompany.Enabled = false;
+                }
+
+                string query = "SELECT * FROM vwUsers WHERE id = @id and BaseCompanyId in (SELECT * FROM dbo.DLEIdToTable(@DleCompanyId))";
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     using (SqlCommand command = new SqlCommand(query, connection))
                     {
                         command.Parameters.Add("@id", SqlDbType.Int).Value = Request.QueryString["uId"].ToString();
-                        command.Parameters.Add("@DleCompanyId", SqlDbType.Int).Value = dleCompanyId;
+                        command.Parameters.Add("@DleCompanyId", SqlDbType.VarChar).Value = dleCompanyId;
                         try
                         {
                             connection.Open();
@@ -51,10 +62,14 @@ namespace GDLC_DLEPortal.Security
                                     txtMobile.Text = reader["ContactNo"].ToString();
                                     txtEmail.Text = reader["Email"].ToString();
                                     dlAccoutType.SelectedText = reader["AccountType"].ToString();
-                                    string companyId = reader["DLECompanyID"].ToString();
-                                    dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID ='" + companyId + "'";
-                                    dlCompany.DataBind();
-                                    dlCompany.SelectedValue = companyId;
+                                    string UsercompanyIds = reader["DLECompanyID"].ToString();
+                                    foreach (RadComboBoxItem item in dlCompany.Items)
+                                    {
+                                        if (UsercompanyIds.Contains(item.Value))
+                                        {
+                                            item.Checked = true;
+                                        }
+                                    }
                                     chkActive.Checked = Convert.ToBoolean(reader["Active"]);
                                     txtUserkey.Text = reader["userkey"].ToString();
                                 }
@@ -71,9 +86,12 @@ namespace GDLC_DLEPortal.Security
 
         protected void btnUpdate_Click(object sender, EventArgs e)
         {
-            //int dleCompanyId = 0;
-            //if (!String.IsNullOrEmpty(dlCompany.SelectedValue))
-            //    dleCompanyId = Convert.ToInt32(dlCompany.SelectedValue);
+            string dleCompanyIds = "";
+            foreach (RadComboBoxItem item in dlCompany.CheckedItems)
+            {
+                dleCompanyIds += item.Value + ",";
+            }
+            dleCompanyIds = dleCompanyIds.TrimEnd(',');
 
             string roles = "";
             foreach (RadComboBoxItem item in dlRoles.CheckedItems)
@@ -84,11 +102,11 @@ namespace GDLC_DLEPortal.Security
 
             string query = "";
             byte[] hashedPassword = new byte[0];
-            query = "Update tblUsers SET userroles=@uroles,fullname=@fname,gender=@gender,contactno=@contactno,email=@email,accounttype=@accounttype,active=@active,userkey=@userkey WHERE id=@id";
+            query = "Update tblUsers SET userroles=@uroles,fullname=@fname,gender=@gender,contactno=@contactno,email=@email,accounttype=@accounttype,dlecompanyId=@dlecompanyId,active=@active,userkey=@userkey WHERE id=@id";
             if (!String.IsNullOrEmpty(txtPassword.Text.Trim()))
             {
                 hashedPassword = GetSHA1(txtPassword.Text.Trim());
-                query = "Update tblUsers SET userpassword=@upass,userroles=@uroles,fullname=@fname,gender=@gender,contactno=@contactno,email=@email,accounttype=@accounttype,active=@active,userkey=@userkey WHERE id=@id";
+                query = "Update tblUsers SET userpassword=@upass,userroles=@uroles,fullname=@fname,gender=@gender,contactno=@contactno,email=@email,accounttype=@accounttype,dlecompanyId=@dlecompanyId,active=@active,userkey=@userkey WHERE id=@id";
             }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -105,7 +123,7 @@ namespace GDLC_DLEPortal.Security
                     command.Parameters.Add("@contactno", SqlDbType.VarChar).Value = txtMobile.Text;
                     command.Parameters.Add("@email", SqlDbType.VarChar).Value = txtEmail.Text;
                     command.Parameters.Add("@accounttype", SqlDbType.VarChar).Value = dlAccoutType.SelectedText;
-                    //command.Parameters.Add("@dlecompanyId", SqlDbType.Int).Value = dleCompanyId;
+                    command.Parameters.Add("@dlecompanyId", SqlDbType.VarChar).Value = dleCompanyIds;
                     command.Parameters.Add("@active", SqlDbType.TinyInt).Value = chkActive.Checked;
                     command.Parameters.Add("@userkey", SqlDbType.Char).Value = txtUserkey.Text.ToUpper();
                     command.Parameters.Add("@id", SqlDbType.Int).Value = ViewState["id"].ToString();
@@ -130,11 +148,6 @@ namespace GDLC_DLEPortal.Security
         {
             SHA1CryptoServiceProvider sha = new SHA1CryptoServiceProvider();
             return sha.ComputeHash(System.Text.Encoding.ASCII.GetBytes(password));
-        }
-        protected void dlCompany_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
-        {
-            e.Item.Text = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyName"].ToString();
-            e.Item.Value = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyID"].ToString();
         }
 
         protected void dlCompany_DataBound(object sender, EventArgs e)

@@ -21,7 +21,7 @@
                         <div class="row" >
            <%-- <div class="col-lg-3">
                 <div class="widget style1 blue-bg">
-                        <div class="row">
+                        <div class="row"> 
                             <div class="col-xs-4 text-center">
                                 <i class="fa fa-trophy fa-5x"></i>
                             </div>
@@ -123,7 +123,7 @@
          <asp:SqlDataSource ID="dailyByVesselSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="spGetDLEDailyByVesselDash" SelectCommandType="StoredProcedure">
              <SelectParameters>
                  <asp:CookieParameter Name="accountType" CookieName="accounttype" Type="String" />
-                 <asp:CookieParameter Name="DLEcodeCompanyID" CookieName="dlecompanyId" Type="Int32" />
+                 <asp:CookieParameter Name="DLEcodeCompanyID" CookieName="dlecompanyId" Type="String" />
               </SelectParameters>
          </asp:SqlDataSource>
                     

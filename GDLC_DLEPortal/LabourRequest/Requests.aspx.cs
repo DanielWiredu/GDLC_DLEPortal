@@ -18,7 +18,19 @@ namespace GDLC_DLEPortal.LabourRequest
         int rows = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (!IsPostBack)
+            {
+                string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
+                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) ORDER BY DLEcodeCompanyName";
+                dleSource.SelectParameters.Add("DLEcodeCompanyID", DbType.String, dleCompanyId);
+                dlCompany.DataBind();
+                dlCompany1.DataBind();
+                if (!dleCompanyId.Contains(","))
+                {
+                    dlCompany.SelectedValue = dleCompanyId;
+                    dlCompany.Enabled = false;    
+                }
+            }
         }
 
         protected void txtSearchReq_TextChanged(object sender, EventArgs e)
@@ -33,10 +45,9 @@ namespace GDLC_DLEPortal.LabourRequest
                 GridDataItem item = e.Item as GridDataItem;
                 txtRequestNo1.Text = item["RequestNo"].Text;
                 txtRequest1.Text = item["Request"].Text;
-                if (item["Submitted"].Text == "1")
-                    btnSubmit1.Enabled = false;
-                else
-                    btnSubmit1.Enabled = true;
+                dlCompany1.SelectedValue = item["DLECompanyId"].Text;
+                dlCompany1.Enabled = false;
+                btnSubmit1.Enabled = false;
 
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "editModal();", true);
                 e.Canceled = true;
@@ -85,10 +96,10 @@ namespace GDLC_DLEPortal.LabourRequest
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@DLECompanyId", SqlDbType.Int).Value = Request.Cookies.Get("dlecompanyId").Value;
+                    command.Parameters.Add("@DLECompanyId", SqlDbType.Int).Value = dlCompany.SelectedValue;
                     command.Parameters.Add("@Request", SqlDbType.VarChar).Value = txtRequest.Text;
                     command.Parameters.Add("@CreatedBy", SqlDbType.VarChar).Value = User.Identity.Name;
-                    command.Parameters.Add("@RequestNo", SqlDbType.Int).Direction = ParameterDirection.Output;
+                    command.Parameters.Add("@RequestNo", SqlDbType.VarChar, 20).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@return_value", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
                     try
                     {
@@ -119,10 +130,11 @@ namespace GDLC_DLEPortal.LabourRequest
                 using (SqlCommand command = new SqlCommand("spSubmitLabourRequest", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@dleCompanyId", SqlDbType.Int).Value = Request.Cookies.Get("dlecompanyId").Value;
+                    command.Parameters.Add("@dleCompanyId", SqlDbType.Int).Value = dlCompany.SelectedValue;
                     command.Parameters.Add("@dleCompanyName", SqlDbType.VarChar, 100).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@requestEmail", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@RequestNo", SqlDbType.Int).Value = txtRequestNo.Text;
+                    command.Parameters.Add("@RequestNo", SqlDbType.VarChar).Value = txtRequestNo.Text;
+                    command.Parameters.Add("@submittedBy", SqlDbType.VarChar).Value = Context.User.Identity.Name;
                     command.Parameters.Add("@return_value", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
                     try
                     {
@@ -160,13 +172,14 @@ namespace GDLC_DLEPortal.LabourRequest
 
         protected void btnUpdate_Click(object sender, EventArgs e)
         {
-            string query = "update tblLabourRequest set Request = @Request where RequestNo = @RequestNo";
+            string query = "update tblLabourRequest set Request = @Request, DLECompanyId = @DLECompanyId where RequestNo = @RequestNo";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
                     command.Parameters.Add("@Request", SqlDbType.VarChar).Value = txtRequest1.Text;
-                    command.Parameters.Add("@RequestNo", SqlDbType.Int).Value = txtRequestNo1.Text;
+                    command.Parameters.Add("@DLECompanyId", SqlDbType.Int).Value = dlCompany1.SelectedValue;
+                    command.Parameters.Add("@RequestNo", SqlDbType.VarChar).Value = txtRequestNo1.Text;
                     try
                     {
                         connection.Open();
@@ -175,6 +188,8 @@ namespace GDLC_DLEPortal.LabourRequest
                         {
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.success('Updated Successfully', 'Success');", true);
                             //ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closeeditModal();", true);
+
+                            btnSubmit1.Enabled = true;
                             RequestGrid.Rebind();
                         }
                     }
@@ -193,10 +208,11 @@ namespace GDLC_DLEPortal.LabourRequest
                 using (SqlCommand command = new SqlCommand("spSubmitLabourRequest", connection))
                 {
                     command.CommandType = CommandType.StoredProcedure;
-                    command.Parameters.Add("@dleCompanyId", SqlDbType.Int).Value = Request.Cookies.Get("dlecompanyId").Value;
+                    command.Parameters.Add("@dleCompanyId", SqlDbType.Int).Value = dlCompany1.SelectedValue;
                     command.Parameters.Add("@dleCompanyName", SqlDbType.VarChar, 100).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@requestEmail", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@RequestNo", SqlDbType.Int).Value = txtRequestNo1.Text;
+                    command.Parameters.Add("@RequestNo", SqlDbType.VarChar).Value = txtRequestNo1.Text;
+                    command.Parameters.Add("@submittedBy", SqlDbType.VarChar).Value = Context.User.Identity.Name;
                     command.Parameters.Add("@return_value", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
                     try
                     {
@@ -208,6 +224,7 @@ namespace GDLC_DLEPortal.LabourRequest
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.success('Submitted Successfully', 'Success');", true);
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closeeditModal();", true);
 
+                            btnSubmit1.Enabled = false;
                             RequestGrid.Rebind();
 
                             sendEmail(command.Parameters["@dleCompanyName"].Value.ToString(), command.Parameters["@requestEmail"].Value.ToString(), txtRequestNo1.Text, txtRequest1.Text);
@@ -228,12 +245,14 @@ namespace GDLC_DLEPortal.LabourRequest
                 string message = "Dear GDLC, <br><br>";
                 message += "Please find below labour request submitted by <strong>" + companyName + "</strong> from the Client Portal. <br><br> ";
                 message += "Request No: " + requestno + "<br>";
-                message += "Request   : " + request + "<br><br>";
-                message += "<strong><a href='http://www.gdlcwave.com/' target='_blank'>Click here</a></strong> to log on to the portal for more details. <br /><br />";
+                //message += "Request   : " + request.Replace(Environment.NewLine, "<br>") + "<br><br>";
+                message += "Request   : " + HttpUtility.HtmlEncode(request).Replace("\r\n", "\r").Replace("\n", "\r").Replace("\r", "<br>\r\n").Replace("  ", " &nbsp;") + "<br><br>";
+                message += "<strong><a href='https://gdlcwave.com/' target='_blank'>Click here</a></strong> to log on to the portal for more details. <br /><br />";
                 message += "<strong>This is an auto generated email. Please do not reply.</strong>";
                 MailMessage myMessage = new MailMessage();
                 myMessage.From = (new MailAddress("admin@gdlcwave.com", "GDLC Client Portal"));
                 myMessage.To.Add(new MailAddress(emailAddress));
+                myMessage.Bcc.Add(new MailAddress("daniel.wiredu@eupacwebs.com"));
                 myMessage.Subject = mailSubject;
                 myMessage.Body = message;
                 myMessage.IsBodyHtml = true;

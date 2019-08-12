@@ -34,8 +34,8 @@ namespace GDLC_DLEPortal.Reports.Daily.Approved
                 ParameterDiscreteValue edate = new ParameterDiscreteValue();
                 sdate.Value = startdate;
                 edate.Value = enddate;
-                adapter = new SqlDataAdapter("select * from vwDailyInvoice where DLEcodeCompanyID = @DLEcodeCompanyID AND (Adate between @startdate and @enddate)", connection);
-                adapter.SelectCommand.Parameters.Add("@DLEcodeCompanyID", SqlDbType.Int).Value = dleCompanyId;
+                adapter = new SqlDataAdapter("select * from vwDailyInvoice where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND (Adate between @startdate and @enddate)", connection);
+                adapter.SelectCommand.Parameters.Add("@DLEcodeCompanyID", SqlDbType.VarChar).Value = dleCompanyId;
                 adapter.SelectCommand.Parameters.Add("@startdate", SqlDbType.DateTime).Value = startdate;
                 adapter.SelectCommand.Parameters.Add("@enddate", SqlDbType.DateTime).Value = enddate;
                 if (connection.State == ConnectionState.Closed)

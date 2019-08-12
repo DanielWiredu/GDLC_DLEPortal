@@ -201,7 +201,7 @@ namespace GDLC_DLEPortal.GDLCAdmin.Downloads
 
         protected void dlCompany_ItemsRequested(object sender, RadComboBoxItemsRequestedEventArgs e)
         {
-            String sql = "SELECT top(30) DLEcodeCompanyID,DLEcodeCompanyName FROM [tblDLECompany] WHERE Active = 1 AND DLEcodeCompanyName LIKE '%" + e.Text.ToUpper() + "%'";
+            String sql = "SELECT top(30) DLEcodeCompanyID,DLEcodeCompanyName FROM [tblDLECompany] WHERE DLEcodeCompanyName LIKE '%" + e.Text.ToUpper() + "%' ORDER BY DLEcodeCompanyName";
             dleSource.SelectCommand = sql;
             dlCompany.DataBind();
         }

@@ -24,7 +24,7 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                 if (!String.IsNullOrEmpty(reqno))
                     loadReqNo(reqno, query, "load");
 
-                btnDisapprove.Enabled = User.IsInRole("Administrator");
+                btnDisapprove.Enabled = User.IsInRole("Administrator") || User.IsInRole("Audit");
             }
             //btnFind.Focus();
         }
@@ -160,6 +160,7 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = "Administrator")]
+        [PrincipalPermission(SecurityAction.Demand, Role = "Audit")]
         protected void btnDisapprove_Click(object sender, EventArgs e)
         {
             if (ViewState["Approved"].ToString() == "False")

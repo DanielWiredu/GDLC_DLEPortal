@@ -103,7 +103,7 @@ namespace GDLC_DLEPortal
 
                         HttpCookie ckUserkey = new HttpCookie("userkey", reader["userkey"].ToString());
                         HttpCookie ckAccountType = new HttpCookie("accounttype", reader["accounttype"].ToString());
-                        HttpCookie ckDLEcompanyId = new HttpCookie("dlecompanyId", reader["dlecompanyId"].ToString());
+                        HttpCookie ckDLEcompanyId = new HttpCookie("dlecompanyId", reader["dlecompanyId"].ToString()); //reader["dlecompanyId"].ToString()"51,63,26"
 
                         FormsAuthentication.SetAuthCookie(txtUsername.Value.Trim(), false);
 

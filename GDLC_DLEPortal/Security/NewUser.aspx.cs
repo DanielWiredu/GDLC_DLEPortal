@@ -21,15 +21,28 @@ namespace GDLC_DLEPortal.Security
             if (!IsPostBack)
             {
                 string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
-                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID ='" + dleCompanyId + "'";
+                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) ORDER BY DLEcodeCompanyName";
+                dleSource.SelectParameters.Add("DLEcodeCompanyID", DbType.String, dleCompanyId);
                 dlCompany.DataBind();
-                dlCompany.SelectedValue = dleCompanyId;
+                if (!dleCompanyId.Contains(","))
+                {
+                    dlCompany.Items.FindItemByValue(dleCompanyId).Checked = true;
+                    dlCompany.CheckedItemsTexts = RadComboBoxCheckedItemsTexts.DisplayAllInInput;
+                    dlCompany.Enabled = false;
+                }           
             }
         }
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            int dleCompanyId = Convert.ToInt32(dlCompany.SelectedValue);
+            string dleCompanyIds = "";
+            foreach (RadComboBoxItem item in dlCompany.CheckedItems)
+            {
+                dleCompanyIds += item.Value + ",";
+            }
+            dleCompanyIds = dleCompanyIds.TrimEnd(',');
+
+            //int dleCompanyId = Convert.ToInt32(dlCompany.SelectedValue);
 
             byte[] hashedPassword = GetSHA1(txtPassword.Text.Trim());
             string roles = "";
@@ -52,7 +65,7 @@ namespace GDLC_DLEPortal.Security
                     command.Parameters.Add("@contactno", SqlDbType.VarChar).Value = txtMobile.Text;
                     command.Parameters.Add("@email", SqlDbType.VarChar).Value = txtEmail.Text;
                     command.Parameters.Add("@accounttype", SqlDbType.VarChar).Value = dlAccoutType.SelectedText;
-                    command.Parameters.Add("@dlecompanyId", SqlDbType.Int).Value = dleCompanyId;
+                    command.Parameters.Add("@dlecompanyId", SqlDbType.VarChar).Value = dleCompanyIds;
                     command.Parameters.Add("@active", SqlDbType.Bit).Value = chkActive.Checked;
                     command.Parameters.Add("@userkey", SqlDbType.Char).Value = txtUserkey.Text.ToUpper();
                     try
@@ -62,6 +75,7 @@ namespace GDLC_DLEPortal.Security
                         if (rows == 1)
                         {
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.success('User Saved Successfully', 'Success');", true);
+                            btnSave.Enabled = false;
                         }
                     }
                     catch (Exception ex)
@@ -83,16 +97,15 @@ namespace GDLC_DLEPortal.Security
             SHA1CryptoServiceProvider sha = new SHA1CryptoServiceProvider();
             return sha.ComputeHash(System.Text.Encoding.ASCII.GetBytes(password));
         }
-        protected void dlCompany_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
-        {
-            e.Item.Text = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyName"].ToString();
-            e.Item.Value = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyID"].ToString();
-        }
-
         protected void dlCompany_DataBound(object sender, EventArgs e)
         {
             //set the initial footer label
             ((Literal)dlCompany.Footer.FindControl("companyCount")).Text = Convert.ToString(dlCompany.Items.Count);
+        }
+
+        protected void btnAddNew_Click(object sender, EventArgs e)
+        {
+            Response.Redirect(Request.RawUrl);
         }
     }
 }

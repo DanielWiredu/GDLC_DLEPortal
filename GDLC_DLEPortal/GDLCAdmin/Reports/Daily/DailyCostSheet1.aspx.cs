@@ -17,6 +17,9 @@ namespace GDLC_DLEPortal.GDLCAdmin.Reports.Daily
             {
                 dpStartDate.SelectedDate = DateTime.Now;
                 dpEndDate.SelectedDate = DateTime.Now;
+
+                dpStartDateByCompany.SelectedDate = DateTime.Now;
+                dpEndDateByCompany.SelectedDate = DateTime.Now;
             }
         }
 
@@ -57,6 +60,36 @@ namespace GDLC_DLEPortal.GDLCAdmin.Reports.Daily
             }
 
         }
+        protected void btnReportByCompany_Click(object sender, EventArgs e)
+        {
+            string dleCompanyIds = "";
+            foreach (RadComboBoxItem item in dlCompany.CheckedItems)
+            {
+                dleCompanyIds += item.Value + ",";
+            }
+            dleCompanyIds = dleCompanyIds.TrimEnd(',');
 
+            string startdate = dpStartDateByCompany.SelectedDate.Value.ToString();
+            string enddate = dpEndDateByCompany.SelectedDate.Value.ToShortDateString() + " 11:59:59 PM";
+
+            if (dlReportTypeByCompany.SelectedText == "Daily Cost Sheet")
+            {
+                if (Cache["rptDailyCostSheet_All_ByCompany"] != null)
+                    Cache.Remove("rptDailyCostSheet_All_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Daily/General/vwDailyCostSheet_All_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+            else if (dlReportTypeByCompany.SelectedText == "Daily Processed")
+            {
+                if (Cache["rptDailyProcessed_ByCompany"] != null)
+                    Cache.Remove("rptDailyProcessed_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Daily/Approved/vwDailyProcessed_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+            else if (dlReportTypeByCompany.SelectedText == "Daily Invoice")
+            {
+                if (Cache["rptDailyInvoice_ByCompany"] != null)
+                    Cache.Remove("rptDailyInvoice_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Daily/Approved/vwDailyInvoice_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+        }
     }
 }

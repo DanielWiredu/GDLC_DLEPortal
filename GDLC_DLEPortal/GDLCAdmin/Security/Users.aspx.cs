@@ -18,7 +18,7 @@ namespace GDLC_DLEPortal.GDLCAdmin.Security
         int rows = 0;
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            
         }
 
         protected void userGrid_ItemDataBound(object sender, GridItemEventArgs e)

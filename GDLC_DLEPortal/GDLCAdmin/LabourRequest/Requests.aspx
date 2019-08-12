@@ -31,7 +31,7 @@
                     <ContentTemplate>
                         <div class="row">
                                         <div class="col-sm-4 pull-right">
-                                            <asp:TextBox runat="server" ID="txtSearchValue" Width="100%" placeholder="Request No..." AutoPostBack="true" OnTextChanged="txtSearchValue_TextChanged"></asp:TextBox>                                        
+                                            <asp:TextBox runat="server" ID="txtSearchValue" Width="100%" placeholder="RequestNo / CompanyName..." AutoPostBack="true" OnTextChanged="txtSearchValue_TextChanged"></asp:TextBox>                                        
                                         </div>
                                         <div class="col-sm-8 pull-left">
                                             <div class="toolbar-btn-action">
@@ -48,7 +48,7 @@
                             <GroupingSettings CaseSensitive="false" />
                                  <MasterTableView DataKeyNames="RequestNo" DataSourceID="RequestSource">
                                      <Columns>
-                                         <telerik:GridBoundColumn DataField="RequestNo" DataType="System.Int32" FilterControlAltText="Filter RequestNo column" HeaderText="RequestNo" SortExpression="RequestNo" UniqueName="RequestNo">
+                                         <telerik:GridBoundColumn DataField="RequestNo" FilterControlAltText="Filter RequestNo column" HeaderText="RequestNo" SortExpression="RequestNo" UniqueName="RequestNo">
                                          <HeaderStyle Width="70px" />
                                          </telerik:GridBoundColumn>
                                          <telerik:GridBoundColumn DataField="Request" FilterControlAltText="Filter Request column" HeaderText="Request Description" SortExpression="Request" UniqueName="Request">
@@ -63,14 +63,14 @@
                                          <telerik:GridDateTimeColumn DataField="DateCreated" DataType="System.DateTime" FilterControlAltText="Filter DateCreated column" HeaderText="DateCreated" SortExpression="DateCreated" UniqueName="DateCreated">
                                          <HeaderStyle Width="120px" />
                                          </telerik:GridDateTimeColumn>
-                                         <telerik:GridButtonColumn ButtonType="PushButton" CommandName="Edit" ButtonCssClass="btn-info" Text="View" Exportable="false">
+                                         <telerik:GridButtonColumn ButtonType="PushButton" CommandName="View" ButtonCssClass="btn-info" Text="View" Exportable="false">
                                         <HeaderStyle Width="50px" />
                                         </telerik:GridButtonColumn>
                                      </Columns>
                                  </MasterTableView>
 
                         </telerik:RadGrid>
-                        <asp:SqlDataSource ID="RequestSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (50) RequestNo, Request, DLEcodeCompanyName, CreatedBy, DateCreated FROM vwLabourRequest WHERE Submitted = 1 AND (RequestNo LIKE '%' + @SearchValue + '%' OR DLEcodeCompanyName LIKE '%' + @SearchValue + '%') ORDER BY RequestNo DESC">
+                        <asp:SqlDataSource ID="RequestSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (100) RequestNo, Request, DLEcodeCompanyName, CreatedBy, DateCreated FROM vwLabourRequest WHERE Submitted = 1 AND (RequestNo LIKE '%' + @SearchValue + '%' OR DLEcodeCompanyName LIKE '%' + @SearchValue + '%') ORDER BY RequestNo DESC">
                             <SelectParameters>
                                 <asp:ControlParameter Name="SearchValue" ControlID="txtSearchValue" Type="String" PropertyName="Text" ConvertEmptyStringToNull="false" />
                             </SelectParameters>
@@ -91,6 +91,7 @@
                     <h4 class="modal-title"> Request</h4>
                 </div>
                         <div class="modal-body">
+                            <div runat="server" id="lblCompany" class="alert alert-info"></div>
                             <div class="form-group">
                                 <label>Request No</label>
                                 <asp:TextBox runat="server" ID="txtRequestNo1" Width="100%" Enabled="false"></asp:TextBox>

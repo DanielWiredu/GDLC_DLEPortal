@@ -23,9 +23,19 @@ namespace GDLC_DLEPortal.GDLCAdmin.Security
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
-            int dleCompanyId = 0;
-            if (!String.IsNullOrEmpty(dlCompany.SelectedValue))
-                dleCompanyId = Convert.ToInt32(dlCompany.SelectedValue);
+            string dleCompanyIds = "";
+            if (dlAccoutType.SelectedText == "Employer")
+            {
+                foreach (RadComboBoxItem item in dlCompany.CheckedItems)
+                {
+                    dleCompanyIds += item.Value + ",";
+                }
+                dleCompanyIds = dleCompanyIds.TrimEnd(',');
+            }
+            else
+            {
+                dleCompanyIds = "0";
+            }
 
             byte[] hashedPassword = GetSHA1(txtPassword.Text.Trim());
             string roles = "";
@@ -48,7 +58,7 @@ namespace GDLC_DLEPortal.GDLCAdmin.Security
                     command.Parameters.Add("@contactno", SqlDbType.VarChar).Value = txtMobile.Text;
                     command.Parameters.Add("@email", SqlDbType.VarChar).Value = txtEmail.Text;
                     command.Parameters.Add("@accounttype", SqlDbType.VarChar).Value = dlAccoutType.SelectedText;
-                    command.Parameters.Add("@dlecompanyId", SqlDbType.Int).Value = dleCompanyId;
+                    command.Parameters.Add("@dlecompanyId", SqlDbType.VarChar).Value = dleCompanyIds;
                     command.Parameters.Add("@active", SqlDbType.Bit).Value = chkActive.Checked;
                     command.Parameters.Add("@userkey", SqlDbType.Char).Value = txtUserkey.Text.ToUpper();
                     try
@@ -79,23 +89,10 @@ namespace GDLC_DLEPortal.GDLCAdmin.Security
             SHA1CryptoServiceProvider sha = new SHA1CryptoServiceProvider();
             return sha.ComputeHash(System.Text.Encoding.ASCII.GetBytes(password));
         }
-        protected void dlCompany_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
-        {
-            e.Item.Text = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyName"].ToString();
-            e.Item.Value = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyID"].ToString();
-        }
-
         protected void dlCompany_DataBound(object sender, EventArgs e)
         {
             //set the initial footer label
             ((Literal)dlCompany.Footer.FindControl("companyCount")).Text = Convert.ToString(dlCompany.Items.Count);
-        }
-
-        protected void dlCompany_ItemsRequested(object sender, RadComboBoxItemsRequestedEventArgs e)
-        {
-            String sql = "SELECT top(30) DLEcodeCompanyID,DLEcodeCompanyName FROM [tblDLECompany] WHERE Active = 1 AND DLEcodeCompanyName LIKE '%" + e.Text.ToUpper() + "%'";
-            dleSource.SelectCommand = sql;
-            dlCompany.DataBind();
         }
     }
 }

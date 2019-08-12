@@ -85,6 +85,24 @@ namespace GDLC_DLEPortal.LabourRequest {
         protected global::System.Web.UI.WebControls.TextBox txtRequestNo;
         
         /// <summary>
+        /// dlCompany control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadComboBox dlCompany;
+        
+        /// <summary>
+        /// dleSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource dleSource;
+        
+        /// <summary>
         /// txtRequest control.
         /// </summary>
         /// <remarks>
@@ -119,6 +137,15 @@ namespace GDLC_DLEPortal.LabourRequest {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.TextBox txtRequestNo1;
+        
+        /// <summary>
+        /// dlCompany1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadComboBox dlCompany1;
         
         /// <summary>
         /// txtRequest1 control.

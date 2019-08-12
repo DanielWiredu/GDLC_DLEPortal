@@ -15,7 +15,7 @@
                             </a>
                             <a class="close-link">
                                 <i class="fa fa-times"></i>
-                            </a>
+                            </a> 
                         </div>
                     </div>
                     <div class="ibox-content">
@@ -63,7 +63,7 @@
                                            <telerik:GridBoundColumn DataField="ACCOUNTTYPE" FilterControlAltText="Filter ACCOUNTTYPE column" HeaderText="Account Type" SortExpression="ACCOUNTTYPE" UniqueName="ACCOUNTTYPE" ShowFilterIcon="false" FilterControlWidth="80px">
                                            <HeaderStyle Width="100px" />
                                            </telerik:GridBoundColumn>
-                                           <telerik:GridBoundColumn DataField="DLEcodeCompanyName" FilterControlAltText="Filter DLEcodeCompanyName column" HeaderText="Company Name" SortExpression="DLEcodeCompanyName" UniqueName="DLEcodeCompanyName" ShowFilterIcon="false" FilterControlWidth="170px">
+                                           <telerik:GridBoundColumn DataField="DLEcodeCompanyName" FilterControlAltText="Filter DLEcodeCompanyName column" HeaderText="Base CompanyName" SortExpression="DLEcodeCompanyName" UniqueName="DLEcodeCompanyName" ShowFilterIcon="false" FilterControlWidth="170px">
                                            <HeaderStyle Width="200px" />
                                            </telerik:GridBoundColumn>
                                            <telerik:GridBoundColumn DataField="ContactNo" FilterControlAltText="Filter ContactNo column" HeaderText="ContactNo" SortExpression="ContactNo" UniqueName="ContactNo" ShowFilterIcon="false" FilterControlWidth="80px">
@@ -81,12 +81,12 @@
                                        </Columns>
                                    </MasterTableView>
                                </telerik:RadGrid>
-                               <asp:SqlDataSource ID="userSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT ID, USERNAME, FULLNAME, ACCOUNTTYPE, DLEcodeCompanyName, ContactNo, ACTIVE FROM VWUSERS WHERE DLECompanyID=@DLECompanyID ORDER BY FULLNAME" DeleteCommand="DELETE FROM TBLUSERS WHERE ID = @ID">
+                               <asp:SqlDataSource ID="userSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT ID, USERNAME, FULLNAME, ACCOUNTTYPE, DLEcodeCompanyName, ContactNo, ACTIVE FROM vwUsersMain WHERE BaseCompanyId in (SELECT * FROM dbo.DLEIdToTable(@DLECompanyID)) ORDER BY FULLNAME">
                                    <DeleteParameters>
                                        <asp:Parameter Name="ID" Type="Int32" />
                                    </DeleteParameters>
                                    <SelectParameters>
-                                        <asp:CookieParameter Name="DLECompanyID" CookieName="dlecompanyId" Type="Int32" />
+                                        <asp:CookieParameter Name="DLECompanyID" CookieName="dlecompanyId" Type="String" />
                             </SelectParameters>
                                </asp:SqlDataSource>
                     </ContentTemplate>

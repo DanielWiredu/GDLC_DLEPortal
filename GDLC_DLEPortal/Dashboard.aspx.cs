@@ -30,7 +30,7 @@ namespace GDLC_DLEPortal
                 {
                     command.CommandType = CommandType.StoredProcedure;
                     command.Parameters.Add("@accountType", SqlDbType.VarChar).Value = accountType;
-                    command.Parameters.Add("@dleCompanyId", SqlDbType.Int).Value = dleCompanyId;
+                    command.Parameters.Add("@dleCompanyId", SqlDbType.VarChar).Value = dleCompanyId;
                     command.Parameters.Add("@dailyAll", SqlDbType.Int).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@dailyApproved", SqlDbType.Int).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@dailyUnapproved", SqlDbType.Int).Direction = ParameterDirection.Output;

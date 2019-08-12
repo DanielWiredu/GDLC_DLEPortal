@@ -48,11 +48,15 @@
                             <GroupingSettings CaseSensitive="false" />
                                  <MasterTableView DataKeyNames="RequestNo" DataSourceID="RequestSource">
                                      <Columns>
-                                         <telerik:GridBoundColumn DataField="RequestNo" DataType="System.Int32" FilterControlAltText="Filter RequestNo column" HeaderText="RequestNo" SortExpression="RequestNo" UniqueName="RequestNo">
+                                         <telerik:GridBoundColumn DataField="RequestNo" FilterControlAltText="Filter RequestNo column" HeaderText="RequestNo" SortExpression="RequestNo" UniqueName="RequestNo">
                                          <HeaderStyle Width="70px" />
                                          </telerik:GridBoundColumn>
                                          <telerik:GridBoundColumn DataField="Request" FilterControlAltText="Filter Request column" HeaderText="Request Description" SortExpression="Request" UniqueName="Request">
                                          <HeaderStyle Width="300px" />
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn DataField="DLECompanyId" DataType="System.Int32" SortExpression="DLECompanyId" UniqueName="DLECompanyId" Display="false"> </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn DataField="DLEcodeCompanyName" FilterControlAltText="Filter DLEcodeCompanyName column" HeaderText="Company Name" SortExpression="DLEcodeCompanyName" UniqueName="DLEcodeCompanyName">
+                                         <HeaderStyle Width="200px" />
                                          </telerik:GridBoundColumn>
                                          <telerik:GridBoundColumn DataField="CreatedBy" FilterControlAltText="Filter CreatedBy column" HeaderText="CreatedBy" SortExpression="CreatedBy" UniqueName="CreatedBy">
                                          <HeaderStyle Width="150px" />
@@ -73,9 +77,9 @@
                                  </MasterTableView>
 
                         </telerik:RadGrid>
-                        <asp:SqlDataSource ID="RequestSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (50) RequestNo, Request, Submitted, CreatedBy, DateCreated FROM tblLabourRequest WHERE DLECompanyId = @DLECompanyId AND (RequestNo LIKE '%' + @RequestNo + '%') ORDER BY RequestNo DESC">
+                        <asp:SqlDataSource ID="RequestSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (100) RequestNo, Request, DLECompanyId, DLEcodeCompanyName, Submitted, CreatedBy, DateCreated FROM vwLabourRequest WHERE DLECompanyId IN (SELECT * FROM dbo.DLEIdToTable(@DLECompanyId)) AND (RequestNo LIKE '%' + @RequestNo + '%') ORDER BY RequestNo DESC">
                             <SelectParameters>
-                                <asp:CookieParameter Name="DLECompanyId" CookieName="dlecompanyId" Type="Int32" />
+                                <asp:CookieParameter Name="DLECompanyId" CookieName="dlecompanyId" Type="String" />
                                 <asp:ControlParameter Name="RequestNo" ControlID="txtSearchReq" Type="String" PropertyName="Text" DefaultValue="0" ConvertEmptyStringToNull="false" />
                             </SelectParameters>
                         </asp:SqlDataSource>
@@ -100,6 +104,12 @@
                                 <asp:TextBox runat="server" ID="txtRequestNo" Width="100%" Enabled="false"></asp:TextBox>
                                 <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRequestNo" Display="Dynamic" ForeColor="Red" ErrorMessage="Required Field" SetFocusOnError="true" ValidationGroup="newsubmit"></asp:RequiredFieldValidator>
                             </div>
+                            <div class="form-group">
+                                <label> Company</label>
+                                <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="300px" EmptyMessage="Select company" DataTextField="DLEcodeCompanyName" DataValueField="DLEcodeCompanyID"></telerik:RadComboBox>
+                                <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
+                                <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="newrequest"></asp:RequiredFieldValidator>
+                         </div>
                          <div class="form-group">
                                <label>Request</label>
                                <asp:TextBox ID="txtRequest" runat="server" Width="100%" TextMode="MultiLine" Rows="10" ></asp:TextBox>
@@ -134,6 +144,11 @@
                                 <asp:TextBox runat="server" ID="txtRequestNo1" Width="100%" Enabled="false"></asp:TextBox>
                                 <asp:RequiredFieldValidator runat="server" ControlToValidate="txtRequestNo1" Display="Dynamic" ForeColor="Red" ErrorMessage="Required Field" SetFocusOnError="true" ValidationGroup="editsubmit"></asp:RequiredFieldValidator>
                             </div>
+                            <div class="form-group">
+                                <label> Company</label>
+                                <telerik:RadComboBox ID="dlCompany1" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="300px" EmptyMessage="Select company" DataTextField="DLEcodeCompanyName" DataValueField="DLEcodeCompanyID"></telerik:RadComboBox>
+                                <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany1" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="editrequest"></asp:RequiredFieldValidator>
+                         </div>
                          <div class="form-group">
                                <label>Request</label>
                                <asp:TextBox ID="txtRequest1" runat="server" Width="100%" TextMode="MultiLine" Rows="10" ></asp:TextBox>

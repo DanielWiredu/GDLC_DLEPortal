@@ -262,7 +262,7 @@
                                     <div class="form-group">
                                     <label class="col-sm-7 control-label">Normal Hrs</label>
                                     <div class="col-sm-5">
-                                        <telerik:RadNumericTextBox ID="txtNormalHrs" runat="server" Width="100%"  MinValue="0" NumberFormat-DecimalDigits="1" ClientIDMode="Static"></telerik:RadNumericTextBox>
+                                        <telerik:RadNumericTextBox ID="txtNormalHrs" runat="server" Width="100%"  MinValue="0" AllowOutOfRangeAutoCorrect="true" NumberFormat-DecimalDigits="1" ClientIDMode="Static"></telerik:RadNumericTextBox>
                                         <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNormalHrs" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
@@ -405,7 +405,8 @@
             function OnNormalTimeSelected(sender, e) {
                 if (e.get_newDate() != null) {
                     //alert($find("<%=tpNormalFrom.ClientID %>").get_selectedDate().format("HH:mm:ss"));
-                    var normalhrs = hoursDiff($find("<%=tpNormalTo.ClientID %>").get_selectedDate(), $find("<%=tpNormalFrom.ClientID %>").get_selectedDate());
+                    //var normalhrs = hoursDiff($find("<%=tpNormalTo.ClientID %>").get_selectedDate(), $find("<%=tpNormalFrom.ClientID %>").get_selectedDate());
+                    var normalhrs = 8;
                     $('#txtNormalHrs').val(normalhrs.toFixed(1));
                     //logEvent("OnDateSelected: " + e.get_newDate().toDateString() + " selected in " + sender.get_id() + "<br />");
                 }

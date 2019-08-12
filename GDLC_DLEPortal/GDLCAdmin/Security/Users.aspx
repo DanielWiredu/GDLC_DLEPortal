@@ -63,7 +63,7 @@
                                            <telerik:GridBoundColumn DataField="ACCOUNTTYPE" FilterControlAltText="Filter ACCOUNTTYPE column" HeaderText="Account Type" SortExpression="ACCOUNTTYPE" UniqueName="ACCOUNTTYPE" ShowFilterIcon="false" FilterControlWidth="80px">
                                            <HeaderStyle Width="100px" />
                                            </telerik:GridBoundColumn>
-                                           <telerik:GridBoundColumn DataField="DLEcodeCompanyName" FilterControlAltText="Filter DLEcodeCompanyName column" HeaderText="Company Name" SortExpression="DLEcodeCompanyName" UniqueName="DLEcodeCompanyName" ShowFilterIcon="false" FilterControlWidth="170px">
+                                           <telerik:GridBoundColumn DataField="DLEcodeCompanyName" FilterControlAltText="Filter DLEcodeCompanyName column" HeaderText="Base CompanyName" SortExpression="DLEcodeCompanyName" UniqueName="DLEcodeCompanyName" ShowFilterIcon="false" FilterControlWidth="170px">
                                            <HeaderStyle Width="200px" />
                                            </telerik:GridBoundColumn>
                                            <telerik:GridBoundColumn DataField="ContactNo" FilterControlAltText="Filter ContactNo column" HeaderText="ContactNo" SortExpression="ContactNo" UniqueName="ContactNo" ShowFilterIcon="false" FilterControlWidth="80px">
@@ -81,10 +81,10 @@
                                        </Columns>
                                    </MasterTableView>
                                </telerik:RadGrid>
-                               <asp:SqlDataSource ID="userSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT ID, USERNAME, FULLNAME, ACCOUNTTYPE, DLEcodeCompanyName, ContactNo, ACTIVE FROM VWUSERS ORDER BY FULLNAME" DeleteCommand="DELETE FROM TBLUSERS WHERE ID = @ID">
-                                   <DeleteParameters>
+                               <asp:SqlDataSource ID="userSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT ID, USERNAME, FULLNAME, ACCOUNTTYPE, DLEcodeCompanyName, ContactNo, ACTIVE FROM vwUsersMain ORDER BY FULLNAME">
+                                   <%--<DeleteParameters>
                                        <asp:Parameter Name="ID" Type="Int32" />
-                                   </DeleteParameters>
+                                   </DeleteParameters>--%>
                                </asp:SqlDataSource>
                     </ContentTemplate>
                 </asp:UpdatePanel>

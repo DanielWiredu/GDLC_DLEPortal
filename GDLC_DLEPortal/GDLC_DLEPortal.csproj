@@ -82,15 +82,20 @@
   <ItemGroup>
     <Content Include="Downloads\Invoices.aspx" />
     <Content Include="GDLCAdmin\Downloads\Invoices.aspx" />
+    <Content Include="GDLCAdmin\LabourRequest\EditRequestForm.aspx" />
+    <Content Include="GDLCAdmin\LabourRequest\RequestForms.aspx" />
     <Content Include="GDLCAdmin\LabourRequest\Requests.aspx" />
     <Content Include="GDLCAdmin\Operations\DailyHoursUpdateNew.aspx" />
     <Content Include="GDLCAdmin\Operations\DailyStaffReq.aspx" />
     <Content Include="GDLCAdmin\Operations\ReqComments.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\Approved\vwDailyInvoice.aspx" />
+    <Content Include="GDLCAdmin\Reports\Daily\Approved\vwDailyInvoice_ByCompany.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\Approved\vwDailyProcessed.aspx" />
+    <Content Include="GDLCAdmin\Reports\Daily\Approved\vwDailyProcessed_ByCompany.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\DailyCostSheet1.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet_All.aspx" />
+    <Content Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx" />
     <Content Include="GDLCAdmin\Reports\Monthly\vwMonthlyReports.aspx" />
     <Content Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyInvoice.aspx" />
     <Content Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyProcessed.aspx" />
@@ -100,8 +105,9 @@
     <Content Include="GDLCAdmin\Security\EditUser.aspx" />
     <Content Include="GDLCAdmin\Security\NewUser.aspx" />
     <Content Include="GDLCAdmin\Security\Users.aspx" />
-    <Content Include="LabourRequest\EditRequest.aspx" />
-    <Content Include="LabourRequest\NewRequest.aspx" />
+    <Content Include="LabourRequest\EditRequestForm.aspx" />
+    <Content Include="LabourRequest\NewRequestForm.aspx" />
+    <Content Include="LabourRequest\RequestForms.aspx" />
     <Content Include="LabourRequest\Requests.aspx" />
     <Content Include="Operations\Daily\DailyHoursUpdateNew.aspx" />
     <Content Include="Operations\Daily\DailyStaffReq.aspx" />
@@ -122,6 +128,9 @@
     <Content Include="Content\font-awesome\fonts\fontawesome-webfont.woff2" />
     <Content Include="Content\js\common.all.min.js.map" />
     <Content Include="Home.Master" />
+    <Content Include="Reports\Daily\Approved\vwDailyInvoice_ByCompany.aspx" />
+    <Content Include="Reports\Daily\Approved\vwDailyProcessed_ByCompany.aspx" />
+    <Content Include="Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx" />
     <Content Include="Security\EditUser.aspx" />
     <Content Include="Security\NewUser.aspx" />
     <Content Include="Security\Users.aspx" />
@@ -129,6 +138,7 @@
     <None Include="Properties\PublishProfiles\finalOnlinePublish.pubxml" />
     <None Include="Properties\PublishProfiles\offlinePublish.pubxml" />
     <None Include="Properties\PublishProfiles\onlinePublish.pubxml" />
+    <Content Include="Uploads\Invoices\201906\GHACEM_DailyInvoice_1362019101734305.pdf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -889,6 +899,20 @@
     <Compile Include="GDLCAdmin\Downloads\Invoices.aspx.designer.cs">
       <DependentUpon>Invoices.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GDLCAdmin\LabourRequest\EditRequestForm.aspx.cs">
+      <DependentUpon>EditRequestForm.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\LabourRequest\EditRequestForm.aspx.designer.cs">
+      <DependentUpon>EditRequestForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\LabourRequest\RequestForms.aspx.cs">
+      <DependentUpon>RequestForms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\LabourRequest\RequestForms.aspx.designer.cs">
+      <DependentUpon>RequestForms.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GDLCAdmin\LabourRequest\Requests.aspx.cs">
       <DependentUpon>Requests.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -948,12 +972,26 @@
     <Compile Include="GDLCAdmin\Reports\Daily\Approved\vwDailyInvoice.aspx.designer.cs">
       <DependentUpon>vwDailyInvoice.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GDLCAdmin\Reports\Daily\Approved\vwDailyInvoice_ByCompany.aspx.cs">
+      <DependentUpon>vwDailyInvoice_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Daily\Approved\vwDailyInvoice_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwDailyInvoice_ByCompany.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GDLCAdmin\Reports\Daily\Approved\vwDailyProcessed.aspx.cs">
       <DependentUpon>vwDailyProcessed.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="GDLCAdmin\Reports\Daily\Approved\vwDailyProcessed.aspx.designer.cs">
       <DependentUpon>vwDailyProcessed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Daily\Approved\vwDailyProcessed_ByCompany.aspx.cs">
+      <DependentUpon>vwDailyProcessed_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Daily\Approved\vwDailyProcessed_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwDailyProcessed_ByCompany.aspx</DependentUpon>
     </Compile>
     <Compile Include="GDLCAdmin\Reports\Daily\DailyCostSheet1.aspx.cs">
       <DependentUpon>DailyCostSheet1.aspx</DependentUpon>
@@ -981,6 +1019,13 @@
     </Compile>
     <Compile Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet_All.aspx.designer.cs">
       <DependentUpon>vwDailyCostSheet_All.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx.cs">
+      <DependentUpon>vwDailyCostSheet_All_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwDailyCostSheet_All_ByCompany.aspx</DependentUpon>
     </Compile>
     <Compile Include="GDLCAdmin\Reports\Monthly\vwMonthlyReports.aspx.cs">
       <DependentUpon>vwMonthlyReports.aspx</DependentUpon>
@@ -1073,19 +1118,26 @@
     <Compile Include="Home.Master.designer.cs">
       <DependentUpon>Home.Master</DependentUpon>
     </Compile>
-    <Compile Include="LabourRequest\EditRequest.aspx.cs">
-      <DependentUpon>EditRequest.aspx</DependentUpon>
+    <Compile Include="LabourRequest\EditRequestForm.aspx.cs">
+      <DependentUpon>EditRequestForm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="LabourRequest\EditRequest.aspx.designer.cs">
-      <DependentUpon>EditRequest.aspx</DependentUpon>
+    <Compile Include="LabourRequest\EditRequestForm.aspx.designer.cs">
+      <DependentUpon>EditRequestForm.aspx</DependentUpon>
     </Compile>
-    <Compile Include="LabourRequest\NewRequest.aspx.cs">
-      <DependentUpon>NewRequest.aspx</DependentUpon>
+    <Compile Include="LabourRequest\NewRequestForm.aspx.cs">
+      <DependentUpon>NewRequestForm.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="LabourRequest\NewRequest.aspx.designer.cs">
-      <DependentUpon>NewRequest.aspx</DependentUpon>
+    <Compile Include="LabourRequest\NewRequestForm.aspx.designer.cs">
+      <DependentUpon>NewRequestForm.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LabourRequest\RequestForms.aspx.cs">
+      <DependentUpon>RequestForms.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="LabourRequest\RequestForms.aspx.designer.cs">
+      <DependentUpon>RequestForms.aspx</DependentUpon>
     </Compile>
     <Compile Include="LabourRequest\Requests.aspx.cs">
       <DependentUpon>Requests.aspx</DependentUpon>
@@ -1208,12 +1260,26 @@
     <Compile Include="Reports\Daily\Approved\vwDailyInvoice.aspx.designer.cs">
       <DependentUpon>vwDailyInvoice.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Daily\Approved\vwDailyInvoice_ByCompany.aspx.cs">
+      <DependentUpon>vwDailyInvoice_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Daily\Approved\vwDailyInvoice_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwDailyInvoice_ByCompany.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Daily\Approved\vwDailyProcessed.aspx.cs">
       <DependentUpon>vwDailyProcessed.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\Daily\Approved\vwDailyProcessed.aspx.designer.cs">
       <DependentUpon>vwDailyProcessed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Daily\Approved\vwDailyProcessed_ByCompany.aspx.cs">
+      <DependentUpon>vwDailyProcessed_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Daily\Approved\vwDailyProcessed_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwDailyProcessed_ByCompany.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Daily\DailyCostSheet1.aspx.cs">
       <DependentUpon>DailyCostSheet1.aspx</DependentUpon>
@@ -1241,6 +1307,13 @@
     </Compile>
     <Compile Include="Reports\Daily\General\vwDailyCostSheet_All.aspx.designer.cs">
       <DependentUpon>vwDailyCostSheet_All.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx.cs">
+      <DependentUpon>vwDailyCostSheet_All_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwDailyCostSheet_All_ByCompany.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Monthly\vwMonthlyReports.aspx.cs">
       <DependentUpon>vwMonthlyReports.aspx</DependentUpon>
@@ -1352,7 +1425,6 @@
     <Folder Include="Models\" />
     <Folder Include="Reports\Monthly\Approved\" />
     <Folder Include="Reports\Monthly\General\" />
-    <Folder Include="Uploads\Invoices\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GDLCAdmin\Reports\Daily\Approved\rptDailyInvoice.rpt">

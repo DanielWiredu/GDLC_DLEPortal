@@ -17,6 +17,20 @@ namespace GDLC_DLEPortal.Reports.Daily
             {
                 dpStartDate.SelectedDate = DateTime.Now;
                 dpEndDate.SelectedDate = DateTime.Now;
+
+                dpStartDateByCompany.SelectedDate = DateTime.Now;
+                dpEndDateByCompany.SelectedDate = DateTime.Now;
+
+                string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
+                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) ORDER BY DLEcodeCompanyName";
+                dleSource.SelectParameters.Add("DLEcodeCompanyID", DbType.String, dleCompanyId);
+                dlCompany.DataBind();
+                if (!dleCompanyId.Contains(","))
+                {
+                    dlCompany.Items.FindItemByValue(dleCompanyId).Checked = true;
+                    dlCompany.CheckedItemsTexts = RadComboBoxCheckedItemsTexts.DisplayAllInInput;
+                    dlCompany.Enabled = false;
+                }
             }
         }
 
@@ -58,5 +72,36 @@ namespace GDLC_DLEPortal.Reports.Daily
 
         }
 
+        protected void btnReportByCompany_Click(object sender, EventArgs e)
+        {
+            string dleCompanyIds = "";
+            foreach (RadComboBoxItem item in dlCompany.CheckedItems)
+            {
+                dleCompanyIds += item.Value + ",";
+            }
+            dleCompanyIds = dleCompanyIds.TrimEnd(',');
+
+            string startdate = dpStartDateByCompany.SelectedDate.Value.ToString();
+            string enddate = dpEndDateByCompany.SelectedDate.Value.ToShortDateString() + " 11:59:59 PM";
+
+            if (dlReportTypeByCompany.SelectedText == "Daily Cost Sheet")
+            {
+                if (Cache["rptDailyCostSheet_All_ByCompany"] != null)
+                    Cache.Remove("rptDailyCostSheet_All_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Daily/General/vwDailyCostSheet_All_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+            else if (dlReportTypeByCompany.SelectedText == "Daily Processed")
+            {
+                if (Cache["rptDailyProcessed_ByCompany"] != null)
+                    Cache.Remove("rptDailyProcessed_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Daily/Approved/vwDailyProcessed_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+            else if (dlReportTypeByCompany.SelectedText == "Daily Invoice")
+            {
+                if (Cache["rptDailyInvoice_ByCompany"] != null)
+                    Cache.Remove("rptDailyInvoice_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Daily/Approved/vwDailyInvoice_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+        }
     }
 }
