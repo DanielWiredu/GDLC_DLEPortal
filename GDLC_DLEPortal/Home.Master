@@ -106,14 +106,14 @@
                     
                     <li class="active"><a href="/Dashboard.aspx"><i class="fa fa-dashboard"></i> <span class="nav-label">Dashboard </span></a></li>
 
-                    <li><a href="#"><i class="fa fa-crosshairs"></i> <span class="nav-label">Labour Request</span><span class="fa arrow"></span></a>
+                    <%--<li><a href="#"><i class="fa fa-crosshairs"></i> <span class="nav-label">Labour Request</span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="/LabourRequest/Requests.aspx"> Regular</a></li>
                             <li><a href="/LabourRequest/RequestForms.aspx">Template</a></li>
                         </ul>
-                    </li>
+                    </li>--%>
 
-                    <%--<li><a href="/LabourRequest/Requests.aspx"><i class="fa fa-crosshairs"></i> <span class="nav-label">Labour Request </span></a></li>--%>
+                    <li><a href="/LabourRequest/Requests.aspx"><i class="fa fa-crosshairs"></i> <span class="nav-label">Labour Request </span></a></li>
                      <%--<li><a href="/LabourRequest/RequestForms.aspx"><i class="fa fa-crosshairs"></i> <span class="nav-label">Labour Request Form</span></a></li>--%>
 
                     <li><a href="#"><i class="fa fa-group"></i> <span class="nav-label">Daily Requisition  </span><span class="fa arrow"></span></a>
