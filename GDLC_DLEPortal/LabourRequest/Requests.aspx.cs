@@ -252,7 +252,7 @@ namespace GDLC_DLEPortal.LabourRequest
                 MailMessage myMessage = new MailMessage();
                 myMessage.From = (new MailAddress("admin@gdlcwave.com", "GDLC Client Portal"));
                 myMessage.To.Add(new MailAddress(emailAddress));
-                myMessage.Bcc.Add(new MailAddress("daniel.wiredu@eupacwebs.com"));
+                //myMessage.Bcc.Add(new MailAddress("daniel.wiredu@eupacwebs.com"));
                 myMessage.Subject = mailSubject;
                 myMessage.Body = message;
                 myMessage.IsBodyHtml = true;
