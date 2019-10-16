@@ -39,7 +39,7 @@ namespace GDLC_DLEPortal.GDLCAdmin.LabourRequest
                                 txtTerminal.Text = reader["Terminal"].ToString();
                                 dpReqdate.SelectedDate = Convert.ToDateTime(reader["RequestDate"]);
                                 txtVessel.Text = reader["Vessel"].ToString();
-                                txtDOA.Text = reader["DOA"].ToString();
+                                dpDOA.SelectedDate = Convert.ToDateTime(reader["DOA"]);
                                 dlActivity.SelectedText = reader["Activity"].ToString();
                                 dlWorkShift.SelectedText = reader["WorkShift"].ToString();
                                 chkSubmitted.Checked = Convert.ToBoolean(reader["Submitted"]);

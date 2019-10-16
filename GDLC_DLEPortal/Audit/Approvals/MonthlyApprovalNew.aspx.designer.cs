@@ -13,6 +13,24 @@ namespace GDLC_DLEPortal.Audit.Approvals {
     public partial class MonthlyApprovalNew {
         
         /// <summary>
+        /// UpdateProgress2 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdateProgress UpdateProgress2;
+        
+        /// <summary>
+        /// upMain control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel upMain;
+        
+        /// <summary>
         /// lblMsg control.
         /// </summary>
         /// <remarks>
@@ -166,15 +184,6 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         protected global::System.Web.UI.WebControls.TextBox txtWorkerName;
         
         /// <summary>
-        /// txtEzwichNo control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtEzwichNo;
-        
-        /// <summary>
         /// dlTradeGroup control.
         /// </summary>
         /// <remarks>
@@ -283,6 +292,24 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         protected global::Telerik.Web.UI.RadNumericTextBox txtTotalDays;
         
         /// <summary>
+        /// btnPrevious control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnPrevious;
+        
+        /// <summary>
+        /// btnNext control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnNext;
+        
+        /// <summary>
         /// chkProcessed control.
         /// </summary>
         /// <remarks>
@@ -299,6 +326,15 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.CheckBox chkStored;
+        
+        /// <summary>
+        /// chkConfirmed control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.CheckBox chkConfirmed;
         
         /// <summary>
         /// chkApproved control.
@@ -353,15 +389,6 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnApprove;
-        
-        /// <summary>
-        /// btnDisapprove control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnDisapprove;
         
         /// <summary>
         /// txtSearchValue control.

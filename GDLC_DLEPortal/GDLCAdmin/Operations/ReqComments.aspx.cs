@@ -25,7 +25,12 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
 
         protected void btnReturn_Click(object sender, EventArgs e)
         {
-            Response.Redirect("/GDLCAdmin/Operations/DailyHoursUpdateNew.aspx?reqno=" + hfReqNo.Value);
+            if (hfReqNo.Value.StartsWith("D"))
+                Response.Redirect("/GDLCAdmin/Operations/DailyHoursUpdateNew.aspx?reqno=" + hfReqNo.Value);
+            else if (hfReqNo.Value.StartsWith("PW"))
+                Response.Redirect("/GDLCAdmin/Operations/EditWeeklyReq.aspx?reqno=" + hfReqNo.Value);
+            else if (hfReqNo.Value.StartsWith("PM"))
+                Response.Redirect("/GDLCAdmin/Operations/EditMonthlyReq.aspx?reqno=" + hfReqNo.Value);
         }
     }
 }

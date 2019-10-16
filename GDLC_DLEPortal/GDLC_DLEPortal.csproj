@@ -43,8 +43,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AjaxControlToolkit">
-      <HintPath>..\..\..\..\..\Downloads\Compressed\AjaxControlToolkit.Binary.NET45\AjaxControlToolkit.dll</HintPath>
+    <Reference Include="AjaxControlToolkit, Version=4.5.7.1213, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\Downloads\AjaxControlToolkit.Binary.NET45\AjaxControlToolkit.dll</HintPath>
     </Reference>
     <Reference Include="CrystalDecisions.CrystalReports.Engine, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
     <Reference Include="CrystalDecisions.ReportSource, Version=13.0.2000.0, Culture=neutral, PublicKeyToken=692fbea5521e1304, processorArchitecture=MSIL" />
@@ -85,9 +86,15 @@
     <Content Include="GDLCAdmin\LabourRequest\EditRequestForm.aspx" />
     <Content Include="GDLCAdmin\LabourRequest\RequestForms.aspx" />
     <Content Include="GDLCAdmin\LabourRequest\Requests.aspx" />
+    <Content Include="GDLCAdmin\Operations\Advice.aspx" />
     <Content Include="GDLCAdmin\Operations\DailyHoursUpdateNew.aspx" />
     <Content Include="GDLCAdmin\Operations\DailyStaffReq.aspx" />
+    <Content Include="GDLCAdmin\Operations\EditAdvice.aspx" />
+    <Content Include="GDLCAdmin\Operations\EditMonthlyReq.aspx" />
+    <Content Include="GDLCAdmin\Operations\EditWeeklyReq.aspx" />
+    <Content Include="GDLCAdmin\Operations\MonthlyStaffReq.aspx" />
     <Content Include="GDLCAdmin\Operations\ReqComments.aspx" />
+    <Content Include="GDLCAdmin\Operations\WeeklyStaffReq.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\Approved\vwDailyInvoice.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\Approved\vwDailyInvoice_ByCompany.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\Approved\vwDailyProcessed.aspx" />
@@ -96,11 +103,20 @@
     <Content Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet_All.aspx" />
     <Content Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx" />
+    <Content Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoice.aspx" />
+    <Content Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoiceSummary.aspx" />
+    <Content Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoiceSummary_ByCompany.aspx" />
+    <Content Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoice_ByCompany.aspx" />
+    <Content Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyProcessed.aspx" />
+    <Content Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyProcessed_ByCompany.aspx" />
     <Content Include="GDLCAdmin\Reports\Monthly\vwMonthlyReports.aspx" />
     <Content Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyInvoice.aspx" />
+    <Content Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyInvoice_ByCompany.aspx" />
     <Content Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyProcessed.aspx" />
+    <Content Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyProcessed_ByCompany.aspx" />
     <Content Include="GDLCAdmin\Reports\Weekly\General\vwWeeklyCostSheet.aspx" />
     <Content Include="GDLCAdmin\Reports\Weekly\General\vwWeeklyCostSheet_All.aspx" />
+    <Content Include="GDLCAdmin\Reports\Weekly\General\vwWeeklyCostSheet_All_ByCompany.aspx" />
     <Content Include="GDLCAdmin\Reports\Weekly\vwWeekly1.aspx" />
     <Content Include="GDLCAdmin\Security\EditUser.aspx" />
     <Content Include="GDLCAdmin\Security\NewUser.aspx" />
@@ -112,13 +128,19 @@
     <Content Include="Operations\Daily\DailyHoursUpdateNew.aspx" />
     <Content Include="Operations\Daily\DailyStaffReq.aspx" />
     <Content Include="Operations\Daily\DailyStaffReqApproved.aspx" />
+    <Content Include="Operations\Monthly\EditMonthlyAdvice.aspx" />
     <Content Include="Operations\Monthly\EditMonthlyReq.aspx" />
+    <Content Include="Operations\Monthly\MonthlyAdvice.aspx" />
     <Content Include="Operations\Monthly\MonthlyStaffReq.aspx" />
     <Content Include="Operations\Monthly\MonthlyStaffReqApproved.aspx" />
+    <Content Include="Operations\Monthly\NewMonthlyAdvice.aspx" />
     <Content Include="Operations\Monthly\NewMonthlyReq.aspx" />
     <Content Include="Operations\ReqComments.aspx" />
+    <Content Include="Operations\Weekly\EditWeeklyAdvice.aspx" />
     <Content Include="Operations\Weekly\EditWeeklyReq.aspx" />
+    <Content Include="Operations\Weekly\NewWeeklyAdivce.aspx" />
     <Content Include="Operations\Weekly\NewWeeklyReq.aspx" />
+    <Content Include="Operations\Weekly\WeeklyAdvice.aspx" />
     <Content Include="Operations\Weekly\WeeklyStaffReq.aspx" />
     <Content Include="Operations\Weekly\WeeklyStaffReqApproved.aspx" />
     <Content Include="packages.config" />
@@ -131,6 +153,16 @@
     <Content Include="Reports\Daily\Approved\vwDailyInvoice_ByCompany.aspx" />
     <Content Include="Reports\Daily\Approved\vwDailyProcessed_ByCompany.aspx" />
     <Content Include="Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx" />
+    <Content Include="Reports\Monthly\Approved\vwMonthlyInvoice.aspx" />
+    <Content Include="Reports\Monthly\Approved\vwMonthlyInvoiceSummary.aspx" />
+    <Content Include="Reports\Monthly\Approved\vwMonthlyInvoiceSummary_ByCompany.aspx" />
+    <Content Include="Reports\Monthly\Approved\vwMonthlyInvoice_ByCompany.aspx" />
+    <Content Include="Reports\Monthly\Approved\vwMonthlyProcessed.aspx" />
+    <Content Include="Reports\Monthly\Approved\vwMonthlyProcessed_ByCompany.aspx" />
+    <Content Include="Reports\Monthly\General\vwMonthlyCostSheet.aspx" />
+    <Content Include="Reports\Weekly\Approved\vwWeeklyInvoice_ByCompany.aspx" />
+    <Content Include="Reports\Weekly\Approved\vwWeeklyProcessed_ByCompany.aspx" />
+    <Content Include="Reports\Weekly\General\vwWeeklyCostSheet_All_ByCompany.aspx" />
     <Content Include="Security\EditUser.aspx" />
     <Content Include="Security\NewUser.aspx" />
     <Content Include="Security\Users.aspx" />
@@ -138,6 +170,8 @@
     <None Include="Properties\PublishProfiles\finalOnlinePublish.pubxml" />
     <None Include="Properties\PublishProfiles\offlinePublish.pubxml" />
     <None Include="Properties\PublishProfiles\onlinePublish.pubxml" />
+    <Content Include="Tools\EditPayrollSetup.aspx" />
+    <Content Include="Tools\TradeGroupRate.aspx" />
     <Content Include="Uploads\Invoices\201906\GHACEM_DailyInvoice_1362019101734305.pdf" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -920,6 +954,13 @@
     <Compile Include="GDLCAdmin\LabourRequest\Requests.aspx.designer.cs">
       <DependentUpon>Requests.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GDLCAdmin\Operations\Advice.aspx.cs">
+      <DependentUpon>Advice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\Advice.aspx.designer.cs">
+      <DependentUpon>Advice.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GDLCAdmin\Operations\DailyHoursUpdateNew.aspx.cs">
       <DependentUpon>DailyHoursUpdateNew.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -934,12 +975,47 @@
     <Compile Include="GDLCAdmin\Operations\DailyStaffReq.aspx.designer.cs">
       <DependentUpon>DailyStaffReq.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GDLCAdmin\Operations\EditAdvice.aspx.cs">
+      <DependentUpon>EditAdvice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\EditAdvice.aspx.designer.cs">
+      <DependentUpon>EditAdvice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\EditMonthlyReq.aspx.cs">
+      <DependentUpon>EditMonthlyReq.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\EditMonthlyReq.aspx.designer.cs">
+      <DependentUpon>EditMonthlyReq.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\EditWeeklyReq.aspx.cs">
+      <DependentUpon>EditWeeklyReq.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\EditWeeklyReq.aspx.designer.cs">
+      <DependentUpon>EditWeeklyReq.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\MonthlyStaffReq.aspx.cs">
+      <DependentUpon>MonthlyStaffReq.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\MonthlyStaffReq.aspx.designer.cs">
+      <DependentUpon>MonthlyStaffReq.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GDLCAdmin\Operations\ReqComments.aspx.cs">
       <DependentUpon>ReqComments.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="GDLCAdmin\Operations\ReqComments.aspx.designer.cs">
       <DependentUpon>ReqComments.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\WeeklyStaffReq.aspx.cs">
+      <DependentUpon>WeeklyStaffReq.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Operations\WeeklyStaffReq.aspx.designer.cs">
+      <DependentUpon>WeeklyStaffReq.aspx</DependentUpon>
     </Compile>
     <Compile Include="GDLCAdmin\Reports\Daily\Approved\rptDailyInvoice.cs">
       <AutoGen>True</AutoGen>
@@ -1027,6 +1103,66 @@
     <Compile Include="GDLCAdmin\Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx.designer.cs">
       <DependentUpon>vwDailyCostSheet_All_ByCompany.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\rptMonthlyInvoice.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptMonthlyInvoice.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\rptMonthlyInvoiceSummary.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptMonthlyInvoiceSummary.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\rptMonthlyProcessed.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptMonthlyProcessed.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoice.aspx.cs">
+      <DependentUpon>vwMonthlyInvoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoice.aspx.designer.cs">
+      <DependentUpon>vwMonthlyInvoice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoiceSummary.aspx.cs">
+      <DependentUpon>vwMonthlyInvoiceSummary.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoiceSummary.aspx.designer.cs">
+      <DependentUpon>vwMonthlyInvoiceSummary.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoiceSummary_ByCompany.aspx.cs">
+      <DependentUpon>vwMonthlyInvoiceSummary_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoiceSummary_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwMonthlyInvoiceSummary_ByCompany.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoice_ByCompany.aspx.cs">
+      <DependentUpon>vwMonthlyInvoice_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyInvoice_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwMonthlyInvoice_ByCompany.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyProcessed.aspx.cs">
+      <DependentUpon>vwMonthlyProcessed.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyProcessed.aspx.designer.cs">
+      <DependentUpon>vwMonthlyProcessed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyProcessed_ByCompany.aspx.cs">
+      <DependentUpon>vwMonthlyProcessed_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Monthly\Approved\vwMonthlyProcessed_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwMonthlyProcessed_ByCompany.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GDLCAdmin\Reports\Monthly\vwMonthlyReports.aspx.cs">
       <DependentUpon>vwMonthlyReports.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1053,12 +1189,26 @@
     <Compile Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyInvoice.aspx.designer.cs">
       <DependentUpon>vwWeeklyInvoice.aspx</DependentUpon>
     </Compile>
+    <Compile Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyInvoice_ByCompany.aspx.cs">
+      <DependentUpon>vwWeeklyInvoice_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyInvoice_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwWeeklyInvoice_ByCompany.aspx</DependentUpon>
+    </Compile>
     <Compile Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyProcessed.aspx.cs">
       <DependentUpon>vwWeeklyProcessed.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyProcessed.aspx.designer.cs">
       <DependentUpon>vwWeeklyProcessed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyProcessed_ByCompany.aspx.cs">
+      <DependentUpon>vwWeeklyProcessed_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Weekly\Approved\vwWeeklyProcessed_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwWeeklyProcessed_ByCompany.aspx</DependentUpon>
     </Compile>
     <Compile Include="GDLCAdmin\Reports\Weekly\General\rptWeeklyCostSheet.cs">
       <AutoGen>True</AutoGen>
@@ -1079,6 +1229,13 @@
     </Compile>
     <Compile Include="GDLCAdmin\Reports\Weekly\General\vwWeeklyCostSheet_All.aspx.designer.cs">
       <DependentUpon>vwWeeklyCostSheet_All.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Weekly\General\vwWeeklyCostSheet_All_ByCompany.aspx.cs">
+      <DependentUpon>vwWeeklyCostSheet_All_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="GDLCAdmin\Reports\Weekly\General\vwWeeklyCostSheet_All_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwWeeklyCostSheet_All_ByCompany.aspx</DependentUpon>
     </Compile>
     <Compile Include="GDLCAdmin\Reports\Weekly\vwWeekly1.aspx.cs">
       <DependentUpon>vwWeekly1.aspx</DependentUpon>
@@ -1177,12 +1334,26 @@
     <Compile Include="Operations\Daily\DailyStaffReqApproved.aspx.designer.cs">
       <DependentUpon>DailyStaffReqApproved.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Operations\Monthly\EditMonthlyAdvice.aspx.cs">
+      <DependentUpon>EditMonthlyAdvice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Operations\Monthly\EditMonthlyAdvice.aspx.designer.cs">
+      <DependentUpon>EditMonthlyAdvice.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Operations\Monthly\EditMonthlyReq.aspx.cs">
       <DependentUpon>EditMonthlyReq.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Operations\Monthly\EditMonthlyReq.aspx.designer.cs">
       <DependentUpon>EditMonthlyReq.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Monthly\MonthlyAdvice.aspx.cs">
+      <DependentUpon>MonthlyAdvice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Operations\Monthly\MonthlyAdvice.aspx.designer.cs">
+      <DependentUpon>MonthlyAdvice.aspx</DependentUpon>
     </Compile>
     <Compile Include="Operations\Monthly\MonthlyStaffReq.aspx.cs">
       <DependentUpon>MonthlyStaffReq.aspx</DependentUpon>
@@ -1198,6 +1369,13 @@
     <Compile Include="Operations\Monthly\MonthlyStaffReqApproved.aspx.designer.cs">
       <DependentUpon>MonthlyStaffReqApproved.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Operations\Monthly\NewMonthlyAdvice.aspx.cs">
+      <DependentUpon>NewMonthlyAdvice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Operations\Monthly\NewMonthlyAdvice.aspx.designer.cs">
+      <DependentUpon>NewMonthlyAdvice.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Operations\Monthly\NewMonthlyReq.aspx.cs">
       <DependentUpon>NewMonthlyReq.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1212,6 +1390,13 @@
     <Compile Include="Operations\ReqComments.aspx.designer.cs">
       <DependentUpon>ReqComments.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Operations\Weekly\EditWeeklyAdvice.aspx.cs">
+      <DependentUpon>EditWeeklyAdvice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Operations\Weekly\EditWeeklyAdvice.aspx.designer.cs">
+      <DependentUpon>EditWeeklyAdvice.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Operations\Weekly\EditWeeklyReq.aspx.cs">
       <DependentUpon>EditWeeklyReq.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1219,12 +1404,26 @@
     <Compile Include="Operations\Weekly\EditWeeklyReq.aspx.designer.cs">
       <DependentUpon>EditWeeklyReq.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Operations\Weekly\NewWeeklyAdivce.aspx.cs">
+      <DependentUpon>NewWeeklyAdivce.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Operations\Weekly\NewWeeklyAdivce.aspx.designer.cs">
+      <DependentUpon>NewWeeklyAdivce.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Operations\Weekly\NewWeeklyReq.aspx.cs">
       <DependentUpon>NewWeeklyReq.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Operations\Weekly\NewWeeklyReq.aspx.designer.cs">
       <DependentUpon>NewWeeklyReq.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Operations\Weekly\WeeklyAdvice.aspx.cs">
+      <DependentUpon>WeeklyAdvice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Operations\Weekly\WeeklyAdvice.aspx.designer.cs">
+      <DependentUpon>WeeklyAdvice.aspx</DependentUpon>
     </Compile>
     <Compile Include="Operations\Weekly\WeeklyStaffReq.aspx.cs">
       <DependentUpon>WeeklyStaffReq.aspx</DependentUpon>
@@ -1315,6 +1514,79 @@
     <Compile Include="Reports\Daily\General\vwDailyCostSheet_All_ByCompany.aspx.designer.cs">
       <DependentUpon>vwDailyCostSheet_All_ByCompany.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Monthly\Approved\rptMonthlyInvoice.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptMonthlyInvoice.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\rptMonthlyInvoiceSummary.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptMonthlyInvoiceSummary.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\rptMonthlyProcessed.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptMonthlyProcessed.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyInvoice.aspx.cs">
+      <DependentUpon>vwMonthlyInvoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyInvoice.aspx.designer.cs">
+      <DependentUpon>vwMonthlyInvoice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyInvoiceSummary.aspx.cs">
+      <DependentUpon>vwMonthlyInvoiceSummary.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyInvoiceSummary.aspx.designer.cs">
+      <DependentUpon>vwMonthlyInvoiceSummary.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyInvoiceSummary_ByCompany.aspx.cs">
+      <DependentUpon>vwMonthlyInvoiceSummary_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyInvoiceSummary_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwMonthlyInvoiceSummary_ByCompany.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyInvoice_ByCompany.aspx.cs">
+      <DependentUpon>vwMonthlyInvoice_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyInvoice_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwMonthlyInvoice_ByCompany.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyProcessed.aspx.cs">
+      <DependentUpon>vwMonthlyProcessed.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyProcessed.aspx.designer.cs">
+      <DependentUpon>vwMonthlyProcessed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyProcessed_ByCompany.aspx.cs">
+      <DependentUpon>vwMonthlyProcessed_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\Approved\vwMonthlyProcessed_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwMonthlyProcessed_ByCompany.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Monthly\General\rptMonthlyCostSheet.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>rptMonthlyCostSheet.rpt</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\General\vwMonthlyCostSheet.aspx.cs">
+      <DependentUpon>vwMonthlyCostSheet.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Monthly\General\vwMonthlyCostSheet.aspx.designer.cs">
+      <DependentUpon>vwMonthlyCostSheet.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Monthly\vwMonthlyReports.aspx.cs">
       <DependentUpon>vwMonthlyReports.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1341,12 +1613,26 @@
     <Compile Include="Reports\Weekly\Approved\vwWeeklyInvoice.aspx.designer.cs">
       <DependentUpon>vwWeeklyInvoice.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Reports\Weekly\Approved\vwWeeklyInvoice_ByCompany.aspx.cs">
+      <DependentUpon>vwWeeklyInvoice_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Weekly\Approved\vwWeeklyInvoice_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwWeeklyInvoice_ByCompany.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Reports\Weekly\Approved\vwWeeklyProcessed.aspx.cs">
       <DependentUpon>vwWeeklyProcessed.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Reports\Weekly\Approved\vwWeeklyProcessed.aspx.designer.cs">
       <DependentUpon>vwWeeklyProcessed.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Weekly\Approved\vwWeeklyProcessed_ByCompany.aspx.cs">
+      <DependentUpon>vwWeeklyProcessed_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Weekly\Approved\vwWeeklyProcessed_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwWeeklyProcessed_ByCompany.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Weekly\General\rptWeeklyCostSheet.cs">
       <AutoGen>True</AutoGen>
@@ -1367,6 +1653,13 @@
     </Compile>
     <Compile Include="Reports\Weekly\General\vwWeeklyCostSheet_All.aspx.designer.cs">
       <DependentUpon>vwWeeklyCostSheet_All.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Reports\Weekly\General\vwWeeklyCostSheet_All_ByCompany.aspx.cs">
+      <DependentUpon>vwWeeklyCostSheet_All_ByCompany.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Reports\Weekly\General\vwWeeklyCostSheet_All_ByCompany.aspx.designer.cs">
+      <DependentUpon>vwWeeklyCostSheet_All_ByCompany.aspx</DependentUpon>
     </Compile>
     <Compile Include="Reports\Weekly\vwWeekly1.aspx.cs">
       <DependentUpon>vwWeekly1.aspx</DependentUpon>
@@ -1396,6 +1689,13 @@
     <Compile Include="Security\Users.aspx.designer.cs">
       <DependentUpon>Users.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Tools\EditPayrollSetup.aspx.cs">
+      <DependentUpon>EditPayrollSetup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tools\EditPayrollSetup.aspx.designer.cs">
+      <DependentUpon>EditPayrollSetup.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Tools\PayrollSetup.aspx.cs">
       <DependentUpon>PayrollSetup.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1410,6 +1710,13 @@
     <Compile Include="Tools\TradeGroup.aspx.designer.cs">
       <DependentUpon>TradeGroup.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Tools\TradeGroupRate.aspx.cs">
+      <DependentUpon>TradeGroupRate.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Tools\TradeGroupRate.aspx.designer.cs">
+      <DependentUpon>TradeGroupRate.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Tools\TradeType.aspx.cs">
       <DependentUpon>TradeType.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -1420,11 +1727,8 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="GDLCAdmin\Reports\Monthly\Approved\" />
     <Folder Include="GDLCAdmin\Reports\Monthly\General\" />
     <Folder Include="Models\" />
-    <Folder Include="Reports\Monthly\Approved\" />
-    <Folder Include="Reports\Monthly\General\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="GDLCAdmin\Reports\Daily\Approved\rptDailyInvoice.rpt">
@@ -1446,6 +1750,18 @@
     <EmbeddedResource Include="GDLCAdmin\Reports\Daily\General\DailyCostSheet.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>DailyCostSheet.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GDLCAdmin\Reports\Monthly\Approved\rptMonthlyInvoice.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptMonthlyInvoice.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GDLCAdmin\Reports\Monthly\Approved\rptMonthlyInvoiceSummary.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptMonthlyInvoiceSummary.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GDLCAdmin\Reports\Monthly\Approved\rptMonthlyProcessed.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptMonthlyProcessed.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="GDLCAdmin\Reports\Weekly\Approved\rptWeeklyInvoiceNew.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
@@ -1471,6 +1787,22 @@
     <EmbeddedResource Include="Reports\Daily\General\DailyCostSheet.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
       <LastGenOutput>DailyCostSheet.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Monthly\Approved\rptMonthlyInvoice.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptMonthlyInvoice.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Monthly\Approved\rptMonthlyInvoiceSummary.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptMonthlyInvoiceSummary.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Monthly\Approved\rptMonthlyProcessed.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptMonthlyProcessed.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Reports\Monthly\General\rptMonthlyCostSheet.rpt">
+      <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>
+      <LastGenOutput>rptMonthlyCostSheet.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Reports\Weekly\Approved\rptWeeklyInvoiceNew.rpt">
       <Generator>CrystalDecisions.VSDesigner.CodeGen.ReportCodeGenerator</Generator>

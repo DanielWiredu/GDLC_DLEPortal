@@ -40,24 +40,6 @@ namespace GDLC_DLEPortal.Operations.Daily {
         protected global::System.Web.UI.WebControls.TextBox txtSearchStaffReq;
         
         /// <summary>
-        /// btnExcelExport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnExcelExport;
-        
-        /// <summary>
-        /// btnPDFExport control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnPDFExport;
-        
-        /// <summary>
         /// dailyStaffReqGrid control.
         /// </summary>
         /// <remarks>

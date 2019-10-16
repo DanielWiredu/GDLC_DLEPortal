@@ -18,9 +18,19 @@ namespace GDLC_DLEPortal.Operations.Weekly
         {
             if (!IsPostBack)
             {
-                dpRegdate.SelectedDate = DateTime.Now;
+                string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
+                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) ORDER BY DLEcodeCompanyName";
+                dleSource.SelectParameters.Add("DLEcodeCompanyID", DbType.String, dleCompanyId);
+                dlCompany.DataBind();
+                if (!dleCompanyId.Contains(","))
+                {
+                    dlCompany.SelectedValue = dleCompanyId;
+                    dlCompany.Enabled = false;
+                }
+
+                dpRegdate.SelectedDate = DateTime.UtcNow;
                 //dpRegdate.FocusedDate = DateTime.Now;
-                dpDate.SelectedDate = DateTime.Now;
+                dpDate.SelectedDate = DateTime.UtcNow;
 
                 workersGrid.DataSource = new DataTable();
                 //workersGrid.DataBind();
@@ -140,19 +150,15 @@ namespace GDLC_DLEPortal.Operations.Weekly
         protected DataTable GetDataTable()
         {
             DataTable dt = new DataTable();
-            string query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME], [TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE WorkerID LIKE '% ' @SearchValue + '%'";
+            string query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME], [TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE WorkerID LIKE '% ' @SearchValue + '%'";
             if (rdSearchType.SelectedValue == "WorkerID")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE WorkerID LIKE '%' + @SearchValue + '%'";
-            else if (rdSearchType.SelectedValue == "SSFNo")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE SSFNo LIKE '%' + @SearchValue + '%'";
-            else if (rdSearchType.SelectedValue == "NHISNo")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE NHIS LIKE '%' + @SearchValue + '%'";
+                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE WorkerID LIKE '%' + @SearchValue + '%'";
             else if (rdSearchType.SelectedValue == "Gang")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE GangName LIKE '%' + @SearchValue + '%'";
+                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE GangName LIKE '%' + @SearchValue + '%'";
             else if (rdSearchType.SelectedValue == "Surname")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE SName LIKE '%' + @SearchValue + '%' ORDER BY [OName]";
+                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE SName LIKE '%' + @SearchValue + '%' ORDER BY [OName]";
             else if (rdSearchType.SelectedValue == "Othernames")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE OName LIKE '%' + @SearchValue + '%' ORDER BY [SName]";
+                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE OName LIKE '%' + @SearchValue + '%' ORDER BY [SName]";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlDataAdapter adapter = new SqlDataAdapter())
@@ -194,7 +200,6 @@ namespace GDLC_DLEPortal.Operations.Weekly
                 txtGroupName.Text = item["TradegroupNAME"].Text;
                 hfTradetype.Value = item["TradetypeID"].Text;
                 txtCategory.Text = item["TradetypeNAME"].Text;
-                txtEzwichNo.Text = item["ezwichid"].Text;
 
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closeWorkersModal();", true);
 
@@ -255,25 +260,6 @@ namespace GDLC_DLEPortal.Operations.Weekly
             vesselSource.SelectCommand = sql;
             dlVessel1.DataBind();
         }
-        protected void dlCompany_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
-        {
-            e.Item.Text = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyName"].ToString();
-            e.Item.Value = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyID"].ToString();
-        }
-
-        protected void dlCompany_DataBound(object sender, EventArgs e)
-        {
-            //set the initial footer label
-            ((Literal)dlCompany.Footer.FindControl("companyCount")).Text = Convert.ToString(dlCompany.Items.Count);
-        }
-
-        protected void dlCompany_ItemsRequested(object sender, RadComboBoxItemsRequestedEventArgs e)
-        {
-            String sql = "SELECT top(30) DLEcodeCompanyID,DLEcodeCompanyName FROM [tblDLECompany] WHERE Active = 1 AND DLEcodeCompanyName LIKE '%" + e.Text.ToUpper() + "%'";
-            dleSource.SelectCommand = sql;
-            dlCompany.DataBind();
-        }
-
         protected void dlReportingPoint_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
         {
             e.Item.Text = ((DataRowView)e.Item.DataItem)["ReportingPoint"].ToString();

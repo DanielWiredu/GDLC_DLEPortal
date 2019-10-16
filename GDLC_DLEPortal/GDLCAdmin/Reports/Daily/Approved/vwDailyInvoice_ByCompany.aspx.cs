@@ -17,9 +17,8 @@ namespace GDLC_DLEPortal.GDLCAdmin.Reports.Daily.Approved
         protected void Page_Init(object sender, EventArgs e)
         {
             string cachedReports = "rptDailyInvoice_ByCompany";
-            int rptCacheTimeout = Convert.ToInt32(ConfigurationManager.AppSettings.Get("rptCacheTimeout").ToString());
 
-            if (Cache[cachedReports] == null)
+            if (Session[cachedReports] == null)
             {
                 ReportDocument rd = new rptDailyInvoiceNew();
                 string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
@@ -51,12 +50,12 @@ namespace GDLC_DLEPortal.GDLCAdmin.Reports.Daily.Approved
                 rd.DataDefinition.ParameterFields["Enddate"].ApplyCurrentValues(parameters);
                 adapter.Dispose();
                 connection.Dispose();
-                Cache.Insert(cachedReports, rd, null, DateTime.MaxValue, TimeSpan.FromMinutes(rptCacheTimeout));
+                Session[cachedReports] = rd;
                 DailyInvoiceReport_ByCompany.ReportSource = rd;
             }
             else
             {
-                DailyInvoiceReport_ByCompany.ReportSource = Cache[cachedReports];
+                DailyInvoiceReport_ByCompany.ReportSource = Session[cachedReports];
             }
         }
         protected void Page_Load(object sender, EventArgs e)

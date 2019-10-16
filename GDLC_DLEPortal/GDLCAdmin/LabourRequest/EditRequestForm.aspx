@@ -78,7 +78,8 @@
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">DOA</label>
                                     <div class="col-sm-8">
-                                        <asp:TextBox ID="txtDOA" runat="server" Width="100%"></asp:TextBox>
+                                        <%--<asp:TextBox ID="txtDOA" runat="server" Width="100%"></asp:TextBox>--%>
+                                        <telerik:RadDatePicker runat="server" ID="dpDOA" Width="100%" DateInput-ReadOnly="true"></telerik:RadDatePicker>
                                     </div>
                                 </div>
                                     <div class="form-group">

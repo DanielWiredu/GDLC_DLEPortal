@@ -16,13 +16,13 @@ namespace GDLC_DLEPortal.Reports.Weekly.Approved
         protected void Page_Init(object sender, EventArgs e)
         {
             string cachedReports = "rptWeeklyInvoice";
-            if (Cache[cachedReports] == null)
+            if (Session[cachedReports] == null)
             {
                 loadReport(cachedReports);
             }
             else
             {
-                WeeklyInvoiceReport.ReportSource = Cache[cachedReports];
+                WeeklyInvoiceReport.ReportSource = Session[cachedReports];
             }
         }
         protected void Page_Load(object sender, EventArgs e)
@@ -32,7 +32,6 @@ namespace GDLC_DLEPortal.Reports.Weekly.Approved
 
         protected void loadReport(string cachedReports)
         {
-            int rptCacheTimeout = Convert.ToInt32(ConfigurationManager.AppSettings.Get("rptCacheTimeout").ToString());
             rptWeeklyInvoiceNew rpt = new rptWeeklyInvoiceNew();
             string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             SqlConnection connection = new SqlConnection(connectionString);
@@ -40,6 +39,7 @@ namespace GDLC_DLEPortal.Reports.Weekly.Approved
             DataSet ds = new DataSet();
             string startdate = Request.QueryString["st"].ToString();
             string enddate = Request.QueryString["ed"].ToString();
+            string dleCompanyId = Request.Cookies["dlecompanyId"].Value;
 
             ParameterValues parameters = new ParameterValues();
             ParameterDiscreteValue sdate = new ParameterDiscreteValue();
@@ -48,7 +48,8 @@ namespace GDLC_DLEPortal.Reports.Weekly.Approved
             sdate.Value = startdate;
             edate.Value = enddate;
 
-            adapter = new SqlDataAdapter("select * from vwWeeklyInvoice where (Adate between @startdate and @enddate)", connection);
+            adapter = new SqlDataAdapter("select * from vwWeeklyInvoice where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND (Adate between @startdate and @enddate)", connection);
+            adapter.SelectCommand.Parameters.Add("@DLEcodeCompanyID", SqlDbType.VarChar).Value = dleCompanyId;
             adapter.SelectCommand.Parameters.Add("@startdate", SqlDbType.DateTime).Value = startdate;
             adapter.SelectCommand.Parameters.Add("@enddate", SqlDbType.DateTime).Value = enddate;
             if (connection.State == ConnectionState.Closed)
@@ -65,7 +66,7 @@ namespace GDLC_DLEPortal.Reports.Weekly.Approved
 
             adapter.Dispose();
             connection.Dispose();
-            Cache.Insert(cachedReports, rpt, null, DateTime.MaxValue, TimeSpan.FromMinutes(rptCacheTimeout));
+            Session[cachedReports] = rpt;
             WeeklyInvoiceReport.ReportSource = rpt;
         }
     }

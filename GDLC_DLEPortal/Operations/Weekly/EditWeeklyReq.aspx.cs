@@ -18,18 +18,26 @@ namespace GDLC_DLEPortal.Operations.Weekly
         {
             if (!IsPostBack)
             {
-                dpDate.SelectedDate = DateTime.Now;
+                string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
+                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) ORDER BY DLEcodeCompanyName";
+                dleSource.SelectParameters.Add("DLEcodeCompanyID", DbType.String, dleCompanyId);
+                dlCompany.DataBind();
+
+                dpDate.SelectedDate = DateTime.UtcNow;
 
                 workersGrid.DataSource = new DataTable();
                 //workersGrid.DataBind();
 
                 //load Req Details
-                loadReqNo(Request.QueryString["reqno"].ToString());
+                loadReqNo(Request.QueryString["reqno"].ToString(), "load");
+
+                btnConfirm.Enabled = User.IsInRole("Operations Manager");
             }
         }
 
-        protected void loadReqNo(string reqno)
+        protected void loadReqNo(string reqno, string request)
         {
+            string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand("spGetWeeklyReqNoDetails", connection))
@@ -46,11 +54,14 @@ namespace GDLC_DLEPortal.Operations.Weekly
                     command.Parameters.Add("@date_", SqlDbType.DateTime).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@Adate", SqlDbType.DateTime).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@Approved", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    command.Parameters.Add("@Confirmed", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@ReqNo", SqlDbType.VarChar).Value = reqno;
+                    command.Parameters.Add("@ReturnReqNo", SqlDbType.VarChar, 10).Direction = ParameterDirection.Output;
+                    command.Parameters.Add("@request", SqlDbType.VarChar).Value = request;
+                    command.Parameters.Add("@companies", SqlDbType.VarChar).Value = dleCompanyId;
                     command.Parameters.Add("@WorkerName", SqlDbType.VarChar, 80).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@TradeGroup", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@TradeCategory", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@ezwichid", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
                     //command.Parameters.Add("@return_value", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
                     try
                     {
@@ -60,7 +71,7 @@ namespace GDLC_DLEPortal.Operations.Weekly
                         if (!String.IsNullOrEmpty(autoNo))
                         {
                             txtAutoNo.Text = autoNo;
-                            txtReqNo.Text = reqno;
+                            txtReqNo.Text = command.Parameters["@ReturnReqNo"].Value.ToString();
                             txtWorkerId.Text = command.Parameters["@WorkerID"].Value.ToString();
                             hfTradegroup.Value = command.Parameters["@TradegroupID"].Value.ToString();
                             hfTradetype.Value = command.Parameters["@TradetypeID"].Value.ToString();
@@ -68,16 +79,12 @@ namespace GDLC_DLEPortal.Operations.Weekly
                             dpRegdate.SelectedDate = Convert.ToDateTime(command.Parameters["@date_"].Value);
                             dpApprovalDate.SelectedDate = Convert.ToDateTime(command.Parameters["@Adate"].Value);
                             chkApproved.Checked = Convert.ToBoolean(command.Parameters["@Approved"].Value);
+                            chkConfirmed.Checked = Convert.ToBoolean(command.Parameters["@Confirmed"].Value);
                             txtWorkerName.Text = command.Parameters["@WorkerName"].Value.ToString();
                             txtGroupName.Text = command.Parameters["@TradeGroup"].Value.ToString();
                             txtCategory.Text = command.Parameters["@TradeCategory"].Value.ToString();
-                            txtEzwichNo.Text = command.Parameters["@ezwichid"].Value.ToString();
                             string query = "";
-                            string companyId = command.Parameters["@DLEcodeCompanyID"].Value.ToString();
-                            query = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID ='" + companyId + "'";
-                            dleSource.SelectCommand = query;
-                            dlCompany.DataBind();
-                            dlCompany.SelectedValue = companyId;
+                            dlCompany.SelectedValue = command.Parameters["@DLEcodeCompanyID"].Value.ToString();
                             string locationId = command.Parameters["@LocationID"].Value.ToString();
                             query = "SELECT LocationId,Location FROM [tblLocation] WHERE LocationId = '" + locationId + "'";
                             locationSource.SelectCommand = query;
@@ -91,7 +98,7 @@ namespace GDLC_DLEPortal.Operations.Weekly
                         }
                         else
                         {
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet not found', 'Error');", true);
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.warning('Cost Sheet not found', 'Note');", true);
                         }
                         
                     }
@@ -189,19 +196,15 @@ namespace GDLC_DLEPortal.Operations.Weekly
         protected DataTable GetDataTable()
         {
             DataTable dt = new DataTable();
-            string query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME], [TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE WorkerID LIKE '% ' @SearchValue + '%'";
+            string query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME], [TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE WorkerID LIKE '% ' @SearchValue + '%'";
             if (rdSearchType.SelectedValue == "WorkerID")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE WorkerID LIKE '%' + @SearchValue + '%'";
-            else if (rdSearchType.SelectedValue == "SSFNo")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE SSFNo LIKE '%' + @SearchValue + '%'";
-            else if (rdSearchType.SelectedValue == "NHISNo")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE NHIS LIKE '%' + @SearchValue + '%'";
+                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE WorkerID LIKE '%' + @SearchValue + '%'";
             else if (rdSearchType.SelectedValue == "Gang")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE GangName LIKE '%' + @SearchValue + '%'";
+                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE GangName LIKE '%' + @SearchValue + '%'";
             else if (rdSearchType.SelectedValue == "Surname")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE SName LIKE '%' + @SearchValue + '%' ORDER BY [OName]";
+                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE SName LIKE '%' + @SearchValue + '%' ORDER BY [OName]";
             else if (rdSearchType.SelectedValue == "Othernames")
-                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers] WHERE OName LIKE '%' + @SearchValue + '%' ORDER BY [SName]";
+                query = "SELECT top(500) [WorkerID], [SName], [OName], [GangName], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [flags] FROM [vwWorkers] WHERE OName LIKE '%' + @SearchValue + '%' ORDER BY [SName]";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlDataAdapter adapter = new SqlDataAdapter())
@@ -243,7 +246,6 @@ namespace GDLC_DLEPortal.Operations.Weekly
                 txtGroupName.Text = item["TradegroupNAME"].Text;
                 hfTradetype.Value = item["TradetypeID"].Text;
                 txtCategory.Text = item["TradetypeNAME"].Text;
-                txtEzwichNo.Text = item["ezwichid"].Text;
 
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closeWorkersModal();", true);
 
@@ -303,24 +305,6 @@ namespace GDLC_DLEPortal.Operations.Weekly
             String sql = "SELECT top(30) VesselId, VesselName FROM tblVessel WHERE VesselName LIKE '%" + e.Text.ToUpper() + "%'";
             vesselSource.SelectCommand = sql;
             dlVessel1.DataBind();
-        }
-        protected void dlCompany_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
-        {
-            e.Item.Text = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyName"].ToString();
-            e.Item.Value = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyID"].ToString();
-        }
-
-        protected void dlCompany_DataBound(object sender, EventArgs e)
-        {
-            //set the initial footer label
-            ((Literal)dlCompany.Footer.FindControl("companyCount")).Text = Convert.ToString(dlCompany.Items.Count);
-        }
-
-        protected void dlCompany_ItemsRequested(object sender, RadComboBoxItemsRequestedEventArgs e)
-        {
-            String sql = "SELECT top(30) DLEcodeCompanyID,DLEcodeCompanyName FROM [tblDLECompany] WHERE Active = 1 AND DLEcodeCompanyName LIKE '%" + e.Text.ToUpper() + "%'";
-            dleSource.SelectCommand = sql;
-            dlCompany.DataBind();
         }
 
         protected void dlReportingPoint_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
@@ -566,26 +550,71 @@ namespace GDLC_DLEPortal.Operations.Weekly
         protected void btnFindCostSheet_Click(object sender, EventArgs e)
         {
             txtReqNo.Text = "";
-            dlCompany.ClearSelection();
+            //dlCompany.ClearSelection();
             dlLocation.ClearSelection();
             dlReportingPoint.ClearSelection();
-            loadReqNo(txtCostSheet.Text.Trim().ToUpper());
+            loadReqNo(txtCostSheet.Text.Trim().ToUpper(), "search");
             ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closeCostSheetModal();", true);
             txtCostSheet.Text = "";
         }
 
-        protected void btnPrintCopy_Click(object sender, EventArgs e)
-        {
-            if (!String.IsNullOrEmpty(txtReqNo.Text))
-            {
-                string startdate = dpRegdate.SelectedDate.Value.ToString();
-                string enddate = dpRegdate.SelectedDate.Value.ToShortDateString() + " 11:59:59 PM";
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Weekly/General/vwWeeklyCostSheet_Copy.aspx?reqno=" + txtReqNo.Text + "&st=" + startdate + "&ed=" + enddate + "');", true);
-            }
-        }
         protected void workersGrid_NeedDataSource(object sender, GridNeedDataSourceEventArgs e)
         {
             workersGrid.DataSource = GetDataTable();
+        }
+
+        protected void btnComments_Click(object sender, EventArgs e)
+        {
+            Response.Redirect("/Operations/ReqComments.aspx?reqno=" + txtReqNo.Text);
+        }
+
+        protected void btnPrevious_Click(object sender, EventArgs e)
+        {
+            loadReqNo(txtReqNo.Text, "previousconfirm");
+        }
+
+        protected void btnNext_Click(object sender, EventArgs e)
+        {
+            loadReqNo(txtReqNo.Text, "nextconfirm");
+        }
+
+        protected void btnConfirm_Click(object sender, EventArgs e)
+        {
+            if (chkConfirmed.Checked)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet Already Confirmed...', 'Error');", true);
+                return;
+            }
+            if (String.IsNullOrEmpty(txtAutoNo.Text))
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet not found', 'Error');", true);
+                return;
+            }
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand("spConfirmWeeklyReq", connection))
+                {
+                    command.CommandType = CommandType.StoredProcedure;
+                    command.Parameters.Add("@Confirmedby", SqlDbType.VarChar).Value = User.Identity.Name;
+                    command.Parameters.Add("@ReqNo", SqlDbType.VarChar).Value = txtReqNo.Text;
+                    command.Parameters.Add("@return_value", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+                    try
+                    {
+                        connection.Open();
+                        command.ExecuteNonQuery();
+                        int retVal = Convert.ToInt16(command.Parameters["@return_value"].Value);
+                        if (retVal == 0)
+                        {
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.success('Confirmed Successfully', 'Success');", true);
+                            chkConfirmed.Checked = true;
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
+                    }
+                }
+            }
         }
     }
 }

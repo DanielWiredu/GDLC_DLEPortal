@@ -4,6 +4,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <link href="/Content/css/telerikCombo.css" rel="stylesheet" />
     <link href="/Content/css/aspControlStyle.css" rel="stylesheet" />
+    <link href="/Content/css/updateProgress.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -20,7 +21,15 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                         <asp:UpdatePanel runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false">
+                        <asp:UpdateProgress ID="UpdateProgress2" runat="server" AssociatedUpdatePanelID="upMain">
+                           <ProgressTemplate>
+                            <div class="divWaiting">            
+	                            <asp:Label ID="lblWait" runat="server" Text="Processing... " />
+	                              <asp:Image ID="imgWait" runat="server" ImageAlign="Top" ImageUrl="/Content/img/loader.gif" />
+                                </div>
+                             </ProgressTemplate>
+                       </asp:UpdateProgress>
+                         <asp:UpdatePanel runat="server" UpdateMode="Conditional" ChildrenAsTriggers="false" ID="upMain">
                     <ContentTemplate>
                         <div runat="server" id="lblMsg"></div>
                         <div class="row">
@@ -36,26 +45,7 @@
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">DLE Company</label>
                                     <div class="col-sm-8">
-                                        <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="200" EmptyMessage="Select Company" Filter="Contains"
-                                           OnItemDataBound="dlCompany_ItemDataBound" OnDataBound="dlCompany_DataBound" OnItemsRequested="dlCompany_ItemsRequested" EnableLoadOnDemand="true"
-                                            OnClientItemsRequested="UpdateCompanyItemCountField" HighlightTemplatedItems="true" MarkFirstMatch="true"  >
-                                            <HeaderTemplate>
-                <ul>
-                    <li class="ncolfull">DLE COMPANY</li>
-                </ul>
-            </HeaderTemplate>
-            <ItemTemplate>
-                <ul>
-                    <li class="ncolfull">
-                        <%# DataBinder.Eval(Container.DataItem, "DLEcodeCompanyName")%></li>
-                </ul>
-            </ItemTemplate>
-            <FooterTemplate>
-                A total of
-                <asp:Literal runat="server" ID="companyCount" />
-                items
-            </FooterTemplate>
-                                        </telerik:RadComboBox>
+                                        <telerik:RadComboBox ID="dlCompany" Enabled="false" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="300px" EmptyMessage="Select company" DataTextField="DLEcodeCompanyName" DataValueField="DLEcodeCompanyID"></telerik:RadComboBox>
                                         <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
                                         <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
@@ -166,9 +156,8 @@
                                 <ClientEvents OnButtonClick="showWorkersModal" />
                                 <EmptyMessageStyle Resize="None" /></telerik:RadTextBox>
                               <asp:RequiredFieldValidator runat="server" ControlToValidate="txtWorkerId" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
-                            <asp:TextBox runat="server" ID="txtWorkerName" Width="30%" Enabled="false"></asp:TextBox>
-                            <label>Ezwich No</label>
-                               <asp:TextBox runat="server" ID="txtEzwichNo" Width="40%" Enabled="false" ForeColor="Red"></asp:TextBox>
+                            <asp:TextBox runat="server" ID="txtWorkerName" Width="40%" Enabled="false"></asp:TextBox>
+                            
                         </div>
                         
                         <div class="row">
@@ -243,11 +232,15 @@
                         </div>
                   
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnPrintCopy" Text="Print Copy" CssClass="btn btn-info" OnClick="btnPrintCopy_Click"  />
+                            <asp:Button runat="server" ID="btnComments" Text="Comments/Remarks" CssClass="btn btn-warning" OnClick="btnComments_Click" />
+                            <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous" OnClick="btnPrevious_Click"  />
+                            <asp:Button runat="server" ID="btnNext" Text=">>" CssClass="btn btn-default" ToolTip="Next" OnClick="btnNext_Click" />
+                            <asp:CheckBox ID="chkConfirmed" style="color:red;font-size:medium" runat="server" Text="Confirmed" TextAlign="Left" Enabled="false" />
                             <asp:CheckBox ID="chkApproved" style="color:red;font-size:medium" runat="server" Text="Approved" TextAlign="Left" Enabled="false" />
                             <label style="color:green">Approval Date</label>
                             <telerik:RadDatePicker runat="server" ID="dpApprovalDate" Enabled="false" DateInput-ReadOnly="true"></telerik:RadDatePicker>
                             <asp:Button runat="server" ID="btnReturn" Text="Return" CssClass="btn btn-warning" CausesValidation="false" PostBackUrl="~/Operations/Weekly/WeeklyStaffReq.aspx" style="margin-bottom:0px" />
+                            <asp:Button runat="server" ID="btnConfirm" Text="Confirm" CssClass="btn btn-primary" OnClick="btnConfirm_Click"/>
                             <asp:Button runat="server" ID="btnFind" Text="Find" CssClass="btn btn-success" OnClientClick="newCostSheetModal()" CausesValidation="false" />
                             <asp:Button runat="server" ID="btnPrint" Text="Print" CssClass="btn btn-info" OnClick="btnPrint_Click"  />
                             <asp:Button runat="server" ID="btnSave" Text="Save Changes" CssClass="btn btn-primary" OnClick="btnSave_Click" />
@@ -256,6 +249,9 @@
                              <Triggers>
                                  <asp:AsyncPostBackTrigger ControlID="btnFindCostSheet" EventName="Click" />
                                  <asp:AsyncPostBackTrigger ControlID="workersGrid" EventName="ItemCommand" />
+                                 <asp:AsyncPostBackTrigger ControlID="btnConfirm" EventName="Click" />
+                                 <asp:AsyncPostBackTrigger ControlID="btnPrevious" EventName="Click" />
+                                 <asp:AsyncPostBackTrigger ControlID="btnNext" EventName="Click" />
                              </Triggers>
                 </asp:UpdatePanel>
                     </div>
@@ -278,8 +274,6 @@
                             <div class="form-group">
                                 <asp:RadioButtonList ID="rdSearchType" runat="server" RepeatDirection="Horizontal" CssClass="rbl">
                                     <asp:ListItem Text="WorkerID" Value="WorkerID" Selected="True"></asp:ListItem>
-                                    <asp:ListItem Text="SSF No" Value="SSFNo"></asp:ListItem>
-                                    <asp:ListItem Text="NHIS No" Value="NHISNo"></asp:ListItem>
                                     <asp:ListItem Text="Gang" Value="Gang"></asp:ListItem>
                                     <asp:ListItem Text="Surname" Value="Surname"></asp:ListItem>
                                     <asp:ListItem Text="Other Names" Value="Othernames"></asp:ListItem>
@@ -317,9 +311,6 @@
                                          <telerik:GridBoundColumn DataField="GangName" FilterControlAltText="Filter GangName column" HeaderText="Gang" SortExpression="GangName" UniqueName="GangName" AutoPostBackOnFilter="true" ShowFilterIcon="false" AllowFiltering="false">
                                          <HeaderStyle Width="130px" />
                                          </telerik:GridBoundColumn>
-                                         <telerik:GridBoundColumn DataField="SSFNo" FilterControlAltText="Filter SSFNo column" HeaderText="SSF No" SortExpression="SSFNo" UniqueName="SSFNo" AutoPostBackOnFilter="true" ShowFilterIcon="false" AllowFiltering="false">
-                                         <HeaderStyle Width="130px" />
-                                         </telerik:GridBoundColumn>
                                          <telerik:GridBoundColumn Display="false" DataField="TradegroupID" SortExpression="TradegroupID" UniqueName="TradegroupID">
                                          </telerik:GridBoundColumn>
                                          <telerik:GridBoundColumn DataField="TradegroupNAME" FilterControlAltText="Filter TradegroupNAME column" HeaderText="Trade Group" SortExpression="TradegroupNAME" UniqueName="TradegroupNAME" AutoPostBackOnFilter="true" ShowFilterIcon="false" AllowFiltering="false">
@@ -330,13 +321,7 @@
                                          <telerik:GridBoundColumn DataField="TradetypeNAME" FilterControlAltText="Filter TradetypeNAME column" HeaderText="Trade Category" SortExpression="TradetypeNAME" UniqueName="TradetypeNAME" AutoPostBackOnFilter="true" ShowFilterIcon="false" AllowFiltering="false">
                                          <HeaderStyle Width="140px" />
                                          </telerik:GridBoundColumn>
-                                         <telerik:GridBoundColumn DataField="NHIS" FilterControlAltText="Filter NHIS column" HeaderText="NHIS No" SortExpression="NHIS" UniqueName="NHIS" AutoPostBackOnFilter="true" ShowFilterIcon="false" AllowFiltering="false">
-                                         <HeaderStyle Width="130px" />
-                                         </telerik:GridBoundColumn>
                                          <telerik:GridBoundColumn Display="false" DataField="flags" FilterControlAltText="Filter flags column" HeaderText="flags" SortExpression="flags" UniqueName="flags">
-                                         <HeaderStyle Width="50" />
-                                         </telerik:GridBoundColumn>
-                                         <telerik:GridBoundColumn Display="false" DataField="ezwichid" FilterControlAltText="Filter ezwichid column" HeaderText="ezwichid" SortExpression="ezwichid" UniqueName="ezwichid" EmptyDataText="">
                                          <HeaderStyle Width="50" />
                                          </telerik:GridBoundColumn>
                                      </Columns>

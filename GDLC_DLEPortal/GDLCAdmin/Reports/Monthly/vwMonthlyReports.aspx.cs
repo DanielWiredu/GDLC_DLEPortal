@@ -17,20 +17,14 @@ namespace GDLC_DLEPortal.GDLCAdmin.Reports.Monthly
             {
                 dpStartDate.SelectedDate = DateTime.UtcNow;
                 dpEndDate.SelectedDate = DateTime.UtcNow;
+
+                dpStartDateByCompany.SelectedDate = DateTime.UtcNow;
+                dpEndDateByCompany.SelectedDate = DateTime.UtcNow;
             }
         }
 
         protected void btnProcess_Click(object sender, EventArgs e)
         {
-            //foreach (System.Collections.DictionaryEntry entry in HttpContext.Current.Cache)
-            //{
-            //    HttpContext.Current.Cache.Remove((string)entry.Key);
-            //}
-
-            //Response.Cache.SetExpires(DateTime.Now);
-            //Response.Cache.SetNoServerCaching();
-            //Response.Cache.SetNoStore();
-
             string startdate = dpStartDate.SelectedDate.Value.ToString();
             string enddate = dpEndDate.SelectedDate.Value.ToShortDateString() + " 11:59:59 PM";
             if (dlReportType.SelectedText == "Monthly Cost Sheet")
@@ -40,21 +34,58 @@ namespace GDLC_DLEPortal.GDLCAdmin.Reports.Monthly
             }
             else if (dlReportType.SelectedText == "Monthly Processed")
             {
-                if (Cache["rptMonthlyProcessed"] != null)
-                    Cache.Remove("rptMonthlyProcessed");
+                if (Session["rptMonthlyProcessed"] != null)
+                    Session.Remove("rptMonthlyProcessed");
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Monthly/Approved/vwMonthlyProcessed.aspx?st=" + startdate + "&ed=" + enddate + "');", true);
             }
             else if (dlReportType.SelectedText == "Monthly Invoice")
             {
-                if (Cache["rptMonthlyInvoice"] != null)
-                    Cache.Remove("rptMonthlyInvoice");
+                if (Session["rptMonthlyInvoice"] != null)
+                    Session.Remove("rptMonthlyInvoice");
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Monthly/Approved/vwMonthlyInvoice.aspx?st=" + startdate + "&ed=" + enddate + "');", true);
             }
             else if (dlReportType.SelectedText == "Monthly Invoice Summary")
             {
-                if (Cache["rptMonthlyInvoiceSummary"] != null)
-                    Cache.Remove("rptMonthlyInvoiceSummary");
+                if (Session["rptMonthlyInvoiceSummary"] != null)
+                    Session.Remove("rptMonthlyInvoiceSummary");
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Monthly/Approved/vwMonthlyInvoiceSummary.aspx?st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+        }
+        protected void btnReportByCompany_Click(object sender, EventArgs e)
+        {
+            string dleCompanyIds = "";
+            foreach (RadComboBoxItem item in dlCompany.CheckedItems)
+            {
+                dleCompanyIds += item.Value + ",";
+            }
+            dleCompanyIds = dleCompanyIds.TrimEnd(',');
+
+            string startdate = dpStartDateByCompany.SelectedDate.Value.ToString();
+            string enddate = dpEndDateByCompany.SelectedDate.Value.ToShortDateString() + " 11:59:59 PM";
+
+            if (dlReportTypeByCompany.SelectedText == "Monthly Cost Sheet")
+            {
+                if (Session["rptMonthlyCostSheet_All_ByCompany"] != null)
+                    Session.Remove("rptMonthlyCostSheet_All_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Monthly/General/vwDMonthlyCostSheet_All_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+            else if (dlReportTypeByCompany.SelectedText == "Monthly Processed")
+            {
+                if (Session["rptMonthlyProcessed_ByCompany"] != null)
+                    Session.Remove("rptMonthlyProcessed_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Monthly/Approved/vwMonthlyProcessed_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+            else if (dlReportTypeByCompany.SelectedText == "Monthly Invoice")
+            {
+                if (Session["rptMonthlyInvoice_ByCompany"] != null)
+                    Session.Remove("rptMonthlyInvoice_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Monthly/Approved/vwMonthlyInvoice_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+            else if (dlReportTypeByCompany.SelectedText == "Monthly Invoice Summary")
+            {
+                if (Session["rptMonthlyInvoiceSummary_ByCompany"] != null)
+                    Session.Remove("rptMonthlyInvoiceSummary_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/GDLCAdmin/Reports/Monthly/Approved/vwMonthlyInvoiceSummary_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
             }
         }
     }

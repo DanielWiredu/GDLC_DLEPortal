@@ -62,7 +62,7 @@
 
                         <div runat="server" id="Div1" class="alert alert-info"> Generate Daily Reports By Company Here</div>
                   
-                        <div class="form-group">
+                        <div class="form-group" >
                             <div class="row">
                                 <div class="col-md-3">
                          <label>DLE Company</label>
@@ -94,7 +94,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="modal-footer">
+                        <div class="modal-footer" >
                             <asp:Button runat="server" ID="btnReportByCompany" Text="Generate Report" CssClass="btn btn-primary" OnClick="btnReportByCompany_Click" OnClientClick="if (Page_IsValid) {this.value='Processing...';this.disabled=true; }" UseSubmitBehavior="false" ValidationGroup="company" />
                         </div>  
 

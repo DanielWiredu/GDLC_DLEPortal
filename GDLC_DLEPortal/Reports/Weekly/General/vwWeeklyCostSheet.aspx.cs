@@ -33,8 +33,9 @@ namespace GDLC_DLEPortal.Reports.Weekly.General
             string startdate = Request.QueryString["st"].ToString();
             string enddate = Request.QueryString["ed"].ToString();
             string reqno = Request.QueryString["reqno"].ToString();
-
-            adapter = new SqlDataAdapter("select * from vwWeeklyCostSheet where Reqno like '%' + @reqno + '%' and (date_ between @startdate and @enddate)", connection);
+            string dleCompanyId = Request.Cookies["dlecompanyId"].Value;
+            adapter = new SqlDataAdapter("select * from vwWeeklyCostSheet where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND Reqno like '%' + @reqno + '%' and (date_ between @startdate and @enddate)", connection);
+            adapter.SelectCommand.Parameters.Add("@DLEcodeCompanyID", SqlDbType.VarChar).Value = dleCompanyId;
             adapter.SelectCommand.Parameters.Add("@reqno", SqlDbType.VarChar).Value = reqno;
             adapter.SelectCommand.Parameters.Add("@startdate", SqlDbType.DateTime).Value = startdate;
             adapter.SelectCommand.Parameters.Add("@enddate", SqlDbType.DateTime).Value = enddate;

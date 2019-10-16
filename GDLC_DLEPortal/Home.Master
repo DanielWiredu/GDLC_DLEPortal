@@ -121,24 +121,26 @@
                             <li><a href="/Operations/Daily/DailyStaffReqApproved.aspx"> Approved</a></li>
                         </ul>
                     </li>
-                    <%--<li><a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Weekly Requisition  </span><span class="fa arrow"></span></a>
+                    <li><a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Weekly Requisition  </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="/Operations/Weekly/WeeklyStaffReq.aspx"> UnApproved</a></li>
                             <li><a href="/Operations/Weekly/WeeklyStaffReqApproved.aspx"> Approved</a></li>
+                            <li><a href="/Operations/Weekly/WeeklyAdvice.aspx">Labour Advice</a></li>
                         </ul>
-                    </li>--%>
-                    <%--<li><a href="#"><i class="fa fa-puzzle-piece"></i> <span class="nav-label">Monthly Requisition  </span><span class="fa arrow"></span></a>
+                    </li>
+                    <li><a href="#"><i class="fa fa-puzzle-piece"></i> <span class="nav-label">Monthly Requisition  </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="/Operations/Monthly/MonthlyStaffReq.aspx"> UnApproved</a></li>
                             <li><a href="/Operations/Monthly/MonthlyStaffReqApproved.aspx"> Approved</a></li>
+                            <li><a href="/Operations/Monthly/MonthlyAdvice.aspx">Labour Advice</a></li>
                         </ul>
-                    </li>--%>
+                    </li>
 
                     <li><a href="#"><i class="fa fa-pencil"></i> <span class="nav-label">Audit </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="/Audit/Approvals/DailyApprovalNew.aspx?reqno="> Daily Requisition Approval </a></li>
-                            <%--<li><a href="/Audit/Approvals/WeeklyApprovalNew.aspx"> Weekly Requisition Approval </a></li>--%>
-                            <li><%--<a href="/Audit/Approvals/MonthlyApprovalNew.aspx"> Monthly Requisition Approval </a>--%></li>
+                            <li><a href="/Audit/Approvals/WeeklyApprovalNew.aspx"> Weekly Requisition Approval </a></li>
+                            <li><a href="/Audit/Approvals/MonthlyApprovalNew.aspx"> Monthly Requisition Approval </a></li>
                         </ul>
                     </li>
 
@@ -156,8 +158,8 @@
                     <li><a href="#"><i class="fa fa-bar-chart"></i> <span class="nav-label">Reports </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
                             <li><a href="/Reports/Daily/DailyCostSheet1.aspx"> All Daily Reports</a></li>
-                            <%--<li><a href="/Reports/Weekly/vwWeekly1.aspx"> All Weekly Reports</a></li>--%>
-                            <li><%--<a href="/Reports/Monthly/vwMonthlyReports.aspx"> All Monthly Reports</a>--%></li>
+                            <li><a href="/Reports/Weekly/vwWeekly1.aspx"> All Weekly Reports</a></li>
+                            <li><a href="/Reports/Monthly/vwMonthlyReports.aspx"> All Monthly Reports</a></li>
                         </ul>
                     </li>
 

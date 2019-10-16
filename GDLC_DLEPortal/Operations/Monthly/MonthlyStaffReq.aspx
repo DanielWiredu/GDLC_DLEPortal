@@ -2,6 +2,7 @@
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
+    <link href="/Content/css/updateProgress.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -18,21 +19,30 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                         <asp:UpdatePanel runat="server" >
+                        <asp:UpdateProgress ID="UpdateProgress2" runat="server" AssociatedUpdatePanelID="upMain">
+                           <ProgressTemplate>
+                            <div class="divWaiting">            
+	                            <asp:Label ID="lblWait" runat="server" Text="Processing... " />
+	                              <asp:Image ID="imgWait" runat="server" ImageAlign="Top" ImageUrl="/Content/img/loader.gif" />
+                                </div>
+                             </ProgressTemplate>
+                       </asp:UpdateProgress>
+                         <asp:UpdatePanel runat="server" ID="upMain" >
                     <ContentTemplate>
                         <div class="row">
                                         <div class="col-sm-4 pull-right">
-                                            <asp:TextBox runat="server" ID="txtSearchStaffReq" Width="100%" placeholder="Req No..." OnTextChanged="txtSearchStaffReq_TextChanged" AutoPostBack="true"></asp:TextBox>
+                                            <asp:TextBox runat="server" ID="txtSearchStaffReq" Width="100%" placeholder="Req No, Worker ID/ Name..." OnTextChanged="txtSearchStaffReq_TextChanged" AutoPostBack="true"></asp:TextBox>
                                            
                                            <%--<asp:Button runat="server" ID="btnExcelExport" CssClass="btn btn-primary" Text="Excel" CausesValidation="false" OnClick="btnExcelExport_Click"/>--%>
                                             <%--<asp:Button runat="server" ID="btnPDFExport" CssClass="btn btn-warning" Text="PDF" CausesValidation="false" OnClick="btnPDFExport_Click"/>--%>
                                         </div>
                                         <div class="col-sm-8 pull-left">
                                             <div class="toolbar-btn-action">
-                                                <asp:Button runat="server" ID="btnAddNew" CssClass="btn btn-success" Text="Add" CausesValidation="false" PostBackUrl="~/Operations/Monthly/NewMonthlyReq.aspx" />  
+                                                <%--<asp:Button runat="server" ID="btnAddNew" CssClass="btn btn-success" Text="Add" CausesValidation="false" PostBackUrl="~/Operations/Monthly/NewMonthlyReq.aspx" />--%>  
                                             </div>
                                         </div>
                                     </div>
+                         <hr />
                              <telerik:RadGrid ID="monthlyStaffReqGrid" runat="server" DataSourceID="monthlyStaffReqSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="False" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="monthlyStaffReqGrid_ItemCommand" OnDeleteCommand="monthlyStaffReqGrid_DeleteCommand">
                             <ClientSettings>
                                 <Scrolling AllowScroll="True" UseStaticHeaders="True" ScrollHeight="400px" />
@@ -54,6 +64,9 @@
                                          <telerik:GridBoundColumn DataField="DLEcodeCompanyName" FilterControlAltText="Filter DLEcodeCompanyName column" HeaderText="DLE Company" SortExpression="DLEcodeCompanyName" UniqueName="DLEcodeCompanyName">
                                          <HeaderStyle Width="200px" />
                                          </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn DataField="WorkerId" FilterControlAltText="Filter WorkerId column" HeaderText="WorkerId" SortExpression="WorkerId" UniqueName="WorkerId">
+                                         <HeaderStyle Width="100px" />
+                                         </telerik:GridBoundColumn>
                                          <telerik:GridBoundColumn DataField="WorkerName" FilterControlAltText="Filter WorkerName column" HeaderText="Worker Name" SortExpression="WorkerName" UniqueName="WorkerName">
                                          <HeaderStyle Width="150px" />
                                          </telerik:GridBoundColumn>
@@ -70,9 +83,10 @@
                                  </MasterTableView>
 
                         </telerik:RadGrid>
-                        <asp:SqlDataSource ID="monthlyStaffReqSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (30) AutoNo, ReqNo, date_, Approved, DLEcodeCompanyName, WorkerName FROM vwMonthlyReq WHERE (ReqNo LIKE '%' + @ReqNo + '%') AND Approved = 0 ORDER BY AutoNo DESC">
+                        <asp:SqlDataSource ID="monthlyStaffReqSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (100) AutoNo, ReqNo, date_, Approved, DLEcodeCompanyName, WorkerId, WorkerName FROM vwMonthlyReq WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND (ReqNo LIKE '%' + @SearchValue + '%' OR WorkerId LIKE '%' + @SearchValue + '%' OR WorkerName LIKE '%' + @SearchValue + '%') AND Approved = 0 ORDER BY AutoNo DESC">
                             <SelectParameters>
-                                <asp:ControlParameter Name="ReqNo" ControlID="txtSearchStaffReq" Type="String" PropertyName="Text" ConvertEmptyStringToNull="false" />
+                                <asp:CookieParameter Name="DLEcodeCompanyID" CookieName="dlecompanyId" Type="String" />
+                                <asp:ControlParameter Name="SearchValue" ControlID="txtSearchStaffReq" Type="String" PropertyName="Text" ConvertEmptyStringToNull="false" />
                             </SelectParameters>
                         </asp:SqlDataSource>
                     </ContentTemplate>

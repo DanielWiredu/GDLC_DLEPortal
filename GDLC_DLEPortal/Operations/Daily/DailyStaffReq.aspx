@@ -35,8 +35,8 @@
                                         </div>
                                         <div class="col-sm-8 pull-left">
                                             <div class="toolbar-btn-action">
-                                                <asp:Button runat="server" ID="btnExcelExport" CssClass="btn-primary" Text="Excel" CausesValidation="false" OnClick="btnExcelExport_Click"/>
-                                            <asp:Button runat="server" ID="btnPDFExport" CssClass="btn-warning" Text="PDF" CausesValidation="false" OnClick="btnPDFExport_Click"/>
+                                                <%--<asp:Button runat="server" ID="btnExcelExport" CssClass="btn-primary" Text="Excel" CausesValidation="false" OnClick="btnExcelExport_Click"/>--%>
+                                            <%--<asp:Button runat="server" ID="btnPDFExport" CssClass="btn-warning" Text="PDF" CausesValidation="false" OnClick="btnPDFExport_Click"/>--%>
                                             </div>
                                         </div>
                                     </div>
@@ -89,8 +89,8 @@
                     </ContentTemplate>
                              <Triggers>
                                   <%--<asp:PostBackTrigger ControlID="btnSearch" />--%>
-                                 <asp:PostBackTrigger ControlID="btnExcelExport" />
-                                  <asp:PostBackTrigger ControlID="btnPDFExport" />
+                                 <%--<asp:PostBackTrigger ControlID="btnExcelExport" />--%>
+                                  <%--<asp:PostBackTrigger ControlID="btnPDFExport" />--%>
                               </Triggers>
                 </asp:UpdatePanel>
                     </div>

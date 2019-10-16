@@ -16,13 +16,13 @@ namespace GDLC_DLEPortal.Reports.Weekly.General
         protected void Page_Init(object sender, EventArgs e)
         {
             string cachedReports = "rptWeeklyCostSheet_All";
-            if (Cache[cachedReports] == null)
+            if (Session[cachedReports] == null)
             {
                 loadReport(cachedReports);
             }
             else
             {
-                WeeklyCostSheetReport_All.ReportSource = Cache[cachedReports];
+                WeeklyCostSheetReport_All.ReportSource = Session[cachedReports];
             }
         }
         protected void Page_Load(object sender, EventArgs e)
@@ -32,7 +32,6 @@ namespace GDLC_DLEPortal.Reports.Weekly.General
 
         protected void loadReport(string cachedReports)
         {
-            int rptCacheTimeout = Convert.ToInt32(ConfigurationManager.AppSettings.Get("rptCacheTimeout").ToString());
             rptWeeklyCostSheet rpt = new rptWeeklyCostSheet();
             string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
             SqlConnection connection = new SqlConnection(connectionString);
@@ -41,7 +40,9 @@ namespace GDLC_DLEPortal.Reports.Weekly.General
 
             string startdate = Request.QueryString["st"].ToString();
             string enddate = Request.QueryString["ed"].ToString();
-            adapter = new SqlDataAdapter("select * from vwWeeklyCostSheet where (date_ between @startdate and @enddate)", connection);
+            string dleCompanyId = Request.Cookies["dlecompanyId"].Value;
+            adapter = new SqlDataAdapter("select * from vwWeeklyCostSheet where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND (date_ between @startdate and @enddate)", connection);
+            adapter.SelectCommand.Parameters.Add("@DLEcodeCompanyID", SqlDbType.VarChar).Value = dleCompanyId;
             adapter.SelectCommand.Parameters.Add("@startdate", SqlDbType.DateTime).Value = startdate;
             adapter.SelectCommand.Parameters.Add("@enddate", SqlDbType.DateTime).Value = enddate;
             if (connection.State == ConnectionState.Closed)
@@ -53,7 +54,7 @@ namespace GDLC_DLEPortal.Reports.Weekly.General
 
             adapter.Dispose();
             connection.Dispose();
-            Cache.Insert(cachedReports, rpt, null, DateTime.MaxValue, TimeSpan.FromMinutes(rptCacheTimeout));
+            Session[cachedReports] = rpt;
             WeeklyCostSheetReport_All.ReportSource = rpt;
         }
     }

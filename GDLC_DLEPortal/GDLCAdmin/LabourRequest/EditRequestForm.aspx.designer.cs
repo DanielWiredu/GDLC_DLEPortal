@@ -76,13 +76,13 @@ namespace GDLC_DLEPortal.GDLCAdmin.LabourRequest {
         protected global::System.Web.UI.WebControls.TextBox txtVessel;
         
         /// <summary>
-        /// txtDOA control.
+        /// dpDOA control.
         /// </summary>
         /// <remarks>
         /// Auto-generated field.
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtDOA;
+        protected global::Telerik.Web.UI.RadDatePicker dpDOA;
         
         /// <summary>
         /// dlActivity control.

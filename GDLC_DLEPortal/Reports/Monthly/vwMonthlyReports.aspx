@@ -31,7 +31,7 @@
                                     <label>Report Type</label>
                                     <telerik:RadDropDownList runat="server" ID="dlReportType" Width="100%" DefaultMessage="Select Report Type">
                                         <Items >
-                                            <telerik:DropDownListItem Text="Monthly Cost Sheet" />
+                                            <%--<telerik:DropDownListItem Text="Monthly Cost Sheet" Visible="false" />--%>
                                             <telerik:DropDownListItem Text="Monthly Processed" />
                                             <telerik:DropDownListItem Text="Monthly Invoice" />
                                             <telerik:DropDownListItem Text="Monthly Invoice Summary" />
@@ -58,6 +58,47 @@
                             <asp:Button runat="server" ID="btnProcess" Text="Generate Report" CssClass="btn btn-primary" OnClick="btnProcess_Click" OnClientClick="if (Page_IsValid) {this.value='Processing...';this.disabled=true; }" UseSubmitBehavior="false" />
                         </div>   
 
+                        
+                        <hr />
+
+                        <div runat="server" id="Div1" class="alert alert-info"> Generate Monthly Reports By Company Here</div>
+                  
+                        <div class="form-group" >
+                            <div class="row">
+                                <div class="col-md-3">
+                         <label>DLE Company</label>
+                                        <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="300px" EmptyMessage="Select 1 or more companies" Filter="None" Localization-AllItemsCheckedString="All companies checked"
+                                          DataTextField="DLEcodeCompanyName" DataValueField="DLEcodeCompanyID" MarkFirstMatch="false" CheckBoxes="true" EnableCheckAllItemsCheckBox="true"></telerik:RadComboBox>
+                                        <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="company"></asp:RequiredFieldValidator>
+                         </div>
+                                <div class="col-md-3">
+                                    <label>Report Type</label>
+                                    <telerik:RadDropDownList runat="server" ID="dlReportTypeByCompany" Width="100%" DefaultMessage="Select Report Type" DropDownHeight="150px">
+                                        <Items >
+                                            <%--<telerik:DropDownListItem Text="Monthly Cost Sheet" Visible="false"/>--%>
+                                            <telerik:DropDownListItem Text="Monthly Processed" />
+                                            <telerik:DropDownListItem Text="Monthly Invoice" />
+                                            <telerik:DropDownListItem Text="Monthly Invoice Summary" />
+                                        </Items>
+                                    </telerik:RadDropDownList>
+                                     <asp:RequiredFieldValidator runat="server" ControlToValidate="dlReportTypeByCompany" Display="Dynamic" ErrorMessage="Select Report Type" SetFocusOnError="true" ForeColor="Red" ValidationGroup="company"></asp:RequiredFieldValidator>
+                                </div>
+                                <div class="col-md-3">
+                                    <label>Approval Start Date</label>
+                                    <telerik:RadDatePicker runat="server" ID="dpStartDateByCompany" DateInput-ReadOnly="false" Width="100%"></telerik:RadDatePicker>
+                                     <asp:RequiredFieldValidator runat="server" ControlToValidate="dpStartDateByCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="company"></asp:RequiredFieldValidator>
+                                </div>
+                                <div class="col-md-3">
+                                     <label>Approval End Date</label>
+                                    <telerik:RadDatePicker runat="server" ID="dpEndDateByCompany" DateInput-ReadOnly="false" Width="100%"></telerik:RadDatePicker>
+                                     <asp:RequiredFieldValidator runat="server" ControlToValidate="dpEndDateByCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="company"></asp:RequiredFieldValidator>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer" >
+                            <asp:Button runat="server" ID="btnReportByCompany" Text="Generate Report" CssClass="btn btn-primary" OnClick="btnReportByCompany_Click" OnClientClick="if (Page_IsValid) {this.value='Processing...';this.disabled=true; }" UseSubmitBehavior="false" ValidationGroup="company" />
+                        </div>  
                       </ContentTemplate>
                 </asp:UpdatePanel> 
                     </div>
@@ -65,13 +106,6 @@
         </div>
 
 
-    <telerik:RadScriptBlock ID="RadScriptBlock1" runat="server">
-        <script type="text/javascript">
-            function UpdateCompanyItemCountField(sender, args) {
-                //Set the footer text.
-                sender.get_dropDownElement().lastChild.innerHTML = "A total of " + sender.get_items().get_count() + " items";
-            }
-        </script>
-    </telerik:RadScriptBlock>
+
 
 </asp:Content>

@@ -21,7 +21,6 @@ namespace GDLC_DLEPortal.Operations.Weekly
 
         protected void txtSearchStaffReq_TextChanged(object sender, EventArgs e)
         {
-            weeklyStaffReqSource.SelectCommand = "SELECT TOP (30) AutoNo, ReqNo, date_, Approved, DLEcodeCompanyName, WorkerName FROM vwWeeklyReq WHERE (ReqNo LIKE '%' + @ReqNo + '%') ORDER BY AutoNo";
             weeklyStaffReqGrid.Rebind();
         }
 

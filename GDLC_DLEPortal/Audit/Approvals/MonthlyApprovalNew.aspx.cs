@@ -19,14 +19,19 @@ namespace GDLC_DLEPortal.Audit.Approvals
         {
             if (!IsPostBack)
             {
-                btnDisapprove.Enabled = User.IsInRole("Administrator") || User.IsInRole("Audit-Disapproval");
+                string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
+                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) ORDER BY DLEcodeCompanyName";
+                dleSource.SelectParameters.Add("DLEcodeCompanyID", DbType.String, dleCompanyId);
+                dlCompany.DataBind();
+
+                //btnDisapprove.Enabled = User.IsInRole("Administrator") || User.IsInRole("Audit-Disapproval");
             }
             btnFind.Focus();
         }
 
-        protected void loadReqNo()
+        protected void loadReqNo(string reqno, string request)
         {
-            string reqno = txtSearchValue.Text.Trim().ToUpper();
+            string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand("spGetMonthlyReqNoDetails", connection))
@@ -43,6 +48,7 @@ namespace GDLC_DLEPortal.Audit.Approvals
                     command.Parameters.Add("@date_", SqlDbType.DateTime).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@Adate", SqlDbType.DateTime).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@Approved", SqlDbType.Bit).Direction = ParameterDirection.Output;
+                    command.Parameters.Add("@Confirmed", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@DWkday", SqlDbType.Int).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@DWkend", SqlDbType.Int).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@DTotal", SqlDbType.Int).Direction = ParameterDirection.Output;
@@ -54,79 +60,84 @@ namespace GDLC_DLEPortal.Audit.Approvals
                     command.Parameters.Add("@PeriodStart", SqlDbType.DateTime).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@PeriodEnd", SqlDbType.DateTime).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@ReqNo", SqlDbType.VarChar).Value = reqno;
+                    command.Parameters.Add("@ReturnReqNo", SqlDbType.VarChar, 10).Direction = ParameterDirection.Output;
+                    command.Parameters.Add("@request", SqlDbType.VarChar).Value = request;
+                    command.Parameters.Add("@companies", SqlDbType.VarChar).Value = dleCompanyId;
                     command.Parameters.Add("@WorkerName", SqlDbType.VarChar, 80).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@TradeGroup", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@TradeCategory", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@ezwichid", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@BankNumber", SqlDbType.VarChar, 30).Direction = ParameterDirection.Output;
-                    command.Parameters.Add("@SortCode", SqlDbType.VarChar, 6).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@Processed", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@Stored", SqlDbType.Bit).Direction = ParameterDirection.Output;
                     try
                     {
                         connection.Open();
                         command.ExecuteNonQuery();
-                        dpRegdate.SelectedDate = Convert.ToDateTime(command.Parameters["@date_"].Value);
-                        txtAutoNo.Text = command.Parameters["@AutoNo"].Value.ToString();
-                        txtReqNo.Text = reqno;
-                        txtWorkerId.Text = command.Parameters["@WorkerID"].Value.ToString();
-                        dlTradeGroup.SelectedValue = command.Parameters["@TradegroupID"].Value.ToString();
-                        hfTradetype.Value = command.Parameters["@TradetypeID"].Value.ToString();
-                        txtJobDescription.Text = command.Parameters["@job"].Value.ToString();
-                        chkApproved.Checked = Convert.ToBoolean(command.Parameters["@Approved"].Value);
-                        ViewState["Approved"] = Convert.ToBoolean(command.Parameters["@Approved"].Value); //use to validate if cost sheet is approved or not instead of enabled checkbox
-                        if (ViewState["Approved"].ToString() == "True")
+
+                        string autoNo = command.Parameters["@AutoNo"].Value.ToString();
+                        if (!String.IsNullOrEmpty(autoNo))
                         {
-                            dpApprovalDate.SelectedDate = Convert.ToDateTime(command.Parameters["@Adate"].Value);
-                            ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
+                            txtAutoNo.Text = autoNo;
+                            txtReqNo.Text = command.Parameters["@ReturnReqNo"].Value.ToString();
+                            txtWorkerId.Text = command.Parameters["@WorkerID"].Value.ToString();
+                            dlTradeGroup.SelectedValue = command.Parameters["@TradegroupID"].Value.ToString();
+                            hfTradetype.Value = command.Parameters["@TradetypeID"].Value.ToString();
+                            txtJobDescription.Text = command.Parameters["@job"].Value.ToString();
+                            dpRegdate.SelectedDate = Convert.ToDateTime(command.Parameters["@date_"].Value);
+                            chkApproved.Checked = Convert.ToBoolean(command.Parameters["@Approved"].Value);
+                            ViewState["Approved"] = Convert.ToBoolean(command.Parameters["@Approved"].Value); //use to validate if cost sheet is approved or not instead of enabled checkbox
+                            if (ViewState["Approved"].ToString() == "True")
+                            {
+                                dpApprovalDate.SelectedDate = Convert.ToDateTime(command.Parameters["@Adate"].Value);
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
+                            }
+                            else
+                            {
+                                dpApprovalDate.SelectedDate = DateTime.Now;
+                            }
+                            chkConfirmed.Checked = Convert.ToBoolean(command.Parameters["@Confirmed"].Value);
+                            txtWorkerName.Text = command.Parameters["@WorkerName"].Value.ToString();
+                            txtGroupName.Text = command.Parameters["@TradeGroup"].Value.ToString();
+                            txtCategory.Text = command.Parameters["@TradeCategory"].Value.ToString();
+
+                            string query = "";
+                            dlCompany.SelectedValue = command.Parameters["@DLEcodeCompanyID"].Value.ToString();
+                            string locationId = command.Parameters["@LocationID"].Value.ToString();
+                            query = "SELECT LocationId,Location FROM [tblLocation] WHERE LocationId = '" + locationId + "'";
+                            locationSource.SelectCommand = query;
+                            dlLocation.DataBind();
+                            dlLocation.SelectedValue = locationId;
+                            string repPoint = command.Parameters["@ReportingpointID"].Value.ToString();
+                            query = "SELECT ReportingPointId, ReportingPoint FROM tblReportingPoint WHERE ReportingPointId = '" + repPoint + "'";
+                            repPointSource.SelectCommand = query;
+                            dlReportingPoint.DataBind();
+                            dlReportingPoint.SelectedValue = repPoint;
+
+                            dpPeriod.SelectedDate = DateTime.ParseExact(command.Parameters["@Yyyymm"].Value.ToString(), "yyyyMM", null);
+                            dpPeriodStart.SelectedDate = Convert.ToDateTime(command.Parameters["@periodstart"].Value.ToString());
+                            dpPeriodEnd.SelectedDate = Convert.ToDateTime(command.Parameters["@periodend"].Value.ToString());
+                            txtDaysWkday.Text = command.Parameters["@DWkday"].Value.ToString();
+                            txtDaysWkend.Text = command.Parameters["@DWkend"].Value.ToString();
+                            txtTotalDays.Text = command.Parameters["@DTotal"].Value.ToString();
+                            txtHoursWkday.Text = command.Parameters["@HRWkday"].Value.ToString();
+                            txtHoursWkend.Text = command.Parameters["@HRWkend"].Value.ToString();
+                            txtNightsWkday.Text = command.Parameters["@NWkday"].Value.ToString();
+                            txtNightsWkend.Text = command.Parameters["@NWkend"].Value.ToString();
+
+                            chkProcessed.Checked = Convert.ToBoolean(command.Parameters["@Processed"].Value);
+                            chkStored.Checked = Convert.ToBoolean(command.Parameters["@Stored"].Value);
+
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
+                            txtSearchValue.Text = "";
                         }
                         else
                         {
-                            dpApprovalDate.SelectedDate = DateTime.Now;
+                            ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.warning('Cost Sheet not found', 'Note');", true);
                         }
-                        txtWorkerName.Text = command.Parameters["@WorkerName"].Value.ToString();
-                        txtGroupName.Text = command.Parameters["@TradeGroup"].Value.ToString();
-                        txtCategory.Text = command.Parameters["@TradeCategory"].Value.ToString();
-                        txtEzwichNo.Text = command.Parameters["@BankNumber"].Value.ToString() + " / " + command.Parameters["@SortCode"].Value.ToString() + " / " + command.Parameters["@ezwichid"].Value.ToString();
-
-                        string query = "";
-                        string companyId = command.Parameters["@DLEcodeCompanyID"].Value.ToString();
-                        query = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID ='" + companyId + "'";
-                        dleSource.SelectCommand = query;
-                        dlCompany.DataBind();
-                        dlCompany.SelectedValue = companyId;
-                        string locationId = command.Parameters["@LocationID"].Value.ToString();
-                        query = "SELECT LocationId,Location FROM [tblLocation] WHERE LocationId = '" + locationId + "'";
-                        locationSource.SelectCommand = query;
-                        dlLocation.DataBind();
-                        dlLocation.SelectedValue = locationId;
-                        string repPoint = command.Parameters["@ReportingpointID"].Value.ToString();
-                        query = "SELECT ReportingPointId, ReportingPoint FROM tblReportingPoint WHERE ReportingPointId = '" + repPoint + "'";
-                        repPointSource.SelectCommand = query;
-                        dlReportingPoint.DataBind();
-                        dlReportingPoint.SelectedValue = repPoint;
-
-                        dpPeriod.SelectedDate = DateTime.ParseExact(command.Parameters["@Yyyymm"].Value.ToString(), "yyyyMM", null);
-                        dpPeriodStart.SelectedDate = Convert.ToDateTime(command.Parameters["@periodstart"].Value.ToString());
-                        dpPeriodEnd.SelectedDate = Convert.ToDateTime(command.Parameters["@periodend"].Value.ToString());
-                        txtDaysWkday.Text = command.Parameters["@DWkday"].Value.ToString();
-                        txtDaysWkend.Text = command.Parameters["@DWkend"].Value.ToString();
-                        txtTotalDays.Text = command.Parameters["@DTotal"].Value.ToString();
-                        txtHoursWkday.Text = command.Parameters["@HRWkday"].Value.ToString();
-                        txtHoursWkend.Text = command.Parameters["@HRWkend"].Value.ToString();
-                        txtNightsWkday.Text = command.Parameters["@NWkday"].Value.ToString();
-                        txtNightsWkend.Text = command.Parameters["@NWkend"].Value.ToString();
-
-                        chkProcessed.Checked = Convert.ToBoolean(command.Parameters["@Processed"].Value);
-                        chkStored.Checked = Convert.ToBoolean(command.Parameters["@Stored"].Value);
-
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
-                        txtSearchValue.Text = "";
+                        
                     }
                     catch (Exception ex)
                     {
-                        //ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet not found', 'Error');", true);
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
                         //txtReqNo.Text = "";
                         //txtAutoNo.Text = "";
                         //txtWorkerId.Text = "";
@@ -134,12 +145,6 @@ namespace GDLC_DLEPortal.Audit.Approvals
                     }
                 }
             }
-        }
-
-        protected void dlCompany_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
-        {
-            e.Item.Text = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyName"].ToString();
-            e.Item.Value = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyID"].ToString();
         }
 
         protected void dlReportingPoint_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
@@ -168,15 +173,15 @@ namespace GDLC_DLEPortal.Audit.Approvals
             dlCompany.ClearSelection();
             dlLocation.ClearSelection();
             dlReportingPoint.ClearSelection();
-            loadReqNo();
+            loadReqNo(txtSearchValue.Text.Trim().ToUpper(), "search");
         }
         protected void btnApprove_Click(object sender, EventArgs e)
         {
-            //if (chkProcessed.Checked)
-            //{
-            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet Already Processed...', 'Error');", true);
-            //    return;
-            //}
+            if (!chkConfirmed.Checked)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet not yet confirmed...', 'Error');", true);
+                return;
+            }
             if (ViewState["Approved"].ToString() == "True")
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
@@ -269,6 +274,16 @@ namespace GDLC_DLEPortal.Audit.Approvals
                     }
                 }
             }
+        }
+
+        protected void btnPrevious_Click(object sender, EventArgs e)
+        {
+            loadReqNo(txtReqNo.Text, "previousapprove");
+        }
+
+        protected void btnNext_Click(object sender, EventArgs e)
+        {
+            loadReqNo(txtReqNo.Text, "nextapprove");
         }
     }
 }

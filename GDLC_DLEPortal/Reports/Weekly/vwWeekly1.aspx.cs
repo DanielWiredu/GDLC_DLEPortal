@@ -17,6 +17,20 @@ namespace GDLC_DLEPortal.Reports.Weekly
             {
                 dpStartDate.SelectedDate = DateTime.UtcNow;
                 dpEndDate.SelectedDate = DateTime.UtcNow;
+
+                dpStartDateByCompany.SelectedDate = DateTime.UtcNow;
+                dpEndDateByCompany.SelectedDate = DateTime.UtcNow;
+
+                string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
+                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) ORDER BY DLEcodeCompanyName";
+                dleSource.SelectParameters.Add("DLEcodeCompanyID", DbType.String, dleCompanyId);
+                dlCompany.DataBind();
+                if (!dleCompanyId.Contains(","))
+                {
+                    dlCompany.Items.FindItemByValue(dleCompanyId).Checked = true;
+                    dlCompany.CheckedItemsTexts = RadComboBoxCheckedItemsTexts.DisplayAllInInput;
+                    dlCompany.Enabled = false;
+                }
             }
         }
         protected void btnProcess_Click(object sender, EventArgs e)
@@ -29,23 +43,54 @@ namespace GDLC_DLEPortal.Reports.Weekly
                 //string reqno = "";
                 //ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Weekly/General/vwWeeklyCostSheet.aspx?reqno=" + reqno + "&st=" + startdate + "&ed=" + enddate + "');", true);
 
-                if (Cache["rptWeeklyCostSheet_All"] != null)
-                    Cache.Remove("rptWeeklyCostSheet_All");
+                if (Session["rptWeeklyCostSheet_All"] != null)
+                    Session.Remove("rptWeeklyCostSheet_All");
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Weekly/General/vwWeeklyCostSheet_All.aspx?&st=" + startdate + "&ed=" + enddate + "');", true);
             }
             else if (dlReportType.SelectedText == "Weekly Processed")
             {
-                if (Cache["rptWeeklyProcessed"] != null)
-                    Cache.Remove("rptWeeklyProcessed");
+                if (Session["rptWeeklyProcessed"] != null)
+                    Session.Remove("rptWeeklyProcessed");
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Weekly/Approved/vwWeeklyProcessed.aspx?st=" + startdate + "&ed=" + enddate + "');", true);
             }
             else if (dlReportType.SelectedText == "Weekly Invoice")
             {
-                if (Cache["rptWeeklyInvoice"] != null)
-                    Cache.Remove("rptWeeklyInvoice");
+                if (Session["rptWeeklyInvoice"] != null)
+                    Session.Remove("rptWeeklyInvoice");
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Weekly/Approved/vwWeeklyInvoice.aspx?st=" + startdate + "&ed=" + enddate + "');", true);
             }
             
+        }
+        protected void btnReportByCompany_Click(object sender, EventArgs e)
+        {
+            string dleCompanyIds = "";
+            foreach (RadComboBoxItem item in dlCompany.CheckedItems)
+            {
+                dleCompanyIds += item.Value + ",";
+            }
+            dleCompanyIds = dleCompanyIds.TrimEnd(',');
+
+            string startdate = dpStartDateByCompany.SelectedDate.Value.ToString();
+            string enddate = dpEndDateByCompany.SelectedDate.Value.ToShortDateString() + " 11:59:59 PM";
+
+            if (dlReportTypeByCompany.SelectedText == "Weekly Cost Sheet")
+            {
+                if (Session["rptWeeklyCostSheet_All_ByCompany"] != null)
+                    Session.Remove("rptWeeklyCostSheet_All_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Weekly/General/vwWeeklyCostSheet_All_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+            else if (dlReportTypeByCompany.SelectedText == "Weekly Processed")
+            {
+                if (Session["rptWeeklyProcessed_ByCompany"] != null)
+                    Session.Remove("rptWeeklyProcessed_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Weekly/Approved/vwWeeklyProcessed_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
+            else if (dlReportTypeByCompany.SelectedText == "Weekly Invoice")
+            {
+                if (Session["rptWeeklyInvoice_ByCompany"] != null)
+                    Session.Remove("rptWeeklyInvoice_ByCompany");
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Reports/Weekly/Approved/vwWeeklyInvoice_ByCompany.aspx?comps=" + dleCompanyIds + "&st=" + startdate + "&ed=" + enddate + "');", true);
+            }
         }
     }
 }

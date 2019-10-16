@@ -4,6 +4,7 @@
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
      <link href="/Content/css/telerikCombo.css" rel="stylesheet" />
     <link href="/Content/css/aspControlStyle.css" rel="stylesheet" />
+    <link href="/Content/css/updateProgress.css" rel="stylesheet" />
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="wrapper wrapper-content animated fadeInRight">
@@ -20,7 +21,15 @@
                         </div>
                     </div>
                     <div class="ibox-content">
-                         <asp:UpdatePanel runat="server">
+                        <asp:UpdateProgress ID="UpdateProgress2" runat="server" AssociatedUpdatePanelID="upMain">
+                           <ProgressTemplate>
+                            <div class="divWaiting">            
+	                            <asp:Label ID="lblWait" runat="server" Text="Processing... " />
+	                              <asp:Image ID="imgWait" runat="server" ImageAlign="Top" ImageUrl="/Content/img/loader.gif" />
+                                </div>
+                             </ProgressTemplate>
+                       </asp:UpdateProgress>
+                         <asp:UpdatePanel runat="server" ID="upMain">
                     <ContentTemplate>
                         <div runat="server" id="lblMsg"></div>
                         <div class="row">
@@ -37,26 +46,8 @@
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">DLE Company</label>
                                     <div class="col-sm-8">
-                                        <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" EmptyMessage="Select Company" Filter="Contains"
-                                           OnItemDataBound="dlCompany_ItemDataBound"  >
-                                            <HeaderTemplate>
-                <ul>
-                    <li class="ncolfull">DLE COMPANY</li>
-                </ul>
-            </HeaderTemplate>
-            <ItemTemplate>
-                <ul>
-                    <li class="ncolfull">
-                        <%# DataBinder.Eval(Container.DataItem, "DLEcodeCompanyName")%></li>
-                </ul>
-            </ItemTemplate>
-            <FooterTemplate>
-                A total of
-                <asp:Literal runat="server" ID="companyCount" />
-                items
-            </FooterTemplate>
-                                        </telerik:RadComboBox>
-                                        <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" ></asp:SqlDataSource>
+                                        <telerik:RadComboBox ID="dlCompany" Enabled="false" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="300px" EmptyMessage="Select company" DataTextField="DLEcodeCompanyName" DataValueField="DLEcodeCompanyID"></telerik:RadComboBox>
+                                        <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
                                         <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
                                 </div>
@@ -164,8 +155,7 @@
                                 </telerik:RadTextBox>
                               <asp:RequiredFieldValidator runat="server" ControlToValidate="txtWorkerId" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                             <asp:TextBox runat="server" ID="txtWorkerName" Width="30%" Enabled="false"></asp:TextBox>
-                            <label>Ezwich No</label>
-                               <asp:TextBox runat="server" ID="txtEzwichNo" Width="40%" Enabled="false" ForeColor="Red"></asp:TextBox>
+                            
                         </div>
                         
                         <div class="row">
@@ -238,16 +228,19 @@
                         </div>
                   
                         <div class="modal-footer">
+                            <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous" OnClick="btnPrevious_Click" />
+                            <asp:Button runat="server" ID="btnNext" Text=">>" CssClass="btn btn-default" ToolTip="Next" OnClick="btnNext_Click" />
                              <asp:CheckBox ID="chkProcessed" runat="server" Text="Processed" TextAlign="Left" Visible="false" />
                              <asp:CheckBox ID="chkStored" runat="server" Text="Stored" TextAlign="Left" Visible="false" />
-                            <asp:CheckBox ID="chkApproved" style="color:red;font-size:medium" runat="server" Text="Approved" TextAlign="Left" Enabled="true" />
+                            <asp:CheckBox ID="chkConfirmed" style="color:red;font-size:medium" runat="server" Text="Confirmed" TextAlign="Left" Enabled="false" />
+                            <asp:CheckBox ID="chkApproved" style="color:red;font-size:medium" runat="server" Text="Approved" TextAlign="Left" Enabled="false" />
                             <label style="color:green">Approval Date</label>
                             <telerik:RadDatePicker runat="server" ID="dpApprovalDate" Enabled="true" DateInput-ReadOnly="true" SelectedDate="01/01/2000"></telerik:RadDatePicker>
                             <asp:Button runat="server" ID="btnReturn" Text="Return" CssClass="btn btn-warning" CausesValidation="false" PostBackUrl="~/Dashboard.aspx" style="margin-bottom:0px" />
                             <asp:Button runat="server" ID="btnFind" Text="Find" CssClass="btn btn-success" OnClientClick="newModal()" CausesValidation="false" />
                             <asp:Button runat="server" ID="btnPrint" Text="Print" CssClass="btn btn-info" OnClick="btnPrint_Click"  />
                             <asp:Button runat="server" ID="btnApprove" Text="Approve" CssClass="btn btn-primary" OnClick="btnApprove_Click" />
-                            <asp:Button runat="server" ID="btnDisapprove" Text="Disapprove" CssClass="btn btn-danger" OnClick="btnDisapprove_Click" />
+                            <%--<asp:Button runat="server" ID="btnDisapprove" Text="Disapprove" CssClass="btn btn-danger" OnClick="btnDisapprove_Click" />--%>
                         </div>   
                     </ContentTemplate>
                 </asp:UpdatePanel>

@@ -46,25 +46,7 @@
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">DLE Company</label>
                                     <div class="col-sm-8">
-                                        <telerik:RadComboBox ID="dlCompany" runat="server" Width="100%" DataSourceID="dleSource" EmptyMessage="Select Company" Filter="Contains"
-                                           OnItemDataBound="dlCompany_ItemDataBound"  >
-                                            <HeaderTemplate>
-                <ul>
-                    <li class="ncolfull">DLE COMPANY</li>
-                </ul>
-            </HeaderTemplate>
-            <ItemTemplate>
-                <ul>
-                    <li class="ncolfull">
-                        <%# DataBinder.Eval(Container.DataItem, "DLEcodeCompanyName")%></li>
-                </ul>
-            </ItemTemplate>
-            <FooterTemplate>
-                A total of
-                <asp:Literal runat="server" ID="companyCount" />
-                items
-            </FooterTemplate>
-                                        </telerik:RadComboBox>
+                                        <telerik:RadComboBox ID="dlCompany" Enabled="false" runat="server" Width="100%" DataSourceID="dleSource" MaxHeight="300px" EmptyMessage="Select company" DataTextField="DLEcodeCompanyName" DataValueField="DLEcodeCompanyID"></telerik:RadComboBox>
                                         <asp:SqlDataSource ID="dleSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>"></asp:SqlDataSource>
                                         <asp:RequiredFieldValidator runat="server" ControlToValidate="dlCompany" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
@@ -335,7 +317,7 @@
                         <div class="modal-footer">
                             <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous"  OnClick="btnPrevious_Click" style="margin-bottom:0px"/>
                             <asp:Button runat="server" ID="btnNext" Text=">>" CssClass="btn btn-default" ToolTip="Next"  OnClick="btnNext_Click" />
-                            <asp:CheckBox ID="chkApproved" style="color:red;font-size:medium" runat="server" Text="Approved" TextAlign="Left" Enabled="true" />
+                            <asp:CheckBox ID="chkApproved" style="color:red;font-size:medium" runat="server" Text="Approved" TextAlign="Left" Enabled="false" />
                             <label style="color:green">Approval Date</label>
                             <telerik:RadDatePicker runat="server" ID="dpApprovalDate" ClientIDMode="Static" Enabled="true" DateInput-ReadOnly="false" SelectedDate="01/01/2000"></telerik:RadDatePicker>
                             <a class="btn btn-success" onclick="newModal()" style="margin-bottom:0px">Find</a>                           

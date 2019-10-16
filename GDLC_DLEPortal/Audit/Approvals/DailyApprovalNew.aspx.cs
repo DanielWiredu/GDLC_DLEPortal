@@ -24,6 +24,11 @@ namespace GDLC_DLEPortal.Audit.Approvals
         {
             if (!IsPostBack)
             {
+                string dleCompanyId = Request.Cookies.Get("dlecompanyId").Value;
+                dleSource.SelectCommand = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) ORDER BY DLEcodeCompanyName";
+                dleSource.SelectParameters.Add("DLEcodeCompanyID", DbType.String, dleCompanyId);
+                dlCompany.DataBind();
+
                 string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo=@ReqNo";
                 string reqno = Request.QueryString["reqno"].ToString();
                 if (!String.IsNullOrEmpty(reqno))
@@ -63,11 +68,7 @@ namespace GDLC_DLEPortal.Audit.Approvals
                         {
                             txtAutoNo.Text = reader["AutoNo"].ToString();
                             txtReqNo.Text = reader["ReqNo"].ToString();
-                            string companyId = reader["DLEcodeCompanyID"].ToString();
-                            query = "SELECT DLEcodeCompanyID, DLEcodeCompanyName FROM tblDLECompany WHERE DLEcodeCompanyID ='" + companyId + "'";
-                            dleSource.SelectCommand = query;
-                            dlCompany.DataBind();
-                            dlCompany.SelectedValue = companyId;
+                            dlCompany.SelectedValue = reader["DLEcodeCompanyID"].ToString();
                             string vesselId = reader["VesselberthID"].ToString();
                             query = "SELECT VesselId, VesselName FROM tblVessel WHERE VesselId ='" + vesselId + "'";
                             vesselSource.SelectCommand = query;
@@ -108,7 +109,8 @@ namespace GDLC_DLEPortal.Audit.Approvals
                             if (ViewState["Approved"].ToString() == "True")
                             {
                                 dpApprovalDate.SelectedDate = Convert.ToDateTime(reader["Adate"]);
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
+                                if (request != "load")
+                                    ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
                             }
                             else
                             {
@@ -163,6 +165,11 @@ namespace GDLC_DLEPortal.Audit.Approvals
         }
         protected void btnUpdate_Click(object sender, EventArgs e)
         {
+            if (subStaffReqGrid.Items.Count == 0)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "noworker", "toastr.error('Cannnot Update Hours...No worker on this cost sheet', 'Not Updated');", true);
+                return;
+            }
             if (Convert.ToDouble(txtNormalHrs.Text.Trim()) != 8.0)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Update..... Normal hours should not be more or less than 8', 'Error');", true);
@@ -225,11 +232,11 @@ namespace GDLC_DLEPortal.Audit.Approvals
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
                 return;
             }
-            if (String.IsNullOrEmpty(txtAutoNo.Text))
-            {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet not found', 'Error');", true);
-                return;
-            }
+            //if (String.IsNullOrEmpty(txtAutoNo.Text))
+            //{
+            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet not found', 'Error');", true);
+            //    return;
+            //}
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand("spApproveDailyReq", connection))
@@ -265,6 +272,20 @@ namespace GDLC_DLEPortal.Audit.Approvals
         protected void subStaffReqGrid_DataBound(object sender, EventArgs e)
         {
             lblGangs.InnerText = "Total Members : " + subStaffReqGrid.Items.Count;
+            //if (subStaffReqGrid.Items.Count == 0)
+            //{
+            //    btnApprove.Enabled = false;
+            //    btnApprove.ToolTip = "Action disabled: No worker on cost sheet";
+            //    btnUpdate.Enabled = false;
+            //    btnUpdate.ToolTip = "Action disabled: No worker on cost sheet";
+            //}
+            //else
+            //{
+            //    btnApprove.Enabled = true;
+            //    btnApprove.ToolTip = "";
+            //    btnUpdate.Enabled = true;
+            //    btnUpdate.ToolTip = "";
+            //}  
         }
 
         protected void btnPrint_Click(object sender, EventArgs e)
@@ -294,7 +315,7 @@ namespace GDLC_DLEPortal.Audit.Approvals
             //    MessageBox.Show("first ");
             //}
             string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo<@ReqNo and Approved = 0 order by reqno desc";
-            loadReqNo(txtReqNo.Text, query, "load");
+            loadReqNo(txtReqNo.Text, query, "loop");
         }
 
         protected void btnNext_Click(object sender, EventArgs e)
@@ -309,18 +330,12 @@ namespace GDLC_DLEPortal.Audit.Approvals
             //    ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('No more records', 'Error');", true);
             //}
             string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo>@ReqNo and Approved = 0 order by reqno";
-            loadReqNo(txtReqNo.Text, query, "load");
+            loadReqNo(txtReqNo.Text, query, "loop");
         }
         protected void dlVessel_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
         {
             e.Item.Text = ((DataRowView)e.Item.DataItem)["VesselName"].ToString();
             e.Item.Value = ((DataRowView)e.Item.DataItem)["VesselId"].ToString();
-        }
-
-        protected void dlCompany_ItemDataBound(object sender, RadComboBoxItemEventArgs e)
-        {
-            e.Item.Text = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyName"].ToString();
-            e.Item.Value = ((DataRowView)e.Item.DataItem)["DLEcodeCompanyID"].ToString();
         }
 
         protected void dlReportingPoint_ItemDataBound(object sender, RadComboBoxItemEventArgs e)

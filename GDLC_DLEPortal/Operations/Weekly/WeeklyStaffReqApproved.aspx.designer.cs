@@ -22,15 +22,6 @@ namespace GDLC_DLEPortal.Operations.Weekly {
         protected global::System.Web.UI.WebControls.TextBox txtSearchStaffReq;
         
         /// <summary>
-        /// btnAddNew control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnAddNew;
-        
-        /// <summary>
         /// weeklyStaffReqGrid control.
         /// </summary>
         /// <remarks>

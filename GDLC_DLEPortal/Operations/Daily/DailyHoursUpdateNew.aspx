@@ -333,6 +333,7 @@
                             <label style="color:green">Approval Date</label>
                             <telerik:RadDatePicker runat="server" ID="dpApprovalDate" ClientIDMode="Static" Enabled="true" DateInput-ReadOnly="false" SelectedDate="01/01/2000"></telerik:RadDatePicker>
                             <asp:Button runat="server" ID="btnReturn" Text="Return" CssClass="btn btn-warning" style="margin-bottom:0px" CausesValidation="false" PostBackUrl="~/Operations/Daily/DailyStaffReq.aspx" />
+                            <asp:Button runat="server" ID="btnConfirm" Text="Confirm" CssClass="btn btn-primary" OnClick="btnConfirm_Click"/>
                             <a class="btn btn-success" onclick="newModal()" >Find</a>                        
                              <asp:Button runat="server" ID="btnPrint" Text="Print" CssClass="btn btn-info" OnClick="btnPrint_Click" OnClientClick="if (Page_IsValid) {this.value='Processing...';this.disabled=true; }" UseSubmitBehavior="false" />
                             <asp:Button runat="server" ID="btnUpdate" Text="Update Hours" CssClass="btn btn-primary" OnClick="btnUpdate_Click" OnClientClick="if (Page_IsValid) {this.value='Processing...';this.disabled=true; }" UseSubmitBehavior="false" />

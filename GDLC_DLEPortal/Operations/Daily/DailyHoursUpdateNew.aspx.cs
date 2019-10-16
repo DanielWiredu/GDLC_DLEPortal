@@ -9,6 +9,7 @@ using System.Configuration;
 using System.Data.SqlClient;
 using System.Globalization;
 using Telerik.Web.UI;
+using System.Net.Mail;
 
 namespace GDLC_DLEPortal.Operations.Daily
 {
@@ -23,6 +24,8 @@ namespace GDLC_DLEPortal.Operations.Daily
                 string reqno = Request.QueryString["reqno"].ToString();
                 if (!String.IsNullOrEmpty(reqno))
                     loadReqNo(reqno, query, "load");
+
+                //btnConfirm.Enabled = User.IsInRole("Operations Manager");
             }
             //btnFind.Focus();
         }
@@ -84,7 +87,8 @@ namespace GDLC_DLEPortal.Operations.Daily
                             if (ViewState["Approved"].ToString() == "True")
                             {
                                 dpApprovalDate.SelectedDate = Convert.ToDateTime(reader["Adate"]);
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
+                                if (request != "load")
+                                    ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
                             }
                             else
                             {
@@ -123,6 +127,11 @@ namespace GDLC_DLEPortal.Operations.Daily
         }
         protected void btnUpdate_Click(object sender, EventArgs e)
         {
+            if (subStaffReqGrid.Items.Count == 0)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "noworker", "toastr.error('Cannnot Update Hours...No worker on this cost sheet', 'Not Updated');", true);
+                return;
+            }
             if (Convert.ToDouble(txtNormalHrs.Text.Trim()) != 8.0)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Update..... Normal hours should not be more or less than 8', 'Error');", true);
@@ -157,6 +166,7 @@ namespace GDLC_DLEPortal.Operations.Daily
                         {
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.success('Hours Updated Successfully', 'Success');", true);
                             //ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "newModal();", true);
+                            
                         }
                     }
                     catch (SqlException ex)
@@ -191,13 +201,13 @@ namespace GDLC_DLEPortal.Operations.Daily
         protected void btnPrevious_Click(object sender, EventArgs e)
         {
             string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo<@ReqNo and Normal = 0 order by reqno desc";
-            loadReqNo(txtReqNo.Text, query, "load");
+            loadReqNo(txtReqNo.Text, query, "loop");
         }
 
         protected void btnNext_Click(object sender, EventArgs e)
         {
             string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo>@ReqNo and Normal = 0 order by reqno";
-            loadReqNo(txtReqNo.Text, query, "load");
+            loadReqNo(txtReqNo.Text, query, "loop");
         }
 
         protected void btnComments_Click(object sender, EventArgs e)
@@ -238,6 +248,106 @@ namespace GDLC_DLEPortal.Operations.Daily
         {
             e.Item.Text = ((DataRowView)e.Item.DataItem)["GangName"].ToString();
             e.Item.Value = ((DataRowView)e.Item.DataItem)["GangId"].ToString();
+        }
+        protected void getCompanyAuditEmail()
+        {
+            DataTable dt = new DataTable();
+            string dleCompanyId = Request.Cookies["dlecompanyId"].Value;
+            string query = "SELECT Username, Email FROM vwUsersMain WHERE BaseCompanyId in (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) and Active=1 and Userroles like '%Audit%'";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.Add("@DLEcodeCompanyID", SqlDbType.Int).Value = dleCompanyId;
+                    try
+                    {
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            dt.Load(reader);
+                            if (dt.Rows.Count > 0)
+                                sendCostSheetEmail(dt, txtReqNo.Text);
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "getEmail", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
+                    }
+                }
+            }
+        }
+        protected void sendCostSheetEmail(DataTable emailList, string reqno)
+        {
+            try
+            {
+                string emailAddress = "";
+                string mailSubject = "GDLC - COST SHEET";
+                string message = "Dear Auditor, " +  "<br><br>";
+                message += "Please note that, cost sheet <strong>" + reqno + "</strong> has been confirmed by your Operations Department on the GDLC Client Portal awaiting your approval. Thank you. <br><br> ";
+                message += "<strong><a href='https://gdlcwave.com/' target='_blank'>Click here</a></strong> to log on to the client portal for more details. <br /><br />";
+                message += "<strong>This is an auto generated email. Please do not reply.</strong>";
+                MailMessage myMessage = new MailMessage();
+                myMessage.From = (new MailAddress("admin@gdlcwave.com", "GDLC Client Portal"));
+                foreach (DataRow dr in emailList.Rows)
+                {
+                    emailAddress = dr.Field<string>("Email");
+                    if (!String.IsNullOrEmpty(emailAddress))
+                    {
+                        myMessage.To.Add(new MailAddress(emailAddress));
+                    }
+                }
+                //myMessage.Bcc.Add(new MailAddress("daniel.wiredu@eupacwebs.com"));
+                myMessage.Subject = mailSubject;
+                myMessage.Body = message;
+                myMessage.IsBodyHtml = true;
+                SmtpClient mySmtpClient = new SmtpClient();
+                mySmtpClient.Send(myMessage);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "mailsuccess", "toastr.success('Email Sent Successfully', 'Success');", true);
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "mailerror", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
+            }
+        }
+        protected void btnConfirm_Click(object sender, EventArgs e)
+        {
+            getCompanyAuditEmail();
+
+            //if (chkConfirmed.Checked)
+            //{
+            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet Already Confirmed...', 'Error');", true);
+            //    return;
+            //}
+            //if (String.IsNullOrEmpty(txtAutoNo.Text))
+            //{
+            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet not found', 'Error');", true);
+            //    return;
+            //}
+            //using (SqlConnection connection = new SqlConnection(connectionString))
+            //{
+            //    using (SqlCommand command = new SqlCommand("spConfirmDailyReq", connection))
+            //    {
+            //        command.CommandType = CommandType.StoredProcedure;
+            //        command.Parameters.Add("@Confirmedby", SqlDbType.VarChar).Value = User.Identity.Name;
+            //        command.Parameters.Add("@ReqNo", SqlDbType.VarChar).Value = txtReqNo.Text;
+            //        command.Parameters.Add("@return_value", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
+            //        try
+            //        {
+            //            connection.Open();
+            //            command.ExecuteNonQuery();
+            //            int retVal = Convert.ToInt16(command.Parameters["@return_value"].Value);
+            //            if (retVal == 0)
+            //            {
+            //                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.success('Confirmed Successfully', 'Success');", true);
+            //                chkConfirmed.Checked = true;
+            //            }
+            //        }
+            //        catch (SqlException ex)
+            //        {
+            //            ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
+            //        }
+            //    }
+            //}
         }
     }
 }
