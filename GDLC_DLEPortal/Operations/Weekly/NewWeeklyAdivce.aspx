@@ -239,7 +239,7 @@
                         </div>
                   
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnGenerateCostSheet" Text="Generate Cost Sheet" CssClass="btn btn-success" OnClick="btnGenerateCostSheet_Click" OnClientClick="Confirm();" style="margin-right:50px" Enabled="false" />
+                            <asp:Button runat="server" ID="btnGenerateCostSheet" Text="Generate Cost Sheet" CssClass="btn btn-success" OnClick="btnGenerateCostSheet_Click" OnClientClick="Confirm();" style="margin-right:50px;margin-bottom:0px" Enabled="false" />
                             <asp:CheckBox ID="chkProcessed" style="color:red;font-size:medium;margin-right:10px" runat="server" Text="Processed" TextAlign="Left" Enabled="false" />
                             <asp:Button runat="server" ID="btnClear" Text="Add" CssClass="btn btn-danger" CausesValidation="false" style="margin-bottom:0px" OnClick="btnClear_Click" />
                             <asp:Button runat="server" ID="btnReturn" Text="Return" CssClass="btn btn-warning" CausesValidation="false" PostBackUrl="~/Operations/Weekly/WeeklyAdvice.aspx"/>

@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace GDLC_DLEPortal.Tools
 {
-    public partial class EditPayrollSetup : System.Web.UI.Page
+    public partial class EditPayrollSetup : MasterPageChange
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
       

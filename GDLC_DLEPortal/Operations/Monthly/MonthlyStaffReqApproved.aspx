@@ -74,7 +74,7 @@
                                  </MasterTableView>
 
                         </telerik:RadGrid>
-                        <asp:SqlDataSource ID="monthlyStaffReqSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (100) AutoNo, ReqNo, date_, Approved, DLEcodeCompanyName, WorkerId, WorkerName FROM vwMonthlyReq WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND (ReqNo LIKE '%' + @SearchValue + '%' OR WorkerId LIKE '%' + @SearchValue + '%' OR WorkerName LIKE '%' + @SearchValue + '%') AND Approved = 0 ORDER BY AutoNo DESC">
+                        <asp:SqlDataSource ID="monthlyStaffReqSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (100) AutoNo, ReqNo, date_, Approved, DLEcodeCompanyName, WorkerId, WorkerName FROM vwMonthlyReq WHERE DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND (ReqNo LIKE '%' + @SearchValue + '%' OR WorkerId LIKE '%' + @SearchValue + '%' OR WorkerName LIKE '%' + @SearchValue + '%') AND Approved = 1 ORDER BY AutoNo DESC">
                             <SelectParameters>
                                 <asp:CookieParameter Name="DLEcodeCompanyID" CookieName="dlecompanyId" Type="String" />
                                 <asp:ControlParameter Name="SearchValue" ControlID="txtSearchStaffReq" Type="String" PropertyName="Text" ConvertEmptyStringToNull="false" />

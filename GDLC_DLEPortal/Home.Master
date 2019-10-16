@@ -123,16 +123,16 @@
                     </li>
                     <li><a href="#"><i class="fa fa-sitemap"></i> <span class="nav-label">Weekly Requisition  </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
+                            <li><a href="/Operations/Weekly/WeeklyAdvice.aspx"> Advice</a></li>
                             <li><a href="/Operations/Weekly/WeeklyStaffReq.aspx"> UnApproved</a></li>
                             <li><a href="/Operations/Weekly/WeeklyStaffReqApproved.aspx"> Approved</a></li>
-                            <li><a href="/Operations/Weekly/WeeklyAdvice.aspx">Labour Advice</a></li>
                         </ul>
                     </li>
                     <li><a href="#"><i class="fa fa-puzzle-piece"></i> <span class="nav-label">Monthly Requisition  </span><span class="fa arrow"></span></a>
                         <ul class="nav nav-second-level collapse">
+                            <li><a href="/Operations/Monthly/MonthlyAdvice.aspx"> Advice</a></li>
                             <li><a href="/Operations/Monthly/MonthlyStaffReq.aspx"> UnApproved</a></li>
                             <li><a href="/Operations/Monthly/MonthlyStaffReqApproved.aspx"> Approved</a></li>
-                            <li><a href="/Operations/Monthly/MonthlyAdvice.aspx">Labour Advice</a></li>
                         </ul>
                     </li>
 

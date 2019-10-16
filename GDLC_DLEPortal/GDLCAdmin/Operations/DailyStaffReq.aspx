@@ -30,7 +30,7 @@
                          <asp:UpdatePanel runat="server" ID="upMain" >
                     <ContentTemplate>
                         <div class="row">
-                                        <div class="col-sm-4 pull-right" style="width:inherit">
+                                        <div class="col-sm-4 pull-right">
                                             <asp:TextBox runat="server" ID="txtSearchStaffReq" Width="100%" placeholder="Req No..." OnTextChanged="txtSearchStaffReq_TextChanged" AutoPostBack="true"></asp:TextBox>                                        
                                         </div>
                                         <div class="col-sm-8 pull-left">

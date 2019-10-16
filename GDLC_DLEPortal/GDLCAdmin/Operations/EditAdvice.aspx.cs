@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace GDLC_DLEPortal.GDLCAdmin.Operations
 {
-    public partial class EditAdvice : System.Web.UI.Page
+    public partial class EditAdvice : MasterPageChange
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)

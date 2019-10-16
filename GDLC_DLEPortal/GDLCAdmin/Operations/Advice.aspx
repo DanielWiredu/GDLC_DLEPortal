@@ -38,10 +38,11 @@
                                         </div>
                                         <div class="col-sm-8 pull-left">
                                             <div class="toolbar-btn-action">
-                                                <asp:Button runat="server" ID="btnAddNew" CssClass="btn btn-success" Text="Add" CausesValidation="false" PostBackUrl="~/Operations/Monthly/NewMonthlyAdvice.aspx"/>  
+                                                
                                             </div>
                                         </div>
                                     </div>
+                        <hr />
                              <telerik:RadGrid ID="weeklyAdviceGrid" runat="server" DataSourceID="weeklyAdviceSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="False" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="weeklyAdviceGrid_ItemCommand">
                             <ClientSettings>
                                 <Scrolling AllowScroll="True" UseStaticHeaders="True" ScrollHeight="400px" />

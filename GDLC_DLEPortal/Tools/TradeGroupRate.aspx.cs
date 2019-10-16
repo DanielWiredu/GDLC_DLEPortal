@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace GDLC_DLEPortal.Tools
 {
-    public partial class TradeGroupRate : System.Web.UI.Page
+    public partial class TradeGroupRate : MasterPageChange
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         int rows = 0;

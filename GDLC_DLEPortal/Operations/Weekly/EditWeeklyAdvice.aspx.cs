@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace GDLC_DLEPortal.Operations.Weekly
 {
-    public partial class EditWeeklyAdvice : System.Web.UI.Page
+    public partial class EditWeeklyAdvice : MasterPageChange
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)

@@ -258,7 +258,7 @@
                         </div>
                   
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous" OnClick="btnPrevious_Click"/>
+                            <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous" OnClick="btnPrevious_Click" style="margin-bottom:0px" />
                             <asp:Button runat="server" ID="btnNext" Text=">>" CssClass="btn btn-default" ToolTip="Next" OnClick="btnNext_Click" />
                              <asp:CheckBox ID="chkProcessed" runat="server" Text="Processed" TextAlign="Left" Visible="false" />
                              <asp:CheckBox ID="chkStored" runat="server" Text="Stored" TextAlign="Left" Visible="false" />

@@ -11,7 +11,7 @@ using System.Data.SqlClient;
 
 namespace GDLC_DLEPortal.Operations.Monthly
 {
-    public partial class NewMonthlyAdvice : System.Web.UI.Page
+    public partial class NewMonthlyAdvice : MasterPageChange
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)

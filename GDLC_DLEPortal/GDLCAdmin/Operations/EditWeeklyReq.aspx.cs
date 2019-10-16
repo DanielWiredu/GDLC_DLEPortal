@@ -12,7 +12,7 @@ using System.Security.Permissions;
 
 namespace GDLC_DLEPortal.GDLCAdmin.Operations
 {
-    public partial class EditWeeklyReq : System.Web.UI.Page
+    public partial class EditWeeklyReq : MasterPageChange
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)

@@ -9,7 +9,7 @@ namespace GDLC_DLEPortal
     {
         protected override void OnPreInit(EventArgs e)
         {
-            this.MasterPageFile = "~/Home.Master";
+            //this.MasterPageFile = "~/Home.Master";
             string accounttype = Request.Cookies["accounttype"].Value;
             if (accounttype != null)    //check the user weather user is logged in or not
             {

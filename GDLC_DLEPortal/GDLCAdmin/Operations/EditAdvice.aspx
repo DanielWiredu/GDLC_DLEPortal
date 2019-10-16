@@ -237,7 +237,7 @@
                         </div>
                   
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous" OnClick="btnPrevious_Click" />
+                            <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous" OnClick="btnPrevious_Click" style="margin-bottom:0px" />
                             <asp:Button runat="server" ID="btnNext" Text=">>" CssClass="btn btn-default" ToolTip="Next" OnClick="btnNext_Click" />
                             <asp:CheckBox ID="chkProcessed" style="color:red;font-size:medium;margin-right:10px" runat="server" Text="Processed" TextAlign="Left" Enabled="false" />
                             <asp:Button runat="server" ID="btnReturn" Text="Return" CssClass="btn btn-warning" CausesValidation="false" PostBackUrl="~/GDLCAdmin/Operations/Advice.aspx" style="margin-bottom:0px" />

@@ -11,7 +11,7 @@ using Telerik.Web.UI;
 
 namespace GDLC_DLEPortal.GDLCAdmin.Operations
 {
-    public partial class Advice : System.Web.UI.Page
+    public partial class Advice : MasterPageChange
     {
         static string connectionString = ConfigurationManager.ConnectionStrings["ConnectionString"].ConnectionString;
         protected void Page_Load(object sender, EventArgs e)

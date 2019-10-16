@@ -239,7 +239,7 @@
                         </div>
                   
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnGenerateCostSheet" Text="Generate Cost Sheet" CssClass="btn btn-success" OnClick="btnGenerateCostSheet_Click" OnClientClick="Confirm();" style="margin-right:50px"  />
+                            <asp:Button runat="server" ID="btnGenerateCostSheet" Text="Generate Cost Sheet" CssClass="btn btn-success" OnClick="btnGenerateCostSheet_Click" OnClientClick="Confirm();" style="margin-right:50px;margin-bottom:0px"  />
                             <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous" OnClick="btnPrevious_Click" />
                             <asp:Button runat="server" ID="btnNext" Text=">>" CssClass="btn btn-default" ToolTip="Next" OnClick="btnNext_Click" />
                             <asp:CheckBox ID="chkProcessed" style="color:red;font-size:medium;margin-right:10px" runat="server" Text="Processed" TextAlign="Left" Enabled="false" />

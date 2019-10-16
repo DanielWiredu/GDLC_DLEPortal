@@ -8,7 +8,7 @@ using Telerik.Web.UI;
 
 namespace GDLC_DLEPortal.GDLCAdmin.Operations
 {
-    public partial class WeeklyStaffReq : System.Web.UI.Page
+    public partial class WeeklyStaffReq : MasterPageChange
     {
         protected void Page_Load(object sender, EventArgs e)
         {
