@@ -41,13 +41,13 @@
                                         </div>
                                     </div>
                         <hr />
-                             <telerik:RadGrid ID="dailyStaffReqGrid" runat="server" DataSourceID="dailyStaffReqSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="False" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="dailyStaffReqGrid_ItemCommand" >
+                             <telerik:RadGrid ID="dailyStaffReqGrid" runat="server" DataSourceID="dailyStaffReqSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="true" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="dailyStaffReqGrid_ItemCommand" >
                             <ClientSettings>
                                 <Scrolling AllowScroll="True" UseStaticHeaders="True" ScrollHeight="400px" />
                                 <Selecting AllowRowSelect="true" />
                             </ClientSettings>
                             <GroupingSettings CaseSensitive="false" />
-                                 <MasterTableView DataKeyNames="ReqNo" DataSourceID="dailyStaffReqSource">
+                                 <MasterTableView DataKeyNames="ReqNo" DataSourceID="dailyStaffReqSource" PageSize="100">
                                      <Columns>
                                          <telerik:GridBoundColumn DataField="AutoNo" DataType="System.Int32" FilterControlAltText="Filter AutoNo column" HeaderText="AutoNo" SortExpression="AutoNo" UniqueName="AutoNo">
                                          <HeaderStyle Width="70px" />
@@ -80,7 +80,7 @@
                                  </MasterTableView>
 
                         </telerik:RadGrid>
-                        <asp:SqlDataSource ID="dailyStaffReqSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (50) AutoNo, ReqNo, date_, Approved, DLEcodeCompanyName, VesselName, ReportingPoint, GangName FROM vwDailyReq WHERE (ReqNo LIKE '%' + @ReqNo + '%') ORDER BY AutoNo DESC">
+                        <asp:SqlDataSource ID="dailyStaffReqSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (100) AutoNo, ReqNo, date_, Approved, DLEcodeCompanyName, VesselName, ReportingPoint, GangName FROM vwDailyReq WHERE (ReqNo LIKE '%' + @ReqNo + '%') ORDER BY AutoNo DESC">
                             <SelectParameters>
                                 <asp:ControlParameter Name="ReqNo" ControlID="txtSearchStaffReq" Type="String" PropertyName="Text" ConvertEmptyStringToNull="false" />
                             </SelectParameters>

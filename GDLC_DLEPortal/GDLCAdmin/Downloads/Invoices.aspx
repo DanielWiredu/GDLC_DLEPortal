@@ -27,20 +27,20 @@
                                         </div>
                                         <div class="col-sm-8 pull-left">
                                             <div class="toolbar-btn-action">
-                                                <%--<asp:Button runat="server" ID="btnUpload" CssClass="btn btn-primary" Text="Upload" CausesValidation="false" OnClientClick="showuploadModal();"/>--%>
+                                                <%--<asp:Button runat="server" CssClass="btn btn-primary" Text="Upload" CausesValidation="false" OnClientClick="showuploadModal();"/>--%>
                                                 <a class="btn btn-primary" onclick="showuploadModal();">Upload</a>
                                             </div>
                                         </div>
                                     </div>
 
                         <hr />
-                             <telerik:RadGrid ID="invoiceGrid" runat="server" DataSourceID="invoiceSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="False" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="invoiceGrid_ItemCommand" >
+                             <telerik:RadGrid ID="invoiceGrid" runat="server" DataSourceID="invoiceSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="True" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="invoiceGrid_ItemCommand" >
                             <ClientSettings>
                                 <Scrolling AllowScroll="True" UseStaticHeaders="True" ScrollHeight="400px" />
                                 <Selecting AllowRowSelect="true" />
                             </ClientSettings>
                             <GroupingSettings CaseSensitive="false" />
-                                 <MasterTableView DataKeyNames="Id" DataSourceID="invoiceSource">
+                                 <MasterTableView DataKeyNames="Id" DataSourceID="invoiceSource" PageSize="50">
                                      <Columns>
                                          <telerik:GridBoundColumn DataField="Id" DataType="System.Int32" FilterControlAltText="Filter Id column" HeaderText="Id" SortExpression="Id" UniqueName="Id">
                                          <HeaderStyle Width="60px" />
@@ -79,7 +79,7 @@
                                  </MasterTableView>
 
                         </telerik:RadGrid>
-                        <asp:SqlDataSource ID="invoiceSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (50) Id, DLEcodeCompanyName, FileName, FileType, FilePath, DateFrom, DateTo, ReportType, CreatedDate FROM vwFileUploads WHERE (FileName LIKE '%' + @FileName + '%') ORDER BY Id DESC">
+                        <asp:SqlDataSource ID="invoiceSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (100) Id, DLEcodeCompanyName, FileName, FileType, FilePath, DateFrom, DateTo, ReportType, CreatedDate FROM vwFileUploads WHERE (FileName LIKE '%' + @FileName + '%') ORDER BY Id DESC">
                             <SelectParameters>
                                 <asp:ControlParameter Name="FileName" ControlID="txtSearchStaffReq" Type="String" PropertyName="Text" ConvertEmptyStringToNull="false" />
                             </SelectParameters>
@@ -165,7 +165,7 @@
                        </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Return</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
                    <asp:Button runat="server" ID="btnSaveFile" Text="Save" CssClass="btn btn-primary" OnClick="btnSaveFile_Click" OnClientClick="if (Page_IsValid) {this.value='Processing...';this.disabled=true; }" UseSubmitBehavior="false" />
                 </div>
             </div>

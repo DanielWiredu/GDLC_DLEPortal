@@ -48,6 +48,7 @@ namespace GDLC_DLEPortal.Operations.Monthly
                     command.Parameters.Add("@AdviceNo", SqlDbType.VarChar).Value = adviceno;
                     command.Parameters.Add("@companies", SqlDbType.VarChar).Value = dleCompanyId;
                     command.Parameters.Add("@request", SqlDbType.VarChar).Value = request;
+                    command.Parameters.Add("@labourType", SqlDbType.VarChar).Value = "Monthly";
                     command.Parameters.Add("@AutoNo", SqlDbType.Int).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@ReturnAdviceNo", SqlDbType.VarChar, 20).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@DLEcodeCompanyID", SqlDbType.Int).Direction = ParameterDirection.Output;
@@ -71,6 +72,9 @@ namespace GDLC_DLEPortal.Operations.Monthly
                         string autoNo = command.Parameters["@AutoNo"].Value.ToString();
                         if (!String.IsNullOrEmpty(autoNo))
                         {
+                            dlLocation.ClearSelection();
+                            dlReportingPoint.ClearSelection();
+
                             txtAdviceNo.Text = command.Parameters["@ReturnAdviceNo"].Value.ToString();
                             txtReqNo.Text = command.Parameters["@ReqNo"].Value.ToString();
                             txtWorkerId.Text = command.Parameters["@WorkerID"].Value.ToString();
@@ -362,6 +366,7 @@ namespace GDLC_DLEPortal.Operations.Monthly
                     command.Parameters.Add("@locationID", SqlDbType.Int).Value = locationId;
                     command.Parameters.Add("@job", SqlDbType.VarChar).Value = txtJobDescription.Text;
                     command.Parameters.Add("@date_", SqlDbType.DateTime).Value = dpRegdate.SelectedDate;
+                    command.Parameters.Add("@UpdatedBy", SqlDbType.VarChar).Value = User.Identity.Name;
                     command.Parameters.Add("@AdviceNo", SqlDbType.VarChar).Value = txtAdviceNo.Text;
                     command.Parameters.Add("@return_value", SqlDbType.Int).Direction = ParameterDirection.ReturnValue;
                     try
@@ -480,7 +485,7 @@ namespace GDLC_DLEPortal.Operations.Monthly
         {
             if (Convert.ToDouble(txtNormalHrs1.Text.Trim()) != 8.0)
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Save..... Normal hours should not be more or less than 8', 'Error');", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Update..... Normal hours should not be more or less than 8', 'Error');", true);
                 return;
             }
 
@@ -587,10 +592,6 @@ namespace GDLC_DLEPortal.Operations.Monthly
         }
         protected void btnFindCostSheet_Click(object sender, EventArgs e)
         {
-            txtReqNo.Text = "";
-            //dlCompany.ClearSelection();
-            dlLocation.ClearSelection();
-            dlReportingPoint.ClearSelection();
             loadAdviceNo(txtCostSheet.Text.Trim().ToUpper(), "search");
             ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closeCostSheetModal();", true);
             txtCostSheet.Text = "";

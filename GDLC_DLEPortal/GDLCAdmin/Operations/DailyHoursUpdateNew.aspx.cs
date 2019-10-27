@@ -24,7 +24,7 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                 if (!String.IsNullOrEmpty(reqno))
                     loadReqNo(reqno, query, "load");
 
-                btnDisapprove.Enabled = User.IsInRole("Administrator") || User.IsInRole("Audit");
+                btnDisapprove.Enabled = User.IsInRole("Administrator");
             }
             //btnFind.Focus();
         }
@@ -41,6 +41,10 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                         SqlDataReader reader = command.ExecuteReader();
                         if (reader.Read())
                         {
+                            dlLocation.ClearSelection();
+                            dlReportingPoint.ClearSelection();
+                            dlCargo.ClearSelection();
+
                             txtAutoNo.Text = reader["AutoNo"].ToString();
                             txtReqNo.Text = reader["ReqNo"].ToString();
                             string companyId = reader["DLEcodeCompanyID"].ToString();
@@ -81,14 +85,10 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                             chkNight.Checked = Convert.ToBoolean(reader["Night"]);
                             chkApproved.Checked = Convert.ToBoolean(reader["Approved"]);
                             ViewState["Approved"] = reader["Approved"].ToString(); //use to validate if cost sheet is approved or not instead of enabled checkbox
-                            if (ViewState["Approved"].ToString() == "True")
+                            dpApprovalDate.SelectedDate = Convert.ToDateTime(reader["Adate"]);
+                            if (ViewState["Approved"].ToString() == "True" && request != "load")
                             {
-                                dpApprovalDate.SelectedDate = Convert.ToDateTime(reader["Adate"]);
                                 ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
-                            }
-                            else
-                            {
-                                dpApprovalDate.SelectedDate = DateTime.UtcNow;
                             }
 
                             chkShipSide.Checked = Convert.ToBoolean(reader["OnBoardAllowance"]);
@@ -101,11 +101,11 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                             chkProcessed.Checked = Convert.ToBoolean(reader["Processed"]);
                             chkStored.Checked = Convert.ToBoolean(reader["Stored"]);
 
-                            if (request == "search")
-                            {
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
-                                txtSearchValue.Text = "";
-                            }
+                            //if (request == "search")
+                            //{
+                            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
+                            //    txtSearchValue.Text = "";
+                            //}
                         }
                         else
                         {
@@ -141,18 +141,20 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
         {
             string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where ReqNo=@ReqNo";
             loadReqNo(txtSearchValue.Text.Trim(), query, "search");
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
+            txtSearchValue.Text = "";
         }
 
         protected void btnPrevious_Click(object sender, EventArgs e)
         {
             string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where ReqNo<@ReqNo order by reqno desc";
-            loadReqNo(txtReqNo.Text, query, "load");
+            loadReqNo(txtReqNo.Text, query, "loop");
         }
 
         protected void btnNext_Click(object sender, EventArgs e)
         {
             string query = "select top(1) AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where ReqNo>@ReqNo order by reqno";
-            loadReqNo(txtReqNo.Text, query, "load");
+            loadReqNo(txtReqNo.Text, query, "loop");
         }
         protected void btnComments_Click(object sender, EventArgs e)
         {
@@ -160,7 +162,6 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
         }
 
         [PrincipalPermission(SecurityAction.Demand, Role = "Administrator")]
-        [PrincipalPermission(SecurityAction.Demand, Role = "Audit")]
         protected void btnDisapprove_Click(object sender, EventArgs e)
         {
             if (ViewState["Approved"].ToString() == "False")

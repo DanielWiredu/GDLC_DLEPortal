@@ -156,7 +156,9 @@
                                 <EmptyMessageStyle Resize="None" /></telerik:RadTextBox>
                               <asp:RequiredFieldValidator runat="server" ControlToValidate="txtWorkerId" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                             <asp:TextBox runat="server" ID="txtWorkerName" Width="40%" Enabled="false"></asp:TextBox>
-                             
+                             <label>Advice No</label>
+                               <asp:TextBox runat="server" ID="txtAdviceNo" Width="20%" Enabled="false" ForeColor="Red"></asp:TextBox>
+                                <asp:Button runat="server" ID="btnViewAdvice" CssClass="btn-info" Text="View" OnClick="btnViewAdvice_Click" />
                         </div>
                         
                         <%--<div class="bg-info"> Work Details </div>--%>
@@ -168,7 +170,7 @@
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">Trade Group</label>
                                     <div class="col-sm-8">
-                                        <telerik:RadDropDownList ID="dlTradeGroup" runat="server" Width="100%" DataSourceID="tradeGroupSource" DataTextField="TradegroupNAME" DataValueField="TradegroupID" DefaultMessage="Select Group" DropDownHeight="200px"></telerik:RadDropDownList>
+                                        <telerik:RadDropDownList ID="dlTradeGroup" runat="server" Width="100%" DataSourceID="tradeGroupSource" DataTextField="TradegroupNAME" DataValueField="TradegroupID" DefaultMessage="Select Group" DropDownHeight="200px" Enabled="false"></telerik:RadDropDownList>
                                         <asp:SqlDataSource ID="tradeGroupSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TradegroupID,TradegroupNAME FROM [tblTradeGroup]"></asp:SqlDataSource>
                                         <asp:RequiredFieldValidator runat="server" ControlToValidate="dlTradeGroup" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                                     </div>
@@ -262,7 +264,7 @@
                         </div>
                   
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnComments" Text="Comments/Remarks" CssClass="btn btn-warning" OnClick="btnComments_Click" style="margin-bottom:0px" />
+                            <asp:Button runat="server" ID="btnComments" Text="Comments" CssClass="btn btn-warning" OnClick="btnComments_Click" style="margin-bottom:0px" />
                             <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous" OnClick="btnPrevious_Click" />
                             <asp:Button runat="server" ID="btnNext" Text=">>" CssClass="btn btn-default" ToolTip="Next" OnClick="btnNext_Click" />
                             <asp:CheckBox ID="chkConfirmed" style="color:red;font-size:medium" runat="server" Text="Confirmed" TextAlign="Left" Enabled="false" />
@@ -313,6 +315,107 @@
         </div>
          </div>
 
+    <!--  Advice modal -->
+    <div class="modal fade" id="advicemodal">
+    <div class="modal-dialog" style="width:90%">
+      <asp:UpdatePanel runat="server">
+          <ContentTemplate>
+               <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Cost Sheet Advice</h4>
+                </div>
+                        <div class="modal-body">
+                             <asp:Panel ID="Panel1" runat="server">
+            <telerik:RadListView ID="lvAdvice" RenderMode="Lightweight" Width="97%" AllowPaging="True" runat="server"
+                ItemPlaceholderID="adviceHolder">
+                <LayoutTemplate>
+                     <%--<h4>Batch Tracker</h4>--%>
+                                <table>
+                                    <tr>
+                                        <td class="tdlabel" style="width:10%">TransDate
+                                            </td>
+                                        <td class="tdlabel" style="width:10%">HrsFrom
+                                            </td>
+                                        <td class="tdlabel" style="width:10%">HrsTo
+                                            </td>
+                                        <td class="tdlabel" style="width:8%">Normal
+                                            </td>
+                                        <td class="tdlabel" style="width:8%">Overtime
+                                            </td>
+                                        <td class="tdlabel" style="width:7%">Night
+                                            </td>
+                                        <td class="tdlabel" style="width:10%">Weekends
+                                            </td>
+                                        <td class="tdlabel" style="width:8%">Holiday
+                                            </td>
+                                        <td class="tdlabel" style="width:15%">VesselName
+                                            </td>
+                                        <td class="tdlabel" style="width:7%">Transport
+                                            </td>
+                                        <td class="tdlabel" style="width:7%">ShipSide
+                                            </td>
+                                    </tr>
+                                    </table>                    
+                    <fieldset class="layoutFieldset" id="FieldSet2">
+                        <asp:Panel ID="adviceHolder" runat="server">
+                        </asp:Panel>
+                    </fieldset>
+                </LayoutTemplate>
+                <ItemTemplate>
+                                <table>
+                                        <tr> 
+                                            <%--<td style="width:10%">
+                                                <%# Eval("TransDate") %>
+                                            </td>--%>
+                                            <td style="width:10%">
+                                                 <%# DataBinder.Eval(Container.DataItem, "TransDate", "{0:dd-MMM-yyyy}") %>
+                                            </td>
+                                            <td style="width:10%">
+                                                <%# Eval("HrsFrom") %>
+                                            </td>
+                                            <td style="width:10%">
+                                                <%# Eval("HrsTo") %>
+                                            </td>
+                                            <td style="width:8%">
+                                                <%# Eval("Normal") %>
+                                            </td>
+                                            <td style="width:8%">
+                                                <%# Eval("Overtime") %>
+                                            </td>
+                                            <td style="width:7%">
+                                                <%# Eval("Night") %>
+                                            </td>
+                                            <td style="width:10%">
+                                                <%# Eval("Weekends") %>
+                                            </td>
+                                            <td style="width:8%">
+                                                <%# Eval("Holiday") %>
+                                            </td>
+                                            <td style="width:15%">
+                                                <%# Eval("VesselName") %>
+                                            </td>
+                                            <td style="width:7%">
+                                                <%# Eval("Transport") %>
+                                            </td>
+                                            <td style="width:7%">
+                                               <%# Eval("OnboardAllowance") %>
+                                            </td>
+                                        </tr>
+                                    </table>
+                </ItemTemplate>
+            </telerik:RadListView>
+        </asp:Panel>
+                       </div>
+                <%--<div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Return</button>
+                </div>--%>
+            </div>
+          </ContentTemplate>
+      </asp:UpdatePanel>
+        </div>
+    </div>
+
         <script type="text/javascript">
             function getTotalDays() {
                 var total = Number($('#txtDaysWkday').val()) + Number($('#txtDaysWkend').val());
@@ -333,6 +436,9 @@
             });
             function closeCostSheetModal() {
                 $('#costsheetmodal').modal('hide');
+            }
+            function showAdviceModal() {
+                $('#advicemodal').modal('show');
             }
     </script>
     <telerik:RadScriptBlock ID="RadScriptBlock1" runat="server">

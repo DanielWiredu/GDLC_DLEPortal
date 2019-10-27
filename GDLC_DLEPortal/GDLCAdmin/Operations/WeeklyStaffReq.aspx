@@ -43,14 +43,14 @@
                                         </div>
                                     </div>
                          <hr />
-                             <telerik:RadGrid ID="weeklyStaffReqGrid" runat="server" DataSourceID="weeklyStaffReqSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="False" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="weeklyStaffReqGrid_ItemCommand">
+                             <telerik:RadGrid ID="weeklyStaffReqGrid" runat="server" DataSourceID="weeklyStaffReqSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="true" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="weeklyStaffReqGrid_ItemCommand">
                             <ClientSettings>
                                 <Scrolling AllowScroll="True" UseStaticHeaders="True" ScrollHeight="400px" />
                                 <Selecting AllowRowSelect="true" />
                             </ClientSettings>
                             <GroupingSettings CaseSensitive="false" />
 
-                                 <MasterTableView DataKeyNames="ReqNo" DataSourceID="weeklyStaffReqSource">
+                                 <MasterTableView DataKeyNames="ReqNo" DataSourceID="weeklyStaffReqSource" PageSize="100">
                                      <Columns>
                                          <telerik:GridBoundColumn DataField="AutoNo" DataType="System.Int32" FilterControlAltText="Filter AutoNo column" HeaderText="AutoNo" SortExpression="AutoNo" UniqueName="AutoNo">
                                          <HeaderStyle Width="100px" />

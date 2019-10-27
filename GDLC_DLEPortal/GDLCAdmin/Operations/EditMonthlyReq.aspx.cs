@@ -60,6 +60,7 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                     command.Parameters.Add("@ReturnReqNo", SqlDbType.VarChar, 10).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@request", SqlDbType.VarChar).Value = request;
                     command.Parameters.Add("@companies", SqlDbType.VarChar).Value = dleCompanyId;
+                    command.Parameters.Add("@AdviceNo", SqlDbType.VarChar, 20).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@WorkerName", SqlDbType.VarChar, 80).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@TradeGroup", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@TradeCategory", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
@@ -70,8 +71,12 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                         string autoNo = command.Parameters["@AutoNo"].Value.ToString();
                         if (!String.IsNullOrEmpty(autoNo))
                         {
+                            dlLocation.ClearSelection();
+                            dlReportingPoint.ClearSelection();
+
                             txtAutoNo.Text = autoNo;
                             txtReqNo.Text = command.Parameters["@ReturnReqNo"].Value.ToString();
+                            txtAdviceNo.Text = command.Parameters["@AdviceNo"].Value.ToString();
                             txtWorkerId.Text = command.Parameters["@WorkerID"].Value.ToString();
                             dlTradeGroup.SelectedValue = command.Parameters["@TradegroupID"].Value.ToString();
                             hfTradetype.Value = command.Parameters["@TradetypeID"].Value.ToString();
@@ -79,6 +84,8 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                             dpRegdate.SelectedDate = Convert.ToDateTime(command.Parameters["@date_"].Value);
                             dpApprovalDate.SelectedDate = Convert.ToDateTime(command.Parameters["@Adate"].Value);
                             chkApproved.Checked = Convert.ToBoolean(command.Parameters["@Approved"].Value);
+                            if (chkApproved.Checked && request != "loadall")
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
                             chkConfirmed.Checked = Convert.ToBoolean(command.Parameters["@Confirmed"].Value);
                             txtWorkerName.Text = command.Parameters["@WorkerName"].Value.ToString();
                             txtGroupName.Text = command.Parameters["@TradeGroup"].Value.ToString();
@@ -165,10 +172,6 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
 
         protected void btnFindCostSheet_Click(object sender, EventArgs e)
         {
-            txtReqNo.Text = "";
-            //dlCompany.ClearSelection();
-            dlLocation.ClearSelection();
-            dlReportingPoint.ClearSelection();
             loadReqNo(txtCostSheet.Text.Trim().ToUpper(), "searchall");
             ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closeCostSheetModal();", true);
             txtCostSheet.Text = "";
@@ -229,6 +232,32 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                         }
                     }
                     catch (SqlException ex)
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
+                    }
+                }
+            }
+        }
+        protected void btnViewAdvice_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter())
+                {
+                    DataTable dTable = new DataTable();
+                    string AdviceNo = txtAdviceNo.Text;
+                    string selectquery = "select AdviceNo, TransDate, Normal, Overtime, Night, Weekends, Holiday, Remarks, VesselberthID, VesselName, Transport, OnBoardAllowance, HrsFrom, HrsTo FROM vwLabourAdviceDays where AdviceNo = @AdviceNo order by TransDate";
+                    adapter.SelectCommand = new SqlCommand(selectquery, connection);
+                    adapter.SelectCommand.Parameters.Add("@AdviceNo", SqlDbType.VarChar).Value = AdviceNo;
+                    try
+                    {
+                        connection.Open();
+                        adapter.Fill(dTable);
+                        lvAdvice.DataSource = dTable;
+                        lvAdvice.DataBind();
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showAdviceModal();", true);
+                    }
+                    catch (Exception ex)
                     {
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
                     }

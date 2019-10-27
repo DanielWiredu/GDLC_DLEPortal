@@ -25,7 +25,7 @@ namespace GDLC_DLEPortal.Operations.Daily
                 if (!String.IsNullOrEmpty(reqno))
                     loadReqNo(reqno, query, "load");
 
-                //btnConfirm.Enabled = User.IsInRole("Operations Manager");
+                btnConfirm.Enabled = User.IsInRole("Operations Manager");
             }
             //btnFind.Focus();
         }
@@ -44,6 +44,10 @@ namespace GDLC_DLEPortal.Operations.Daily
                         SqlDataReader reader = command.ExecuteReader();
                         if (reader.Read())
                         {
+                            dlLocation.ClearSelection();
+                            dlReportingPoint.ClearSelection();
+                            dlCargo.ClearSelection();
+
                             txtAutoNo.Text = reader["AutoNo"].ToString();
                             txtReqNo.Text = reader["ReqNo"].ToString();
                             string companyId = reader["DLEcodeCompanyID"].ToString();
@@ -84,15 +88,10 @@ namespace GDLC_DLEPortal.Operations.Daily
                             chkNight.Checked = Convert.ToBoolean(reader["Night"]);
                             chkApproved.Checked = Convert.ToBoolean(reader["Approved"]);
                             ViewState["Approved"] = reader["Approved"].ToString(); //use to validate if cost sheet is approved or not instead of enabled checkbox
-                            if (ViewState["Approved"].ToString() == "True")
+                            dpApprovalDate.SelectedDate = Convert.ToDateTime(reader["Adate"]);
+                            if (ViewState["Approved"].ToString() == "True" && request != "load")
                             {
-                                dpApprovalDate.SelectedDate = Convert.ToDateTime(reader["Adate"]);
-                                if (request != "load")
-                                    ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
-                            }
-                            else
-                            {
-                                dpApprovalDate.SelectedDate = DateTime.UtcNow;
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
                             }
 
                             chkShipSide.Checked = Convert.ToBoolean(reader["OnBoardAllowance"]);
@@ -105,11 +104,11 @@ namespace GDLC_DLEPortal.Operations.Daily
                             chkProcessed.Checked = Convert.ToBoolean(reader["Processed"]);
                             chkStored.Checked = Convert.ToBoolean(reader["Stored"]);
 
-                            if (request == "search")
-                            {
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
-                                txtSearchValue.Text = "";
-                            }
+                            //if (request == "search")
+                            //{
+                            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
+                            //    txtSearchValue.Text = "";
+                            //}
                         }
                         else
                         {
@@ -196,6 +195,8 @@ namespace GDLC_DLEPortal.Operations.Daily
         {
             string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo=@ReqNo";
             loadReqNo(txtSearchValue.Text.Trim(), query,"search");
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
+            txtSearchValue.Text = "";
         }
 
         protected void btnPrevious_Click(object sender, EventArgs e)
@@ -311,6 +312,12 @@ namespace GDLC_DLEPortal.Operations.Daily
         }
         protected void btnConfirm_Click(object sender, EventArgs e)
         {
+            if (Convert.ToDouble(txtNormalHrs.Text.Trim()) != 8.0)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Confirm..... Normal hours should not be more or less than 8', 'Error');", true);
+                return;
+            }
+
             getCompanyAuditEmail();
 
             //if (chkConfirmed.Checked)

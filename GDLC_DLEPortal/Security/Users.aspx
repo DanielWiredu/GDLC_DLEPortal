@@ -40,37 +40,37 @@
                          <asp:UpdatePanel runat="server" ID="upMain" >
                     <ContentTemplate>
 
-                            <telerik:RadGrid ID="userGrid" runat="server" AllowFilteringByColumn="True" AllowSorting="True" DataSourceID="userSource" GroupPanelPosition="Top" OnItemDataBound="userGrid_ItemDataBound" OnItemCommand="userGrid_ItemCommand" OnItemDeleted="userGrid_ItemDeleted">
+                            <telerik:RadGrid ID="userGrid" runat="server" AllowFilteringByColumn="True" AllowSorting="True" AllowPaging="true" DataSourceID="userSource" GroupPanelPosition="Top" OnItemDataBound="userGrid_ItemDataBound" OnItemCommand="userGrid_ItemCommand" OnItemDeleted="userGrid_ItemDeleted">
                                    <GroupingSettings CaseSensitive="False" />
                                    <ClientSettings>
                                        <Selecting AllowRowSelect="True" />
                                        <Scrolling AllowScroll="true" UseStaticHeaders="true" ScrollHeight="400px" />
                                    </ClientSettings>
                                    <GroupingSettings CaseSensitive="false" />
-                                   <MasterTableView AutoGenerateColumns="False" CommandItemDisplay="None" DataKeyNames="ID" DataSourceID="userSource">
+                                   <MasterTableView AutoGenerateColumns="False" CommandItemDisplay="None" DataKeyNames="ID" DataSourceID="userSource" PageSize="100">
                                        <CommandItemSettings ShowAddNewRecordButton="false" />
                                        <RowIndicatorColumn Visible="False">
                                        </RowIndicatorColumn>
                                        <Columns>
                                            <telerik:GridBoundColumn  DataField="ID" FilterControlAltText="Filter ID column"  SortExpression="ID" UniqueName="ID" Display="false">
                                            </telerik:GridBoundColumn>
-                                           <telerik:GridBoundColumn AutoPostBackOnFilter="True" CurrentFilterFunction="Contains" DataField="USERNAME" EmptyDataText="" FilterControlAltText="Filter USERNAME column" FilterDelay="1000" HeaderText="Username"  SortExpression="USERNAME" UniqueName="USERNAME" ShowFilterIcon="false" FilterControlWidth="120px">
+                                           <telerik:GridBoundColumn AutoPostBackOnFilter="True" CurrentFilterFunction="Contains" DataField="USERNAME" EmptyDataText="" FilterControlAltText="Filter USERNAME column" HeaderText="Username"  SortExpression="USERNAME" UniqueName="USERNAME" ShowFilterIcon="false" FilterControlWidth="120px">
                                            <HeaderStyle Width="150px" />
                                            </telerik:GridBoundColumn>
-                                           <telerik:GridBoundColumn AutoPostBackOnFilter="True" CurrentFilterFunction="Contains" DataField="FULLNAME" FilterControlAltText="Filter FULLNAME column" FilterDelay="1000" HeaderText="Full Name" SortExpression="FULLNAME" UniqueName="FULLNAME" ShowFilterIcon="false" FilterControlWidth="170px">
+                                           <telerik:GridBoundColumn AutoPostBackOnFilter="True" CurrentFilterFunction="Contains" DataField="FULLNAME" FilterControlAltText="Filter FULLNAME column" HeaderText="Full Name" SortExpression="FULLNAME" UniqueName="FULLNAME" ShowFilterIcon="false" FilterControlWidth="170px">
                                            <HeaderStyle Width="200px" />
                                            </telerik:GridBoundColumn>
-                                           <telerik:GridBoundColumn DataField="ACCOUNTTYPE" FilterControlAltText="Filter ACCOUNTTYPE column" HeaderText="Account Type" SortExpression="ACCOUNTTYPE" UniqueName="ACCOUNTTYPE" ShowFilterIcon="false" FilterControlWidth="80px">
+                                           <telerik:GridBoundColumn AutoPostBackOnFilter="True" CurrentFilterFunction="Contains" DataField="ACCOUNTTYPE" FilterControlAltText="Filter ACCOUNTTYPE column" HeaderText="Account Type" SortExpression="ACCOUNTTYPE" UniqueName="ACCOUNTTYPE" ShowFilterIcon="false" FilterControlWidth="80px">
                                            <HeaderStyle Width="100px" />
                                            </telerik:GridBoundColumn>
-                                           <telerik:GridBoundColumn DataField="DLEcodeCompanyName" FilterControlAltText="Filter DLEcodeCompanyName column" HeaderText="Base CompanyName" SortExpression="DLEcodeCompanyName" UniqueName="DLEcodeCompanyName" ShowFilterIcon="false" FilterControlWidth="170px">
+                                           <telerik:GridBoundColumn AutoPostBackOnFilter="True" CurrentFilterFunction="Contains" DataField="DLEcodeCompanyName" FilterControlAltText="Filter DLEcodeCompanyName column" HeaderText="Base CompanyName" SortExpression="DLEcodeCompanyName" UniqueName="DLEcodeCompanyName" ShowFilterIcon="false" FilterControlWidth="170px">
                                            <HeaderStyle Width="200px" />
                                            </telerik:GridBoundColumn>
-                                           <telerik:GridBoundColumn DataField="ContactNo" FilterControlAltText="Filter ContactNo column" HeaderText="ContactNo" SortExpression="ContactNo" UniqueName="ContactNo" ShowFilterIcon="false" FilterControlWidth="80px">
+                                           <telerik:GridBoundColumn AutoPostBackOnFilter="True" CurrentFilterFunction="Contains" DataField="ContactNo" FilterControlAltText="Filter ContactNo column" HeaderText="ContactNo" SortExpression="ContactNo" UniqueName="ContactNo" ShowFilterIcon="false" FilterControlWidth="80px">
                                            <HeaderStyle Width="100px" />
                                            </telerik:GridBoundColumn>
-                                            <telerik:GridBoundColumn DataField="ACTIVE" FilterControlAltText="Filter ACTIVE column" HeaderText="ACTIVE" SortExpression="ACTIVE" UniqueName="ACTIVE" Display="false" >
-                                           <HeaderStyle Width="120px" />
+                                           <telerik:GridBoundColumn DataField="ACTIVE" FilterControlAltText="Filter ACTIVE column" HeaderText="A" SortExpression="ACTIVE" UniqueName="ACTIVE" Display="false" >
+                                           <HeaderStyle Width="30px" />
                                             </telerik:GridBoundColumn>
                                            <telerik:GridButtonColumn CommandName="Edit" Text="Edit" UniqueName="Edit" ButtonType="PushButton" ButtonCssClass="btn-info">
                                            <HeaderStyle Width="50px" />

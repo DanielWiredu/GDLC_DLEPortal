@@ -184,6 +184,24 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         protected global::System.Web.UI.WebControls.TextBox txtWorkerName;
         
         /// <summary>
+        /// txtAdviceNo control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtAdviceNo;
+        
+        /// <summary>
+        /// btnViewAdvice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnViewAdvice;
+        
+        /// <summary>
         /// dlTradeGroup control.
         /// </summary>
         /// <remarks>
@@ -364,6 +382,15 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         protected global::System.Web.UI.WebControls.Button btnReturn;
         
         /// <summary>
+        /// btnSave control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnSave;
+        
+        /// <summary>
         /// btnFind control.
         /// </summary>
         /// <remarks>
@@ -391,6 +418,15 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         protected global::System.Web.UI.WebControls.Button btnApprove;
         
         /// <summary>
+        /// rdSearchType control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.RadioButtonList rdSearchType;
+        
+        /// <summary>
         /// txtSearchValue control.
         /// </summary>
         /// <remarks>
@@ -400,6 +436,24 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         protected global::System.Web.UI.WebControls.TextBox txtSearchValue;
         
         /// <summary>
+        /// workersGrid control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadGrid workersGrid;
+        
+        /// <summary>
+        /// workerSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource workerSource;
+        
+        /// <summary>
         /// btnSearch control.
         /// </summary>
         /// <remarks>
@@ -407,5 +461,50 @@ namespace GDLC_DLEPortal.Audit.Approvals {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::System.Web.UI.WebControls.Button btnSearch;
+        
+        /// <summary>
+        /// txtCostSheet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCostSheet;
+        
+        /// <summary>
+        /// btnFindCostSheet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnFindCostSheet;
+        
+        /// <summary>
+        /// Panel1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Panel Panel1;
+        
+        /// <summary>
+        /// lvAdvice control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadListView lvAdvice;
+        
+        /// <summary>
+        /// RadScriptBlock1 control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::Telerik.Web.UI.RadScriptBlock RadScriptBlock1;
     }
 }

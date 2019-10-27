@@ -26,20 +26,19 @@
                                         </div>
                                         <div class="col-sm-8 pull-left">
                                             <div class="toolbar-btn-action">
-                                                <%--<asp:Button runat="server" ID="btnUpload" CssClass="btn btn-primary" Text="Upload" CausesValidation="false" OnClientClick="showuploadModal();"/>--%>
-                                                <%--<a class="btn btn-primary" onclick="showuploadModal();">Upload</a>--%>
+                                               
                                             </div>
                                         </div>
                                     </div>
 
                         <hr />
-                             <telerik:RadGrid ID="invoiceGrid" runat="server" DataSourceID="invoiceSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="False" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="invoiceGrid_ItemCommand" >
+                             <telerik:RadGrid ID="invoiceGrid" runat="server" DataSourceID="invoiceSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="True" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="invoiceGrid_ItemCommand" >
                             <ClientSettings>
                                 <Scrolling AllowScroll="True" UseStaticHeaders="True" ScrollHeight="400px" />
                                 <Selecting AllowRowSelect="true" />
                             </ClientSettings>
                             <GroupingSettings CaseSensitive="false" />
-                                 <MasterTableView DataKeyNames="Id" DataSourceID="invoiceSource">
+                                 <MasterTableView DataKeyNames="Id" DataSourceID="invoiceSource" PageSize="50">
                                      <Columns>
                                          <telerik:GridBoundColumn DataField="Id" DataType="System.Int32" FilterControlAltText="Filter Id column" HeaderText="Id" SortExpression="Id" UniqueName="Id">
                                          <HeaderStyle Width="60px" />

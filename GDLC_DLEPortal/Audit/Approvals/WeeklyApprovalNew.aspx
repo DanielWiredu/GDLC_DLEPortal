@@ -54,8 +54,9 @@
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">Reporting Point</label>
                                     <div class="col-sm-8">
-                                        <telerik:RadComboBox ID="dlReportingPoint" runat="server" Width="100%" DataSourceID="repPointSource" EmptyMessage="Select Reporting Point" Filter="Contains"
-                                           OnItemDataBound="dlReportingPoint_ItemDataBound" >
+                                        <telerik:RadComboBox ID="dlReportingPoint" runat="server" Width="100%" DataSourceID="repPointSource" MaxHeight="200" EmptyMessage="Select Reporting Point" Filter="Contains"
+                                           OnItemDataBound="dlReportingPoint_ItemDataBound" OnDataBound="dlReportingPoint_DataBound" OnItemsRequested="dlReportingPoint_ItemsRequested" EnableLoadOnDemand="true"
+                                          OnClientItemsRequested="UpdateRepPointItemCountField"   HighlightTemplatedItems="true" MarkFirstMatch="true"   >
                                              <HeaderTemplate>
                 <ul>
                     <li class="ncolfull">REPORTING POINT</li>
@@ -79,8 +80,9 @@
                                     <div class="form-group">
                                     <label class="col-sm-4 control-label">Location</label>
                                     <div class="col-sm-8">
-                                        <telerik:RadComboBox ID="dlLocation" runat="server" Width="100%" DataSourceID="locationSource" EmptyMessage="Select Location" Filter="Contains"
-                                          OnItemDataBound="dlLocation_ItemDataBound" >
+                                        <telerik:RadComboBox ID="dlLocation" runat="server" Width="100%" DataSourceID="locationSource" MaxHeight="200px" EmptyMessage="Select Location" Filter="Contains"
+                                          OnItemDataBound="dlLocation_ItemDataBound" OnDataBound="dlLocation_DataBound" OnItemsRequested="dlLocation_ItemsRequested" EnableLoadOnDemand="true"
+                                            OnClientItemsRequested="UpdateLocationItemCountField" HighlightTemplatedItems="true" MarkFirstMatch="true"    >
                                             <HeaderTemplate>
                 <ul>
                     <li class="ncolfull">LOCATION</li>
@@ -152,20 +154,24 @@
                                <asp:HiddenField runat="server" ID="hfTradetype" />
                                 <label>Name</label> 
                             <telerik:RadTextBox runat="server" ID="txtWorkerId" ReadOnly="true" Width="15%" ShowButton="true" EmptyMessage="Select Worker">
-                                </telerik:RadTextBox>
+                                <ClientEvents OnButtonClick="showWorkersModal" />
+                                <EmptyMessageStyle Resize="None" /></telerik:RadTextBox>
                               <asp:RequiredFieldValidator runat="server" ControlToValidate="txtWorkerId" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red"></asp:RequiredFieldValidator>
                             <asp:TextBox runat="server" ID="txtWorkerName" Width="30%" Enabled="false"></asp:TextBox>
-                            
+                            <label>Advice No</label>
+                               <asp:TextBox runat="server" ID="txtAdviceNo" Width="20%" Enabled="false" ForeColor="Red"></asp:TextBox>
+                                <asp:Button runat="server" ID="btnViewAdvice" CssClass="btn-info" Text="View" OnClick="btnViewAdvice_Click" />
                         </div>
                         
                         <div class="row">
                             <asp:UpdatePanel runat="server">
                     <ContentTemplate>
                         <div runat="server" id="lblDays" class="bg-info">Total Days : </div>
-                             <telerik:RadGrid ID="subStaffReqGrid" runat="server" DataSourceID="subStaffReqSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="False" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnDataBound="subStaffReqGrid_DataBound" Enabled="false">
+                             <telerik:RadGrid ID="subStaffReqGrid" runat="server" DataSourceID="subStaffReqSource" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="False" AllowSorting="True" CellSpacing="-1" GridLines="Both" OnItemCommand="subStaffReqGrid_ItemCommand" OnDataBound="subStaffReqGrid_DataBound" OnItemDeleted="subStaffReqGrid_ItemDeleted">
                             <ClientSettings AllowKeyboardNavigation="true">
                                 <Scrolling AllowScroll="True" UseStaticHeaders="True" ScrollHeight="250px" />
                                 <Selecting AllowRowSelect="true" />
+                                <ClientEvents OnRowDblClick="WorkGrdRowDblClick" />
                                 <KeyboardNavigationSettings AllowActiveRowCycle="true" />
                             </ClientSettings>
                             <GroupingSettings CaseSensitive="false" />
@@ -187,17 +193,19 @@
                                          <telerik:GridBoundColumn DataField="Overtime" FilterControlAltText="Filter Overtime column" HeaderText="Overtime" SortExpression="Overtime" UniqueName="Overtime">
                                          <HeaderStyle Width="100px" />
                                          </telerik:GridBoundColumn>
-                                         <telerik:GridBoundColumn DataField="Night" FilterControlAltText="Filter Night column" HeaderText="Night" SortExpression="Night" UniqueName="Night">
+                                         <telerik:GridBoundColumn DataField="Night" FilterControlAltText="Filter Night column" HeaderText="Night" SortExpression="Night" UniqueName="Night" EmptyDataText="">
                                          <HeaderStyle Width="80px" />
                                          </telerik:GridBoundColumn>
-                                         <telerik:GridBoundColumn DataField="Weekends" FilterControlAltText="Filter Weekends column" HeaderText="Weekends" SortExpression="Weekends" UniqueName="Weekends">
+                                         <telerik:GridBoundColumn DataField="Weekends" FilterControlAltText="Filter Weekends column" HeaderText="Weekends" SortExpression="Weekends" UniqueName="Weekends" EmptyDataText="">
                                          <HeaderStyle Width="100px" />
                                          </telerik:GridBoundColumn>
-                                         <telerik:GridBoundColumn DataField="Holiday" FilterControlAltText="Filter Holiday column" HeaderText="Holiday" SortExpression="Holiday" UniqueName="Holiday">
+                                         <telerik:GridBoundColumn DataField="Holiday" FilterControlAltText="Filter Holiday column" HeaderText="Holiday" SortExpression="Holiday" UniqueName="Holiday" EmptyDataText="">
                                          <HeaderStyle Width="90px" />
                                          </telerik:GridBoundColumn>
-                                         <telerik:GridBoundColumn DataField="Remarks" FilterControlAltText="Filter Remarks column" HeaderText="Remarks" SortExpression="Remarks" UniqueName="Remarks">
+                                         <telerik:GridBoundColumn DataField="Remarks" FilterControlAltText="Filter Remarks column" HeaderText="Remarks" SortExpression="Remarks" UniqueName="Remarks" EmptyDataText="">
                                          <HeaderStyle Width="150px" />
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn Display="false" DataField="VesselberthID" SortExpression="VesselberthID" UniqueName="VesselberthID">
                                          </telerik:GridBoundColumn>
                                          <telerik:GridBoundColumn DataField="VesselName" FilterControlAltText="Filter VesselName column" HeaderText="Vessel Name" SortExpression="VesselName" UniqueName="VesselName">
                                          <HeaderStyle Width="150px" />
@@ -237,10 +245,10 @@
                             <label style="color:green">Approval Date</label>
                             <telerik:RadDatePicker runat="server" ID="dpApprovalDate" Enabled="true" DateInput-ReadOnly="true" SelectedDate="01/01/2000"></telerik:RadDatePicker>
                             <asp:Button runat="server" ID="btnReturn" Text="Return" CssClass="btn btn-warning" CausesValidation="false" PostBackUrl="~/Dashboard.aspx" style="margin-bottom:0px" />
-                            <asp:Button runat="server" ID="btnFind" Text="Find" CssClass="btn btn-success" OnClientClick="newModal()" CausesValidation="false" />
+                            <asp:Button runat="server" ID="btnSave" Text="Save Changes" CssClass="btn btn-primary" OnClick="btnSave_Click" />
+                            <asp:Button runat="server" ID="btnFind" Text="Find" CssClass="btn btn-success" OnClientClick="newCostSheetModal()" CausesValidation="false" />
                             <asp:Button runat="server" ID="btnPrint" Text="Print" CssClass="btn btn-info" OnClick="btnPrint_Click"  />
                             <asp:Button runat="server" ID="btnApprove" Text="Approve" CssClass="btn btn-primary" OnClick="btnApprove_Click" />
-                            <%--<asp:Button runat="server" ID="btnDisapprove" Text="Disapprove" CssClass="btn btn-danger" OnClick="btnDisapprove_Click" />--%>
                         </div>   
                     </ContentTemplate>
                 </asp:UpdatePanel>
@@ -248,24 +256,77 @@
                 </div>
         </div>
 
-             <!-- new modal -->
-         <div class="modal fade" id="newmodal">
-    <div class="modal-dialog" style="width:40%">
+     <!-- workers modal -->
+         <div class="modal fade" id="workersmodal">
+    <div class="modal-dialog" style="width:70%">
         <asp:Panel runat="server" DefaultButton="btnSearch">
             <asp:UpdatePanel runat="server" UpdateMode="Conditional">
             <ContentTemplate>
                  <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
-                    <h4 class="modal-title">Find Cost Sheet</h4>
+                    <h4 class="modal-title">Workers</h4>
                 </div>
                         <div class="modal-body">
+                            <div class="form-group">
+                                <asp:RadioButtonList ID="rdSearchType" runat="server" RepeatDirection="Horizontal" CssClass="rbl">
+                                    <asp:ListItem Text="WorkerID" Value="WorkerID" Selected="True"></asp:ListItem>
+                                    <asp:ListItem Text="Gang" Value="Gang"></asp:ListItem>
+                                    <asp:ListItem Text="Surname" Value="Surname"></asp:ListItem>
+                                    <asp:ListItem Text="Other Names" Value="Othernames"></asp:ListItem>
+                                </asp:RadioButtonList>
+                            </div>
                              <div class="form-group">
-                                        <label>Enter Requisition No</label>
-                                       <asp:TextBox runat="server" ID="txtSearchValue" Width="100%" MaxLength="50" ClientIDMode="Static" ></asp:TextBox>
+                                        <%--<label>Enter Value</label>--%>
+                                       <asp:TextBox runat="server" ID="txtSearchValue" Width="100%" MaxLength="50" ClientIDMode="Static"></asp:TextBox>
                                    <asp:RequiredFieldValidator runat="server" ErrorMessage="Required Field" ControlToValidate="txtSearchValue" Display="Dynamic" ForeColor="Red" SetFocusOnError="true" ValidationGroup="search"></asp:RequiredFieldValidator>
                              </div>
                             <div>
+                                <telerik:RadGrid ID="workersGrid" runat="server" AutoGenerateColumns="False" GroupPanelPosition="Top" AllowPaging="true" CellSpacing="-1" GridLines="Both" OnItemCommand="workersGrid_ItemCommand" OnNeedDataSource="workersGrid_NeedDataSource">
+                            <ClientSettings >
+                                <%--<Virtualization EnableVirtualization="true" InitiallyCachedItemsCount="100" ItemsPerView="100" />--%>
+                                <Scrolling AllowScroll="True" UseStaticHeaders="True" ScrollHeight="350px" SaveScrollPosition="false" />
+                                <Selecting AllowRowSelect="true" />
+                                <ClientEvents OnRowDblClick="RowDblClick" />
+                            </ClientSettings>
+                            <GroupingSettings CaseSensitive="false" />
+
+                                 <MasterTableView DataKeyNames="WorkerID" AllowSorting="false" AllowFilteringByColumn="false" PageSize="50">
+                                     <Columns>
+                                        <%--<telerik:GridButtonColumn ButtonType="FontIconButton" CommandName="Edit" Text="Add" Exportable="false">
+                                        <HeaderStyle Width="30px" />
+                                        </telerik:GridButtonColumn>--%>
+                                         <telerik:GridBoundColumn DataField="WorkerID" FilterControlAltText="Filter WorkerID column" HeaderText="Worker ID" ReadOnly="True" SortExpression="WorkerID" UniqueName="WorkerID" AutoPostBackOnFilter="true" ShowFilterIcon="false" AllowFiltering="false">
+                                         <HeaderStyle Width="80px" />
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn DataField="SName" FilterControlAltText="Filter SName column" HeaderText="Surname" SortExpression="SName" UniqueName="SName" AutoPostBackOnFilter="true" ShowFilterIcon="false" FilterControlWidth="110px">
+                                         <HeaderStyle Width="140px" />
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn DataField="OName" FilterControlAltText="Filter OName column" HeaderText="Othernames" SortExpression="OName" UniqueName="OName" AutoPostBackOnFilter="true" ShowFilterIcon="false" FilterControlWidth="140px">
+                                         <HeaderStyle Width="170px" />
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn DataField="GangName" FilterControlAltText="Filter GangName column" HeaderText="Gang" SortExpression="GangName" UniqueName="GangName" AutoPostBackOnFilter="true" ShowFilterIcon="false" AllowFiltering="false">
+                                         <HeaderStyle Width="130px" />
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn Display="false" DataField="TradegroupID" SortExpression="TradegroupID" UniqueName="TradegroupID">
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn DataField="TradegroupNAME" FilterControlAltText="Filter TradegroupNAME column" HeaderText="Trade Group" SortExpression="TradegroupNAME" UniqueName="TradegroupNAME" AutoPostBackOnFilter="true" ShowFilterIcon="false" AllowFiltering="false">
+                                         <HeaderStyle Width="120px" />
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn Display="false" DataField="TradetypeID" SortExpression="TradetypeID" UniqueName="TradetypeID">
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn DataField="TradetypeNAME" FilterControlAltText="Filter TradetypeNAME column" HeaderText="Trade Category" SortExpression="TradetypeNAME" UniqueName="TradetypeNAME" AutoPostBackOnFilter="true" ShowFilterIcon="false" AllowFiltering="false">
+                                         <HeaderStyle Width="140px" />
+                                         </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn Display="false" DataField="flags" FilterControlAltText="Filter flags column" HeaderText="flags" SortExpression="flags" UniqueName="flags">
+                                         <HeaderStyle Width="50" />
+                                         </telerik:GridBoundColumn>
+                                     </Columns>
+                                 </MasterTableView>
+
+                        </telerik:RadGrid>
+                        <%--<asp:SqlDataSource ID="workerSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT [WorkerID], [SName], [OName], [GangName], [SSFNo], [TradegroupID], [TradegroupNAME] ,[TradetypeID], [TradetypeNAME], [NHIS], [flags], [ezwichid] FROM [vwWorkers]">
+                        </asp:SqlDataSource>--%>
                             </div>
                        </div>
 
@@ -279,16 +340,389 @@
         </asp:Panel>
         </div>
          </div>
+
+    <!-- new modal -->
+         <div class="modal fade" id="newmodal">
+    <div class="modal-dialog" style="width:50%">
+        <asp:Panel runat="server" DefaultButton="btnAddDay">
+            <asp:UpdatePanel runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                 <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Add</h4>
+                </div>
+                        <div class="modal-body">
+                             <div class="form-group">
+                                 <div class="row">
+                                     <div class="col-md-6">
+                                   <label>Date</label>
+                                        <telerik:RadDatePicker runat="server" ID="dpDate" Width="100%" DateInput-ReadOnly="true"></telerik:RadDatePicker>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="dpDate" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="new"></asp:RequiredFieldValidator>
+                                    </div>
+                                     <div class="col-md-3">
+                                         <label>Normal Hrs</label>
+                                        <telerik:RadNumericTextBox ID="txtNormalHrs" runat="server" Width="100%" MinValue="0" Value="8" NumberFormat-DecimalDigits="1"></telerik:RadNumericTextBox>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNormalHrs" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="new"></asp:RequiredFieldValidator>
+                                    </div>
+                                     <div class="col-md-3">
+                                         <label>Overtime Hrs</label>
+                                        <telerik:RadNumericTextBox ID="txtOvertimeHrs" runat="server" Width="100%"  MinValue="0" Value="4" NumberFormat-DecimalDigits="1"></telerik:RadNumericTextBox>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtOvertimeHrs" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="new"></asp:RequiredFieldValidator>
+                                    </div>
+                                 </div>
+                             </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Vessel</label>
+                                        <telerik:RadComboBox ID="dlVessel" runat="server" Width="100%" DataSourceID="vesselSource" MaxHeight="200" EmptyMessage="Select Vessel" Filter="Contains"
+                                          OnItemDataBound="dlVessel_ItemDataBound" OnDataBound="dlVessel_DataBound" OnItemsRequested="dlVessel_ItemsRequested" 
+                                           OnClientItemsRequested="UpdateVesselItemCountField" HighlightTemplatedItems="true"
+                                            EnableLoadOnDemand="true" MarkFirstMatch="true"  >
+                                            <HeaderTemplate>
+                <ul>
+                    <li class="ncolfull">VESSEL NAME</li>
+                </ul>
+            </HeaderTemplate>
+            <ItemTemplate>
+                <ul>
+                    <li class="ncolfull">
+                        <%# DataBinder.Eval(Container.DataItem, "VesselName")%></li>
+                </ul>
+            </ItemTemplate>
+            <FooterTemplate>
+                A total of
+                <asp:Literal runat="server" ID="vesselCount" />
+                items
+            </FooterTemplate>
+                                        </telerik:RadComboBox>
+                                        <asp:SqlDataSource ID="vesselSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT top (30) VesselId,VesselName FROM [tblVessel]"></asp:SqlDataSource>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="form-group">
+                                        <label>Remarks</label>
+                                       <asp:TextBox runat="server" ID="txtRemarks" Width="100%" ></asp:TextBox>
+                             </div>
+                            <div class="form-group">
+                                    <div class="row">
+                                    <div class="col-md-12">
+                                        <asp:CheckBox ID="chkShipSide" runat="server" Text="Ship Side" TextAlign="Left" /> 
+                                        <asp:CheckBox ID="chkHoliday" runat="server" Text="Holiday" TextAlign="Left" /> 
+                                        <asp:CheckBox ID="chkNight" runat="server" Text="Night" TextAlign="Left" /> 
+                                        &nbsp;&nbsp;&nbsp; 
+
+                                        <%--<asp:CheckBox ID="CheckBox1" runat="server" Text="Risk" TextAlign="Left" Enabled="false" /> &nbsp;&nbsp;&nbsp; 
+                                        <asp:CheckBox ID="CheckBox2" runat="server" Text="Height" TextAlign="Left" Enabled="false" />--%>
+                                    </div>
+                                </div>
+                                </div>
+                       </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <asp:Button ID="btnAddDay" runat="server" Text="Save" CssClass="btn btn-primary" ClientIDMode="Static" OnClick="btnAddDay_Click" ValidationGroup="new" />
+                </div>
+            </div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+        </asp:Panel>
+        </div>
+         </div>
+
+    <!-- edit modal -->
+         <div class="modal fade" id="editmodal">
+    <div class="modal-dialog" style="width:50%">
+        <asp:Panel runat="server" DefaultButton="btnUpdateDay">
+            <asp:UpdatePanel runat="server" UpdateMode="Always">
+            <ContentTemplate>
+                 <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Edit</h4>
+                </div>
+                        <div class="modal-body">
+                             <div class="form-group">
+                                 <div class="row">
+                                     <div class="col-md-6">
+                                   <label>Date</label>
+                                        <telerik:RadDatePicker runat="server" ID="dpDate1" Width="100%" DateInput-ReadOnly="true"></telerik:RadDatePicker>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="dpDate1" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                    </div>
+                                     <div class="col-md-3">
+                                         <label>Normal Hrs</label>
+                                        <telerik:RadNumericTextBox ID="txtNormalHrs1" runat="server" Width="100%" MinValue="0" NumberFormat-DecimalDigits="1"></telerik:RadNumericTextBox>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtNormalHrs1" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                    </div>
+                                     <div class="col-md-3">
+                                         <label>Overtime Hrs</label>
+                                        <telerik:RadNumericTextBox ID="txtOvertimeHrs1" runat="server" Width="100%"  MinValue="0" NumberFormat-DecimalDigits="1"></telerik:RadNumericTextBox>
+                                        <asp:RequiredFieldValidator runat="server" ControlToValidate="txtOvertimeHrs1" Display="Dynamic" ErrorMessage="Required Field" SetFocusOnError="true" ForeColor="Red" ValidationGroup="edit"></asp:RequiredFieldValidator>
+                                    </div>
+                                 </div>
+                             </div>
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <label>Vessel</label>
+                                        <telerik:RadComboBox ID="dlVessel1" runat="server" Width="100%" DataSourceID="vesselSource" MaxHeight="200" EmptyMessage="Select Vessel" Filter="Contains"
+                                          OnItemDataBound="dlVessel1_ItemDataBound" OnDataBound="dlVessel1_DataBound" OnItemsRequested="dlVessel1_ItemsRequested" 
+                                           OnClientItemsRequested="UpdateVesselItemCountField" HighlightTemplatedItems="true"
+                                            EnableLoadOnDemand="true" MarkFirstMatch="true"  >
+                                            <HeaderTemplate>
+                <ul>
+                    <li class="ncolfull">VESSEL NAME</li>
+                </ul>
+            </HeaderTemplate>
+            <ItemTemplate>
+                <ul>
+                    <li class="ncolfull">
+                        <%# DataBinder.Eval(Container.DataItem, "VesselName")%></li>
+                </ul>
+            </ItemTemplate>
+            <FooterTemplate>
+                A total of
+                <asp:Literal runat="server" ID="vesselCount1" />
+                items
+            </FooterTemplate>
+                                        </telerik:RadComboBox>
+                                        <%--<asp:SqlDataSource ID="SqlDataSource1" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT top (30) VesselId,VesselName FROM [tblVessel]"></asp:SqlDataSource>--%>
+                                    </div>
+                                </div>
+                            </div>
+                        <div class="form-group">
+                                        <label>Remarks</label>
+                                       <asp:TextBox runat="server" ID="txtRemarks1" Width="100%" ></asp:TextBox>
+                             </div>
+                            <div class="form-group">
+                                    <div class="row">
+                                    <div class="col-md-12">
+                                        <asp:CheckBox ID="chkShipSide1" runat="server" Text="Ship Side" TextAlign="Left" /> 
+                                        <asp:CheckBox ID="chkHoliday1" runat="server" Text="Holiday" TextAlign="Left" /> 
+                                        <asp:CheckBox ID="chkNight1" runat="server" Text="Night" TextAlign="Left" /> 
+                                        &nbsp;&nbsp;&nbsp; 
+
+                                        <%--<asp:CheckBox ID="CheckBox1" runat="server" Text="Risk" TextAlign="Left" Enabled="false" /> &nbsp;&nbsp;&nbsp; 
+                                        <asp:CheckBox ID="CheckBox2" runat="server" Text="Height" TextAlign="Left" Enabled="false" />--%>
+                                    </div>
+                                </div>
+                                </div>
+                       </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <asp:Button ID="btnUpdateDay" runat="server" Text="Update" CssClass="btn btn-primary"  OnClick="btnUpdateDay_Click" ValidationGroup="edit" />
+                </div>
+            </div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+        </asp:Panel>
+        </div>
+         </div>
+
+
+    <!-- find cost sheed modal -->
+         <div class="modal fade" id="costsheetmodal">
+    <div class="modal-dialog" style="width:40%">
+        <asp:Panel runat="server" DefaultButton="btnFindCostSheet">
+            <asp:UpdatePanel runat="server" UpdateMode="Conditional">
+            <ContentTemplate>
+                 <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Find Cost Sheet</h4>
+                </div>
+                        <div class="modal-body">
+                             <div class="form-group">
+                                        <label>Enter Requisition No</label>
+                                       <asp:TextBox runat="server" ID="txtCostSheet" Width="100%" MaxLength="50" ClientIDMode="Static"></asp:TextBox>
+                                   <asp:RequiredFieldValidator runat="server" ErrorMessage="Required Field" ControlToValidate="txtCostSheet" Display="Dynamic" ForeColor="Red" SetFocusOnError="true" ValidationGroup="searchcostsheet"></asp:RequiredFieldValidator>
+                             </div>
+                            <div>
+                            </div>
+                       </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+                    <asp:Button ID="btnFindCostSheet" runat="server" Text="Find" CssClass="btn btn-primary"  OnClick="btnFindCostSheet_Click" ValidationGroup="searchcostsheet" />
+                </div>
+            </div>
+            </ContentTemplate>
+        </asp:UpdatePanel>
+        </asp:Panel>
+        </div>
+         </div>
+
+    <!--  Advice modal -->
+    <div class="modal fade" id="advicemodal">
+    <div class="modal-dialog" style="width:90%">
+      <asp:UpdatePanel runat="server">
+          <ContentTemplate>
+               <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                    <h4 class="modal-title">Cost Sheet Advice</h4>
+                </div>
+                        <div class="modal-body">
+                             <asp:Panel ID="Panel1" runat="server">
+            <telerik:RadListView ID="lvAdvice" RenderMode="Lightweight" Width="97%" AllowPaging="True" runat="server"
+                ItemPlaceholderID="adviceHolder">
+                <LayoutTemplate>
+                     <%--<h4>Batch Tracker</h4>--%>
+                                <table>
+                                    <tr>
+                                        <td class="tdlabel" style="width:10%">TransDate
+                                            </td>
+                                        <td class="tdlabel" style="width:10%">HrsFrom
+                                            </td>
+                                        <td class="tdlabel" style="width:10%">HrsTo
+                                            </td>
+                                        <td class="tdlabel" style="width:8%">Normal
+                                            </td>
+                                        <td class="tdlabel" style="width:8%">Overtime
+                                            </td>
+                                        <td class="tdlabel" style="width:7%">Night
+                                            </td>
+                                        <td class="tdlabel" style="width:10%">Weekends
+                                            </td>
+                                        <td class="tdlabel" style="width:8%">Holiday
+                                            </td>
+                                        <td class="tdlabel" style="width:15%">VesselName
+                                            </td>
+                                        <td class="tdlabel" style="width:7%">Transport
+                                            </td>
+                                        <td class="tdlabel" style="width:7%">ShipSide
+                                            </td>
+                                    </tr>
+                                    </table>                    
+                    <fieldset class="layoutFieldset" id="FieldSet2">
+                        <asp:Panel ID="adviceHolder" runat="server">
+                        </asp:Panel>
+                    </fieldset>
+                </LayoutTemplate>
+                <ItemTemplate>
+                                <table>
+                                        <tr> 
+                                            <%--<td style="width:10%">
+                                                <%# Eval("TransDate") %>
+                                            </td>--%>
+                                            <td style="width:10%">
+                                                 <%# DataBinder.Eval(Container.DataItem, "TransDate", "{0:dd-MMM-yyyy}") %>
+                                            </td>
+                                            <td style="width:10%">
+                                                <%# Eval("HrsFrom") %>
+                                            </td>
+                                            <td style="width:10%">
+                                                <%# Eval("HrsTo") %>
+                                            </td>
+                                            <td style="width:8%">
+                                                <%# Eval("Normal") %>
+                                            </td>
+                                            <td style="width:8%">
+                                                <%# Eval("Overtime") %>
+                                            </td>
+                                            <td style="width:7%">
+                                                <%# Eval("Night") %>
+                                            </td>
+                                            <td style="width:10%">
+                                                <%# Eval("Weekends") %>
+                                            </td>
+                                            <td style="width:8%">
+                                                <%# Eval("Holiday") %>
+                                            </td>
+                                            <td style="width:15%">
+                                                <%# Eval("VesselName") %>
+                                            </td>
+                                            <td style="width:7%">
+                                                <%# Eval("Transport") %>
+                                            </td>
+                                            <td style="width:7%">
+                                               <%# Eval("OnboardAllowance") %>
+                                            </td>
+                                        </tr>
+                                    </table>
+                </ItemTemplate>
+            </telerik:RadListView>
+        </asp:Panel>
+                       </div>
+                <%--<div class="modal-footer">
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">Return</button>
+                </div>--%>
+            </div>
+          </ContentTemplate>
+      </asp:UpdatePanel>
+        </div>
+    </div>
+
         <script type="text/javascript">
+            function showWorkersModal() {
+                $('#workersmodal').modal('show');
+                $('#workersmodal').appendTo($("form:first"));
+            }
+            $('#workersmodal').on('shown.bs.modal', function () {
+                $('#txtSearchValue').focus();
+            });
+            function closeWorkersModal() {
+                $('#workersmodal').modal('hide');
+            }
             function newModal() {
                 $('#newmodal').modal('show');
                 $('#newmodal').appendTo($("form:first"));
             }
             $('#newmodal').on('shown.bs.modal', function () {
-                $('#txtSearchValue').focus();
+                $('#btnAddDay').focus();
             });
             function closenewModal() {
                 $('#newmodal').modal('hide');
             }
+            function editModal() {
+                $('#editmodal').modal('show');
+                $('#editmodal').appendTo($("form:first"));
+            }
+            function closeeditModal() {
+                $('#editmodal').modal('hide');
+            }
+            function newCostSheetModal() {
+                $('#costsheetmodal').modal('show');
+                $('#costsheetmodal').appendTo($("form:first"));
+            }
+            $('#costsheetmodal').on('shown.bs.modal', function () {
+                $('#txtCostSheet').focus();
+            });
+            function closeCostSheetModal() {
+                $('#costsheetmodal').modal('hide');
+            }
+            function showAdviceModal() {
+                $('#advicemodal').modal('show');
+            }
     </script>
+    <telerik:RadScriptBlock ID="RadScriptBlock1" runat="server">
+        <script type="text/javascript">
+            function UpdateVesselItemCountField(sender, args) {
+                //Set the footer text.
+                sender.get_dropDownElement().lastChild.innerHTML = "A total of " + sender.get_items().get_count() + " items";
+            }
+            function UpdateCompanyItemCountField(sender, args) {
+                //Set the footer text.
+                sender.get_dropDownElement().lastChild.innerHTML = "A total of " + sender.get_items().get_count() + " items";
+            }
+            function UpdateRepPointItemCountField(sender, args) {
+                //Set the footer text.
+                sender.get_dropDownElement().lastChild.innerHTML = "A total of " + sender.get_items().get_count() + " items";
+            }
+            function UpdateLocationItemCountField(sender, args) {
+                //Set the footer text.
+                sender.get_dropDownElement().lastChild.innerHTML = "A total of " + sender.get_items().get_count() + " items";
+            }
+            function RowDblClick(sender, eventArgs) {
+                var editedRow = eventArgs.get_itemIndexHierarchical();
+                sender.get_masterTableView().fireCommand("AddWorker", editedRow);
+            }
+            function WorkGrdRowDblClick(sender, eventArgs) {
+                var editedRow = eventArgs.get_itemIndexHierarchical();
+                sender.get_masterTableView().fireCommand("EditWork", editedRow);
+            }
+        </script>
+    </telerik:RadScriptBlock>
 </asp:Content>

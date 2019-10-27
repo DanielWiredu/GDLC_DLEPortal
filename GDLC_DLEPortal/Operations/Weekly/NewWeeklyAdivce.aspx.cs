@@ -402,7 +402,7 @@ namespace GDLC_DLEPortal.Operations.Weekly
         {
             if (Convert.ToDouble(txtNormalHrs1.Text.Trim()) != 8.0)
             {
-                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Save..... Normal hours should not be more or less than 8', 'Error');", true);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Update..... Normal hours should not be more or less than 8', 'Error');", true);
                 return;
             }
 

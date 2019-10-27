@@ -8,6 +8,7 @@ using Telerik.Web.UI;
 using System.Data;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Net.Mail;
 
 namespace GDLC_DLEPortal.Operations.Weekly
 {
@@ -59,6 +60,7 @@ namespace GDLC_DLEPortal.Operations.Weekly
                     command.Parameters.Add("@ReturnReqNo", SqlDbType.VarChar, 10).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@request", SqlDbType.VarChar).Value = request;
                     command.Parameters.Add("@companies", SqlDbType.VarChar).Value = dleCompanyId;
+                    command.Parameters.Add("@AdviceNo", SqlDbType.VarChar, 20).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@WorkerName", SqlDbType.VarChar, 80).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@TradeGroup", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
                     command.Parameters.Add("@TradeCategory", SqlDbType.VarChar, 50).Direction = ParameterDirection.Output;
@@ -70,8 +72,13 @@ namespace GDLC_DLEPortal.Operations.Weekly
                         string autoNo = command.Parameters["@AutoNo"].Value.ToString();
                         if (!String.IsNullOrEmpty(autoNo))
                         {
+                            txtReqNo.Text = "";
+                            dlLocation.ClearSelection();
+                            dlReportingPoint.ClearSelection();
+
                             txtAutoNo.Text = autoNo;
                             txtReqNo.Text = command.Parameters["@ReturnReqNo"].Value.ToString();
+                            txtAdviceNo.Text = command.Parameters["@AdviceNo"].Value.ToString();
                             txtWorkerId.Text = command.Parameters["@WorkerID"].Value.ToString();
                             hfTradegroup.Value = command.Parameters["@TradegroupID"].Value.ToString();
                             hfTradetype.Value = command.Parameters["@TradetypeID"].Value.ToString();
@@ -79,6 +86,8 @@ namespace GDLC_DLEPortal.Operations.Weekly
                             dpRegdate.SelectedDate = Convert.ToDateTime(command.Parameters["@date_"].Value);
                             dpApprovalDate.SelectedDate = Convert.ToDateTime(command.Parameters["@Adate"].Value);
                             chkApproved.Checked = Convert.ToBoolean(command.Parameters["@Approved"].Value);
+                            if (chkApproved.Checked && request != "load")
+                                ScriptManager.RegisterStartupScript(this, this.GetType(), "approved", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
                             chkConfirmed.Checked = Convert.ToBoolean(command.Parameters["@Confirmed"].Value);
                             txtWorkerName.Text = command.Parameters["@WorkerName"].Value.ToString();
                             txtGroupName.Text = command.Parameters["@TradeGroup"].Value.ToString();
@@ -347,6 +356,11 @@ namespace GDLC_DLEPortal.Operations.Weekly
 
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            if (chkConfirmed.Checked)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet Confirmed...Changes Not Allowed', 'Error');", true);
+                return;
+            }
             if (chkApproved.Checked)
             {
                 ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cost Sheet Approved...Changes Not Allowed', 'Error');", true);
@@ -403,7 +417,7 @@ namespace GDLC_DLEPortal.Operations.Weekly
         protected void subStaffReqGrid_DataBound(object sender, EventArgs e)
         {
             lblDays.InnerText = "Total Days : " + subStaffReqGrid.Items.Count;
-            if (chkApproved.Checked)
+            if (chkConfirmed.Checked || chkApproved.Checked)
             {
                 subStaffReqGrid.Enabled = false;
             }
@@ -438,6 +452,12 @@ namespace GDLC_DLEPortal.Operations.Weekly
 
         protected void btnAddDay_Click(object sender, EventArgs e)
         {
+            if (Convert.ToDouble(txtNormalHrs.Text.Trim()) != 8.0)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Save..... Normal hours should not be more or less than 8', 'Error');", true);
+                return;
+            }
+
             int vesselId = 0;
             if (!String.IsNullOrEmpty(dlVessel.SelectedValue))
                 vesselId = Convert.ToInt32(dlVessel.SelectedValue);
@@ -495,6 +515,12 @@ namespace GDLC_DLEPortal.Operations.Weekly
 
         protected void btnUpdateDay_Click(object sender, EventArgs e)
         {
+            if (Convert.ToDouble(txtNormalHrs1.Text.Trim()) != 8.0)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Cannot Update..... Normal hours should not be more or less than 8', 'Error');", true);
+                return;
+            }
+
             int vesselId = 0;
             if (!String.IsNullOrEmpty(dlVessel1.SelectedValue))
                 vesselId = Convert.ToInt32(dlVessel1.SelectedValue);
@@ -549,10 +575,6 @@ namespace GDLC_DLEPortal.Operations.Weekly
         }
         protected void btnFindCostSheet_Click(object sender, EventArgs e)
         {
-            txtReqNo.Text = "";
-            //dlCompany.ClearSelection();
-            dlLocation.ClearSelection();
-            dlReportingPoint.ClearSelection();
             loadReqNo(txtCostSheet.Text.Trim().ToUpper(), "search");
             ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closeCostSheetModal();", true);
             txtCostSheet.Text = "";
@@ -607,6 +629,7 @@ namespace GDLC_DLEPortal.Operations.Weekly
                         {
                             ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.success('Confirmed Successfully', 'Success');", true);
                             chkConfirmed.Checked = true;
+                            getCompanyAuditEmail();
                         }
                     }
                     catch (SqlException ex)
@@ -614,6 +637,93 @@ namespace GDLC_DLEPortal.Operations.Weekly
                         ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
                     }
                 }
+            }
+        }
+
+        protected void btnViewAdvice_Click(object sender, EventArgs e)
+        {
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlDataAdapter adapter = new SqlDataAdapter())
+                {
+                    DataTable dTable = new DataTable();
+                    string AdviceNo = txtAdviceNo.Text;
+                    string selectquery = "select AdviceNo, TransDate, Normal, Overtime, Night, Weekends, Holiday, Remarks, VesselberthID, VesselName, Transport, OnBoardAllowance, HrsFrom, HrsTo FROM vwLabourAdviceDays where AdviceNo = @AdviceNo order by TransDate";
+                    adapter.SelectCommand = new SqlCommand(selectquery, connection);
+                    adapter.SelectCommand.Parameters.Add("@AdviceNo", SqlDbType.VarChar).Value = AdviceNo;
+                    try
+                    {
+                        connection.Open();
+                        adapter.Fill(dTable);
+                        lvAdvice.DataSource = dTable;
+                        lvAdvice.DataBind();
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showAdviceModal();", true);
+                    }
+                    catch (Exception ex)
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
+                    }
+                }
+            }
+        }
+        protected void getCompanyAuditEmail()
+        {
+            DataTable dt = new DataTable();
+            string dleCompanyId = Request.Cookies["dlecompanyId"].Value;
+            string query = "SELECT Username, Email FROM vwUsersMain WHERE BaseCompanyId in (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) and Active=1 and Userroles like '%Audit%'";
+            using (SqlConnection connection = new SqlConnection(connectionString))
+            {
+                using (SqlCommand command = new SqlCommand(query, connection))
+                {
+                    command.Parameters.Add("@DLEcodeCompanyID", SqlDbType.Int).Value = dleCompanyId;
+                    try
+                    {
+                        connection.Open();
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            dt.Load(reader);
+                            if (dt.Rows.Count > 0)
+                                sendCostSheetEmail(dt, txtReqNo.Text);
+                        }
+                    }
+                    catch (SqlException ex)
+                    {
+                        ScriptManager.RegisterStartupScript(this, this.GetType(), "getEmail", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
+                    }
+                }
+            }
+        }
+        protected void sendCostSheetEmail(DataTable emailList, string reqno)
+        {
+            try
+            {
+                string emailAddress = "";
+                string mailSubject = "GDLC - COST SHEET";
+                string message = "Dear Auditor, " + "<br><br>";
+                message += "Please note that, cost sheet <strong>" + reqno + "</strong> has been confirmed by your Operations Department on the GDLC Client Portal awaiting your approval. Thank you. <br><br> ";
+                message += "<strong><a href='https://gdlcwave.com/' target='_blank'>Click here</a></strong> to log on to the client portal for more details. <br /><br />";
+                message += "<strong>This is an auto generated email. Please do not reply.</strong>";
+                MailMessage myMessage = new MailMessage();
+                myMessage.From = (new MailAddress("admin@gdlcwave.com", "GDLC Client Portal"));
+                foreach (DataRow dr in emailList.Rows)
+                {
+                    emailAddress = dr.Field<string>("Email");
+                    if (!String.IsNullOrEmpty(emailAddress))
+                    {
+                        myMessage.To.Add(new MailAddress(emailAddress));
+                    }
+                }
+                //myMessage.Bcc.Add(new MailAddress("daniel.wiredu@eupacwebs.com"));
+                myMessage.Subject = mailSubject;
+                myMessage.Body = message;
+                myMessage.IsBodyHtml = true;
+                SmtpClient mySmtpClient = new SmtpClient();
+                mySmtpClient.Send(myMessage);
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "mailsuccess", "toastr.success('Email Sent Successfully', 'Success');", true);
+            }
+            catch (Exception ex)
+            {
+                ScriptManager.RegisterStartupScript(this, this.GetType(), "mailerror", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
             }
         }
     }

@@ -70,6 +70,9 @@
                                          <telerik:GridBoundColumn DataField="WorkerName" FilterControlAltText="Filter WorkerName column" HeaderText="Worker Name" SortExpression="WorkerName" UniqueName="WorkerName">
                                          <HeaderStyle Width="150px" />
                                          </telerik:GridBoundColumn>
+                                         <telerik:GridBoundColumn DataField="ReqNo" FilterControlAltText="Filter ReqNo column" HeaderText="ReqNo" SortExpression="ReqNo" UniqueName="ReqNo">
+                                         <HeaderStyle Width="100px" />
+                                         </telerik:GridBoundColumn>
                                          <telerik:GridCheckBoxColumn DataField="Processed" DataType="System.Boolean" FilterControlAltText="Filter Processed column" HeaderText="P" SortExpression="Processed" UniqueName="Processed" StringTrueValue="1" StringFalseValue="0" >
                                          <HeaderStyle Width="30px" />
                                          </telerik:GridCheckBoxColumn>
@@ -80,7 +83,7 @@
                                  </MasterTableView>
 
                         </telerik:RadGrid>
-                        <asp:SqlDataSource ID="weeklyAdviceSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (100) AutoNo, AdviceNo, WorkerId, date_, Processed, DLEcodeCompanyName, WorkerName FROM vwLabourAdvice WHERE (AdviceNo LIKE '%' + @SearchValue + '%' OR WorkerId LIKE '%' + @SearchValue + '%' OR WorkerName LIKE '%' + @SearchValue + '%') ORDER BY AutoNo DESC">
+                        <asp:SqlDataSource ID="weeklyAdviceSource" runat="server" ConnectionString="<%$ ConnectionStrings:ConnectionString %>" SelectCommand="SELECT TOP (100) AutoNo, AdviceNo, WorkerId, date_, Processed, DLEcodeCompanyName, WorkerName, ReqNo FROM vwLabourAdvice WHERE (AdviceNo LIKE '%' + @SearchValue + '%' OR WorkerId LIKE '%' + @SearchValue + '%' OR WorkerName LIKE '%' + @SearchValue + '%' OR ReqNo LIKE '%' + @SearchValue + '%') ORDER BY AutoNo DESC">
                             <SelectParameters>
                                 <asp:ControlParameter Name="SearchValue" ControlID="txtSearchStaffReq" Type="String" PropertyName="Text" ConvertEmptyStringToNull="false" />
                             </SelectParameters>

@@ -326,10 +326,10 @@
                         </div>
                   
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnComments" Text="Comments/Remarks" CssClass="btn btn-warning" OnClick="btnComments_Click" style="margin-bottom:0px" />
+                            <asp:Button runat="server" ID="btnComments" Text="Comments" CssClass="btn btn-warning" OnClick="btnComments_Click" style="margin-bottom:0px" />
                             <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous"  OnClick="btnPrevious_Click" />
                             <asp:Button runat="server" ID="btnNext" Text=">>" CssClass="btn btn-default" ToolTip="Next"  OnClick="btnNext_Click" />
-                            <asp:CheckBox ID="chkApproved" style="color:red;font-size:medium" runat="server" Text="Approved" TextAlign="Left" Enabled="true" />
+                            <asp:CheckBox ID="chkApproved" style="color:red;font-size:medium" runat="server" Text="Approved" TextAlign="Left" Enabled="false" />
                             <label style="color:green">Approval Date</label>
                             <telerik:RadDatePicker runat="server" ID="dpApprovalDate" ClientIDMode="Static" Enabled="true" DateInput-ReadOnly="false" SelectedDate="01/01/2000"></telerik:RadDatePicker>
                             <asp:Button runat="server" ID="btnReturn" Text="Return" CssClass="btn btn-warning" style="margin-bottom:0px" CausesValidation="false" PostBackUrl="~/Operations/Daily/DailyStaffReq.aspx" />

@@ -66,6 +66,10 @@ namespace GDLC_DLEPortal.Audit.Approvals
                         SqlDataReader reader = command.ExecuteReader();
                         if (reader.Read())
                         {
+                            dlLocation.ClearSelection();
+                            dlReportingPoint.ClearSelection();
+                            dlCargo.ClearSelection();
+
                             txtAutoNo.Text = reader["AutoNo"].ToString();
                             txtReqNo.Text = reader["ReqNo"].ToString();
                             dlCompany.SelectedValue = reader["DLEcodeCompanyID"].ToString();
@@ -143,11 +147,11 @@ namespace GDLC_DLEPortal.Audit.Approvals
                             chkProcessed.Checked = Convert.ToBoolean(reader["Processed"]);
                             chkStored.Checked = Convert.ToBoolean(reader["Stored"]);
 
-                            if (request == "search")
-                            {
-                                ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
-                                txtSearchValue.Text = "";
-                            }
+                            //if (request == "search")
+                            //{
+                            //    ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
+                            //    txtSearchValue.Text = "";
+                            //}
                         }
                         else
                         {
@@ -301,6 +305,8 @@ namespace GDLC_DLEPortal.Audit.Approvals
         {
             string query = "select AutoNo,ReqNo,DLEcodeCompanyID,VesselberthID,locationID,ReportpointID,cargoID,gangID,job,date_,Normal,Overtime,Weekends,Night,Approved,Adate,OnBoardAllowance,NormalHrsFrom,NormalHrsTo,OvertimeHrsFrom,OvertimeHrsTo, Processed,Stored from tblStaffReq where DLEcodeCompanyID IN (SELECT * FROM dbo.DLEIdToTable(@DLEcodeCompanyID)) AND ReqNo=@ReqNo";
             loadReqNo(txtSearchValue.Text.Trim(), query, "search");
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closenewModal();", true);
+            txtSearchValue.Text = "";
         }
 
         protected void btnPrevious_Click(object sender, EventArgs e)

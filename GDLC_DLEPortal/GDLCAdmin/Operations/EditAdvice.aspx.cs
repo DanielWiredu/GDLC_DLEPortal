@@ -56,6 +56,9 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
                         string autoNo = command.Parameters["@AutoNo"].Value.ToString();
                         if (!String.IsNullOrEmpty(autoNo))
                         {
+                            dlLocation.ClearSelection();
+                            dlReportingPoint.ClearSelection();
+
                             txtAdviceNo.Text = command.Parameters["@ReturnAdviceNo"].Value.ToString();
                             txtReqNo.Text = command.Parameters["@ReqNo"].Value.ToString();
                             txtWorkerId.Text = command.Parameters["@WorkerID"].Value.ToString();
@@ -143,10 +146,6 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations
 
         protected void btnFindCostSheet_Click(object sender, EventArgs e)
         {
-            txtReqNo.Text = "";
-            //dlCompany.ClearSelection();
-            dlLocation.ClearSelection();
-            dlReportingPoint.ClearSelection();
             loadAdviceNo(txtCostSheet.Text.Trim().ToUpper(), "searchall");
             ScriptManager.RegisterStartupScript(this, this.GetType(), "popup", "closeCostSheetModal();", true);
             txtCostSheet.Text = "";

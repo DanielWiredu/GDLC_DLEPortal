@@ -314,7 +314,7 @@
                         </div>
                   
                         <div class="modal-footer">
-                            <asp:Button runat="server" ID="btnComments" Text="Comments/Remarks" CssClass="btn btn-warning" OnClick="btnComments_Click" style="margin-bottom:0px" />
+                            <asp:Button runat="server" ID="btnComments" Text="Comments" CssClass="btn btn-warning" OnClick="btnComments_Click" style="margin-bottom:0px" />
                             <asp:Button runat="server" ID="btnPrevious" Text="<<" CssClass="btn btn-default" ToolTip="Previous"  OnClick="btnPrevious_Click" />
                             <asp:Button runat="server" ID="btnNext" Text=">>" CssClass="btn btn-default" ToolTip="Next"  OnClick="btnNext_Click" />
                             <asp:CheckBox ID="chkApproved" style="color:red;font-size:medium" runat="server" Text="Approved" TextAlign="Left" Enabled="false" />
