@@ -259,7 +259,7 @@ namespace GDLC_DLEPortal.Operations.Daily
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
                 {
-                    command.Parameters.Add("@DLEcodeCompanyID", SqlDbType.Int).Value = dleCompanyId;
+                    command.Parameters.Add("@DLEcodeCompanyID", SqlDbType.VarChar).Value = dleCompanyId;
                     try
                     {
                         connection.Open();
@@ -284,7 +284,7 @@ namespace GDLC_DLEPortal.Operations.Daily
                 string emailAddress = "";
                 string mailSubject = "GDLC - COST SHEET";
                 string message = "Dear Auditor, " +  "<br><br>";
-                message += "Please note that, cost sheet <strong>" + reqno + "</strong> has been confirmed by your Operations Department on the GDLC Client Portal awaiting your approval. Thank you. <br><br> ";
+                message += "Please note that, cost sheet <strong>" + reqno + "</strong> has been confirmed by your Operations Supervisor on the GDLC Client Portal awaiting your approval. Thank you. <br><br> ";
                 message += "<strong><a href='https://gdlcwave.com/' target='_blank'>Click here</a></strong> to log on to the client portal for more details. <br /><br />";
                 message += "<strong>This is an auto generated email. Please do not reply.</strong>";
                 MailMessage myMessage = new MailMessage();

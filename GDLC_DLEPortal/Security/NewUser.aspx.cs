@@ -52,7 +52,7 @@ namespace GDLC_DLEPortal.Security
             }
             roles = roles.TrimEnd(',');
 
-            string query = "insert into tblUsers(username,userpassword,userroles,fullname,gender,contactno,email,accounttype,dlecompanyId,active,userkey) values(@uname,@upass,@uroles,@fname,@gender,@contactno,@email,@accounttype,@dlecompanyId,@active,@userkey)";
+            string query = "insert into tblUsers(username,userpassword,userroles,fullname,gender,contactno,email,accounttype,dlecompanyId,active,userkey,createdby) values(@uname,@upass,@uroles,@fname,@gender,@contactno,@email,@accounttype,@dlecompanyId,@active,@userkey,@createdby)";
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
                 using (SqlCommand command = new SqlCommand(query, connection))
@@ -68,6 +68,7 @@ namespace GDLC_DLEPortal.Security
                     command.Parameters.Add("@dlecompanyId", SqlDbType.VarChar).Value = dleCompanyIds;
                     command.Parameters.Add("@active", SqlDbType.Bit).Value = chkActive.Checked;
                     command.Parameters.Add("@userkey", SqlDbType.Char).Value = txtUserkey.Text.ToUpper();
+                    command.Parameters.Add("@createdby", SqlDbType.VarChar).Value = User.Identity.Name;
                     try
                     {
                         connection.Open();

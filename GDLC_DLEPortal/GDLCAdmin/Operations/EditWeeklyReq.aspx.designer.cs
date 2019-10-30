@@ -319,24 +319,6 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations {
         protected global::System.Web.UI.WebControls.Button btnDisapprove;
         
         /// <summary>
-        /// txtCostSheet control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.TextBox txtCostSheet;
-        
-        /// <summary>
-        /// btnFindCostSheet control.
-        /// </summary>
-        /// <remarks>
-        /// Auto-generated field.
-        /// To modify move field declaration from designer file to code-behind file.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.Button btnFindCostSheet;
-        
-        /// <summary>
         /// Panel1 control.
         /// </summary>
         /// <remarks>
@@ -353,6 +335,33 @@ namespace GDLC_DLEPortal.GDLCAdmin.Operations {
         /// To modify move field declaration from designer file to code-behind file.
         /// </remarks>
         protected global::Telerik.Web.UI.RadListView lvAdvice;
+        
+        /// <summary>
+        /// vwAdviceSource control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.SqlDataSource vwAdviceSource;
+        
+        /// <summary>
+        /// txtCostSheet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.TextBox txtCostSheet;
+        
+        /// <summary>
+        /// btnFindCostSheet control.
+        /// </summary>
+        /// <remarks>
+        /// Auto-generated field.
+        /// To modify move field declaration from designer file to code-behind file.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Button btnFindCostSheet;
         
         /// <summary>
         /// RadScriptBlock1 control.

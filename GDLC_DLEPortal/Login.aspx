@@ -87,6 +87,22 @@
                 </div>
             </div>
             <div class="col-md-4">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="wrapper wrapper-content animated fadeInUp pull-right">
+                    <ul class="notes">
+                        <li>
+                            <div>
+                                <small><%=DateTime.UtcNow.ToString() %></small>
+                                <h4>Upcoming Update</h4>
+                                <p>Newly added Weekly & Monthly labour requisition modules will soon be released for use.</p>
+                                <%--<a href="#"><i class="fa fa-trash-o "></i></a>--%>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
 
             </div>
         </div>
@@ -96,7 +112,7 @@
                 <strong>Developed by <a href="http://eupacwebs.com/" target="_blank">Eupac Web Solutions Limited</a></strong>
             </div>
             <div class="col-md-6 text-right">
-               <strong>Copyright &copy; <%=DateTime.Now.Year.ToString() %> <a href="https://docklabour.com/" target="_blank" >Ghana Dock Labour Company</a>.</strong> 
+               <strong>Copyright &copy; <%=DateTime.UtcNow.Year.ToString() %> <a href="https://docklabour.com/" target="_blank" >Ghana Dock Labour Company</a>.</strong> 
             </div>
         </div>
     </div>

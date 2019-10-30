@@ -261,29 +261,7 @@ namespace GDLC_DLEPortal.Audit.Approvals
         }
         protected void btnViewAdvice_Click(object sender, EventArgs e)
         {
-            using (SqlConnection connection = new SqlConnection(connectionString))
-            {
-                using (SqlDataAdapter adapter = new SqlDataAdapter())
-                {
-                    DataTable dTable = new DataTable();
-                    string AdviceNo = txtAdviceNo.Text;
-                    string selectquery = "select AdviceNo, TransDate, Normal, Overtime, Night, Weekends, Holiday, Remarks, VesselberthID, VesselName, Transport, OnBoardAllowance, HrsFrom, HrsTo FROM vwLabourAdviceDays where AdviceNo = @AdviceNo order by TransDate";
-                    adapter.SelectCommand = new SqlCommand(selectquery, connection);
-                    adapter.SelectCommand.Parameters.Add("@AdviceNo", SqlDbType.VarChar).Value = AdviceNo;
-                    try
-                    {
-                        connection.Open();
-                        adapter.Fill(dTable);
-                        lvAdvice.DataSource = dTable;
-                        lvAdvice.DataBind();
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "Pop", "showAdviceModal();", true);
-                    }
-                    catch (Exception ex)
-                    {
-                        ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('" + ex.Message.Replace("'", "").Replace("\r\n", "") + "', 'Error');", true);
-                    }
-                }
-            }
+            ScriptManager.RegisterStartupScript(this, this.GetType(), "newTab", "window.open('/Operations/Monthly/EditMonthlyAdvice.aspx?adviceno=" + txtAdviceNo.Text + "');", true);
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {

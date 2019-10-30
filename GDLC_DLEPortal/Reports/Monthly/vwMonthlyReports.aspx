@@ -33,7 +33,7 @@
                                         <Items >
                                             <%--<telerik:DropDownListItem Text="Monthly Cost Sheet" Visible="false" />--%>
                                             <telerik:DropDownListItem Text="Monthly Processed" />
-                                            <telerik:DropDownListItem Text="Monthly Invoice" />
+                                             <%--<telerik:DropDownListItem Text="Monthly Invoice" />--%>
                                             <telerik:DropDownListItem Text="Monthly Invoice Summary" />
                                         </Items>
                                     </telerik:RadDropDownList>
@@ -78,7 +78,7 @@
                                         <Items >
                                             <%--<telerik:DropDownListItem Text="Monthly Cost Sheet" Visible="false"/>--%>
                                             <telerik:DropDownListItem Text="Monthly Processed" />
-                                            <telerik:DropDownListItem Text="Monthly Invoice" />
+                                             <%--<telerik:DropDownListItem Text="Monthly Invoice" />--%>
                                             <telerik:DropDownListItem Text="Monthly Invoice Summary" />
                                         </Items>
                                     </telerik:RadDropDownList>

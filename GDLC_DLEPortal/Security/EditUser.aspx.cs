@@ -103,11 +103,11 @@ namespace GDLC_DLEPortal.Security
 
             string query = "";
             byte[] hashedPassword = new byte[0];
-            query = "Update tblUsers SET userroles=@uroles,fullname=@fname,gender=@gender,contactno=@contactno,email=@email,accounttype=@accounttype,dlecompanyId=@dlecompanyId,active=@active,userkey=@userkey WHERE id=@id";
+            query = "Update tblUsers SET userroles=@uroles,fullname=@fname,gender=@gender,contactno=@contactno,email=@email,accounttype=@accounttype,dlecompanyId=@dlecompanyId,active=@active,userkey=@userkey,updatedby=@updatedby,updateddate=@updateddate WHERE id=@id";
             if (!String.IsNullOrEmpty(txtPassword.Text.Trim()))
             {
                 hashedPassword = GetSHA1(txtPassword.Text.Trim());
-                query = "Update tblUsers SET userpassword=@upass,userroles=@uroles,fullname=@fname,gender=@gender,contactno=@contactno,email=@email,accounttype=@accounttype,dlecompanyId=@dlecompanyId,active=@active,userkey=@userkey WHERE id=@id";
+                query = "Update tblUsers SET userpassword=@upass,userroles=@uroles,fullname=@fname,gender=@gender,contactno=@contactno,email=@email,accounttype=@accounttype,dlecompanyId=@dlecompanyId,active=@active,userkey=@userkey,updatedby=@updatedby,updateddate=@updateddate WHERE id=@id";
             }
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -127,6 +127,8 @@ namespace GDLC_DLEPortal.Security
                     command.Parameters.Add("@dlecompanyId", SqlDbType.VarChar).Value = dleCompanyIds;
                     command.Parameters.Add("@active", SqlDbType.TinyInt).Value = chkActive.Checked;
                     command.Parameters.Add("@userkey", SqlDbType.Char).Value = txtUserkey.Text.ToUpper();
+                    command.Parameters.Add("@updatedby", SqlDbType.VarChar).Value = User.Identity.Name;
+                    command.Parameters.Add("@updateddate", SqlDbType.DateTime).Value = DateTime.UtcNow;
                     command.Parameters.Add("@id", SqlDbType.Int).Value = ViewState["id"].ToString();
                     try
                     {

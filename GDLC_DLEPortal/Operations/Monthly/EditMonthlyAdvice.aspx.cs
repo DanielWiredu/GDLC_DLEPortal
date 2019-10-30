@@ -162,6 +162,11 @@ namespace GDLC_DLEPortal.Operations.Monthly
 
             else if (e.CommandName == "EditWork")
             {
+                if (chkProcessed.Checked)
+                {
+                    ScriptManager.RegisterStartupScript(this, this.GetType(), "", "toastr.error('Advice already processed...Changes Not Allowed', 'Error');", true);
+                    return;
+                }
                 var item = subStaffReqGrid.Items[e.CommandArgument.ToString()];
                 ViewState["autoId"] = item["AutoId"].Text;
                 dpDate1.SelectedDate = Convert.ToDateTime(item["TransDate"].Text);
